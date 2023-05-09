@@ -59,7 +59,7 @@ export default function Dashboardpage() {
   }, [])
 
   return (
-    <div className='flex surface-200 px-4 w-12 flex-column'>
+    <div className='flex surface-ground px-4 w-12 flex-column'>
       
       <div className='flex justify-content-between'>
         <h1>Dashboard</h1>

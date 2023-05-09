@@ -11,7 +11,7 @@ export default function Nav() {
                 Username
             </div>
             <div className='flex flex-column'>    
-                <Link to='/'><Button className='border-noround w-full px-6' label="Dashboard" icon="pi pi-th-large" style={{boxShadow: 'none'}}/></Link>
+                <Link to='/Dashboard'><Button className='border-noround w-full px-6' label="Dashboard" icon="pi pi-th-large" style={{boxShadow: 'none'}}/></Link>
                 <Link to='/Auctions'><Button className='border-noround w-full px-6' label="Auctions" icon="pi pi-megaphone" style={{boxShadow: 'none'}}/></Link>
                 <Link to='/Lots'><Button className='border-noround w-full px-6' label="Lots" icon="pi pi-box" style={{boxShadow: 'none'}}/></Link>
                 <Link to='/People'><Button className='border-noround w-full px-6' label="People" icon="pi pi-users" style={{boxShadow: 'none'}}/></Link>
