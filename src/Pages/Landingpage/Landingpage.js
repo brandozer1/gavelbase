@@ -6,6 +6,7 @@ import { Avatar } from 'primereact/avatar';
 import { InputText } from 'primereact/inputtext';
 import { InputSwitch } from 'primereact/inputswitch';
 import { InputTextarea } from 'primereact/inputtextarea';
+import { Link } from 'react-router-dom';
 import LandingBackground from '../../Assets/LandingBackground.png';
 
 export default function Landingpage() {
@@ -104,7 +105,7 @@ export default function Landingpage() {
                         </li>
                     </ul>
                     <div className="flex justify-content-between lg:block border-top-1 lg:border-top-none surface-border py-3 lg:py-0 mt-3 lg:mt-0">
-                        <Button label="Login" className="p-button font-bold" />
+                        <Link to='/Login' style={{textDecoration: 'none'}}><Button className="p-button font-bold" label='Login'/></Link>
                     </div>
                 </div>
             </div>
@@ -112,7 +113,7 @@ export default function Landingpage() {
                 <img src={LandingBackground} alt="hero-2" className="absolute top-0 left-0 w-auto h-full block md:w-full" />
 
                 <div className="text-center my-6 relative">
-                    <div className="text-6xl text-white font-bold mb-1">The Platform For</div>
+                    <div className="text-6xl text-white font-bold mb-1">The Auction Platform For</div>
                     <div className="text-6xl text-primary font-bold mb-4">Today's Generation</div>
                     <p className="mt-0 mb-4 line-height-3 text-center mx-auto text-white" style={{ maxWidth: '500px' }}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
 
@@ -137,7 +138,7 @@ export default function Landingpage() {
                     <span className="text-900">One Product, </span>
                     <span className="text-blue-600">Many Solutions</span>
                 </div>
-                <div className="text-700 mb-6">Ac turpis egestas maecenas pharetra convallis posuere morbi leo urna.</div>
+                <div className="text-700 mb-6">Our auction solutions will take your business to the next level.</div>
                 <div className="grid">
                     <div className="col-12 md:col-4 mb-4 px-5">
                         <span className="p-3 shadow-2 mb-3 inline-block surface-card" style={{ borderRadius: '10px' }}>
@@ -184,7 +185,7 @@ export default function Landingpage() {
                 </div>
             </div>
             <div className="surface-section px-4 pb-8 md:px-6 lg:px-8">
-                <div className="p-6 shadow-2 flex flex-column md:flex-row align-items-center justify-content-between" style={{ borderRadius: '1rem', background: 'linear-gradient(0deg, rgba(0, 123, 255, 0.5), rgba(0, 123, 255, 0.5)), linear-gradient(92.54deg, #1C80CF 47.88%, #FFFFFF 100.01%)' }}>
+                <div className="p-6 shadow-2 flex flex-column md:flex-row align-items-center justify-content-between" style={{ borderRadius: '1rem', background: 'linear-gradient(0deg, rgba(0, 123, 255, 0.5), rgba(0, 123, 255, 0.5)), linear-gradient(92.54deg, #4f46e5 47.88%, #FFFFFF 100.01%)' }}>
                     <div className="pr-6">
                         <div className="text-blue-100 font-medium text-xl mb-3">TAKE THE NEXT STEP</div>
                         <div className="text-white font-medium text-5xl">Enpower your customer experience</div>
