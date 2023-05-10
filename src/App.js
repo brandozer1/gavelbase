@@ -11,6 +11,8 @@ import Auctionpage from './Pages/Auctionpage/Auctionpage';
 import Lotpage from './Pages/Lotpage/Lotpage';
 import Loginpage from './Pages/Loginpage/Loginpage';
 import Landingpage from './Pages/Landingpage/Landingpage';
+import Createauctionpage from './Pages/Createauctionpage/Createauctionpage';
+import Createlotpage from './Pages/Createlotpage/Createlotpage';
 import Nav from './Components/Nav/Nav';
 
 function App() {
@@ -19,6 +21,8 @@ function App() {
       <Router >
         
         <Routes>
+            <Route path='/Createlot' element={<><Nav /><Createlotpage/></>} />
+            <Route path='/Createauction' element={<><Nav /><Createauctionpage/></>} />
             <Route path='/Login' element={<Loginpage/>} />
             <Route path='/Lots' element={<><Nav /><Lotpage/></>} />
             <Route path='/Auctions' element={<><Nav /><Auctionpage/></>} />

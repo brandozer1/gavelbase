@@ -19,7 +19,7 @@ export default function Auctionpage() {
     <div className='px-3 w-full'>
         <div className='flex justify-content-between align-items-center w-full'>
             <h1>Auction Dashboard</h1>
-            <Link><Button label='Create New Auction' icon='pi pi-plus'/></Link>
+            <Link to='/Createauction'><Button label='Create New Auction' icon='pi pi-plus'/></Link>
         </div>
         <DataTable value={auctions} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}>
             <Column sortable field="name" header="Name" style={{ width: '25%' }}></Column>
