@@ -117,7 +117,7 @@ export default function Landingpage() {
                     <div className="text-6xl text-primary font-bold mb-4">Today's Generation</div>
                     <p className="mt-0 mb-4 line-height-3 text-center mx-auto text-white" style={{ maxWidth: '500px' }}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
 
-                    <Button label="Learn More" type="button" />
+                    <Button label="Get Started" type="button" />
 
                     <p className="text-sm mt-4 mb-4 line-height-3 text-white">Available for MacOS, Web and Google accounts only</p>
                     <div className="flex justify-content-center align-items-center">
