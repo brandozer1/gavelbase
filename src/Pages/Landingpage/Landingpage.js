@@ -8,7 +8,7 @@ import { InputSwitch } from 'primereact/inputswitch';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Link } from 'react-router-dom';
 import LandingBackground from '../../Assets/LandingBackground.png';
-import Logo from '../../Assets/Logo.webp';
+import Logo from '../../Assets/Logo.png';
 
 export default function Landingpage() {
     const rootBtnRef = useRef(null);
