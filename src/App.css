@@ -24,8 +24,8 @@
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+body {
+  overflow-x: hidden;
 }
 
 @keyframes App-logo-spin {

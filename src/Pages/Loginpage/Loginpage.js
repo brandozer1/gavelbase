@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { Checkbox } from 'primereact/checkbox';
+import Logo from '../../Assets/Logo.jpg';
 export default function Loginpage() {
     const [checked1, setChecked1] = useState(false);
 
@@ -9,7 +10,7 @@ export default function Loginpage() {
     <div className='flex justify-content-center w-screen align-items-center bg-primary  lg:h-screen'>
         <div className="surface-card p-4 shadow-2 border-round w-full lg:w-6">
             <div className="text-center mb-5">
-                <img src="assets/images/blocks/logos/hyper.svg" alt="hyper" height={50} className="mb-3" />
+                <img src={Logo} alt="hyper" height={100} className="mb-3" />
                 <div className="text-900 text-3xl font-medium mb-3">Member Login</div>
                 <span className="text-600 font-medium line-height-3">Don't have an account?</span>
                 <a className="font-medium no-underline ml-2 text-blue-500 cursor-pointer">Create today!</a>
@@ -25,7 +26,7 @@ export default function Loginpage() {
                 <div className="flex align-items-center justify-content-between mb-6">
                     <div className="flex align-items-center">
                         <Checkbox id="rememberme" className="mr-2" checked={checked1} onChange={(e) => setChecked1(e.checked)} />
-                        <label htmlFor="rememberme">Remember me</label>
+                        <label className='text-900' htmlFor="rememberme">Remember me</label>
                     </div>
                     <a className="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer">Forgot your password?</a>
                 </div>
