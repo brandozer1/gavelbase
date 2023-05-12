@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { Checkbox } from 'primereact/checkbox';
-import Logo from '../../Assets/Logo.jpg';
+import Logo from '../../Assets/Logo.png';
 export default function Loginpage() {
     const [checked1, setChecked1] = useState(false);
 
@@ -10,7 +10,7 @@ export default function Loginpage() {
     <div className='flex justify-content-center w-screen align-items-center bg-primary  lg:h-screen'>
         <div className="surface-card p-4 shadow-2 border-round w-full lg:w-6">
             <div className="text-center mb-5">
-                <img src={Logo} alt="hyper" height={100} className="mb-3" />
+                <img src={Logo} alt="hyper" className="mb-3 w-10 md:w-6" />
                 <div className="text-900 text-3xl font-medium mb-3">Member Login</div>
                 <span className="text-600 font-medium line-height-3">Don't have an account?</span>
                 <a className="font-medium no-underline ml-2 text-blue-500 cursor-pointer">Create today!</a>
