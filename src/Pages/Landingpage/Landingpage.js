@@ -18,7 +18,7 @@ export default function Landingpage() {
     return (
     
         <div className='w-screen'>
-            <div className="surface-overlay py-3 px-6 shadow-2 flex align-items-center justify-content-between relative lg:static">
+            <div className="surface-overlay py-3 px-4 shadow-2 flex align-items-center justify-content-between relative lg:static">
                 <img src={Logo} alt="hyper" height={50} />
                 <StyleClass nodeRef={rootBtnRef} selector="@next" enterClassName="hidden" leaveToClassName="hidden" hideOnOutsideClick>
                     <a ref={rootBtnRef} className="cursor-pointer block lg:hidden text-700" >
