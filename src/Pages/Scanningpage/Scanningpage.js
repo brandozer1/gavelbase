@@ -16,7 +16,7 @@ export default function Scanningpage() {
 
     return (
     <div>
-        <InputText onChange={(e)=>setUpc(e.value)} placeholder='Scan or Enter UPC' className='w-12'/>
+        <InputText onChange={(e)=>setUpc(e.target.value)} placeholder='Scan or Enter UPC' className='w-12'/>
         <Button onClick={()=>{handleCode(upc)}} label='Submit' className='w-12'/>
     </div>
     )
