@@ -14,6 +14,7 @@ import Landingpage from './Pages/Landingpage/Landingpage';
 import Createauctionpage from './Pages/Createauctionpage/Createauctionpage';
 import Createlotpage from './Pages/Createlotpage/Createlotpage';
 import Nav from './Components/Nav/Nav';
+import Scanningpage from './Pages/Scanningpage/Scanningpage';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         
         <Routes>
             <Route path='/Createlot' element={<><Nav /><Createlotpage/></>} />
+            <Route path='/Scanning' element={<><Nav /><Scanningpage/></>} />
             <Route path='/Createauction' element={<><Nav /><Createauctionpage/></>} />
             <Route path='/Login' element={<Loginpage/>} />
             <Route path='/Lots' element={<><Nav /><Lotpage/></>} />
