@@ -70,7 +70,7 @@ export default function Landingpage() {
 
                     <p className="text-sm mt-4 mb-4 line-height-3 text-white">Available for MacOS, Web and Google accounts only</p>
                     <div className="flex justify-content-center align-items-center">
-                        <a href="http://www.apple.com" className="text-white mr-3">
+                        <a href="https://www.apple.com" className="text-white mr-3">
                             <i className="pi pi-apple text-2xl"></i>
                         </a>
                         <a href="https://play.google.com" className="text-white mr-3">
