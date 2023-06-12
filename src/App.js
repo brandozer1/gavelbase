@@ -14,7 +14,6 @@ import Landingpage from './Pages/Landingpage/Landingpage';
 import Createauctionpage from './Pages/Createauctionpage/Createauctionpage';
 import Createlotpage from './Pages/Createlotpage/Createlotpage';
 import Nav from './Components/Nav/Nav';
-import Scanningpage from './Pages/Scanningpage/Scanningpage';
 import Fasttrackpage from './Pages/Fasttrackpage/Fasttrackpage';
 
 function App() {
@@ -24,7 +23,6 @@ function App() {
         
         <Routes>
             <Route path='/Createlot' element={<><Nav /><Createlotpage/></>} />
-            <Route path='/Scanning' element={<><Nav /><Scanningpage/></>} />
             <Route path='/Createauction' element={<><Nav /><Createauctionpage/></>} />
             <Route path='/Fasttrack' element={<Fasttrackpage/>} />
             <Route path='/Login' element={<Loginpage/>} />
