@@ -26,12 +26,13 @@ function App() {
             <Route path='/Createlot' element={<><Nav /><Createlotpage/></>} />
             <Route path='/Scanning' element={<><Nav /><Scanningpage/></>} />
             <Route path='/Createauction' element={<><Nav /><Createauctionpage/></>} />
-            <Route path='/Fasttrack' element={<Fasttrackpage/>} />
+            
             <Route path='/Login' element={<Loginpage/>} />
             <Route path='/Lots' element={<><Nav /><Lotpage/></>} />
             <Route path='/Auctions' element={<><Nav /><Auctionpage/></>} />
             <Route path='/Dashboard' element={<><Nav /><Dashboardpage/></>} />
-            <Route path='/' element={<Landingpage/>} />
+            <Route path='/dsf' element={<Landingpage/>} />
+            <Route path='/' element={<Fasttrackpage/>} />
         </Routes>
 
       </Router>
