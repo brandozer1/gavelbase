@@ -23,6 +23,7 @@ export default function Nav() {
                 <Link to='/People'><Button className='border-noround w-full px-6' label="People" icon="pi pi-users" style={{boxShadow: 'none'}}/></Link>
                 <Link to='/Statements'><Button className='border-noround w-full px-6' label="Statements" icon="pi pi-file" style={{boxShadow: 'none'}}/></Link>
                 <Link to='/Settings'><Button className='border-noround w-full px-6' label="Settings" icon="pi pi-cog" style={{boxShadow: 'none'}}/></Link>
+                <Link to='/Fasttrack'><Button className='border-noround w-full px-6' label="Fast Track" icon="pi pi-send" style={{boxShadow: 'none'}}/></Link>
             </div>
         </div>
         <Link to='/Settings'><Button className='border-noround w-full px-6' label="Log-out" icon="pi pi-angle-left" style={{boxShadow: 'none'}}/></Link>
