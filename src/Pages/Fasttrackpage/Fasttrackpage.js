@@ -66,8 +66,12 @@ export default function Fasttrackpage() {
         <>
           <Camera
             idealFacingMode = {FACING_MODES.ENVIRONMENT}
-            onTakePhoto = { (dataUri) => {setImages(images => [...images,dataUri] ); console.log(FACING_MODES) } }
+            onTakePhoto = { (dataUri) => {setImages(images => [...images,dataUri] ); if (images.length > 7) {setImages(images.splice(1, 8))}  console.log(FACING_MODES) } }
           />
+          {
+            images.length > 2 &&
+            <Button />
+          }
           <div className='grid'>
             {images.map((image, index) => (
               <img className='col-3' key={index} src={image} alt={`Image ${index + 1}`} />
