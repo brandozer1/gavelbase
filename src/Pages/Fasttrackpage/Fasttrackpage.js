@@ -89,7 +89,7 @@ export default function Fasttrackpage() {
   }
 
   function handleUPC() {
-    axios.get(`http://localhost:3001/api/lookup/${upc}`, {withCredentials: true}).then((res)=>{
+    axios.get(`https://gavelbaseserver.herokuapp.com/api/lookup/${upc}`, {withCredentials: true}).then((res)=>{
       console.log(res.data);
       setProductInfo(res.data);
       for (let i = 0; i < res.data.items.length; i++ ) {
