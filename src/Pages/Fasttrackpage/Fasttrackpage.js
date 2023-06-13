@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import Camera from 'react-html5-camera-photo';
+import { FACING_MODES } from 'react-html5-camera-photo';
 import 'react-html5-camera-photo/build/css/index.css';
 import './Fasttrackpage.css'
 
@@ -64,6 +65,7 @@ export default function Fasttrackpage() {
         step == 0 &&
         <>
           <Camera
+            idealFacingMode = {FACING_MODES.ENVIRONMENT}
             onTakePhoto = { (dataUri) => {setImages(images => [...images,dataUri] ); } }
           />
           {images.map((image, index) => (
