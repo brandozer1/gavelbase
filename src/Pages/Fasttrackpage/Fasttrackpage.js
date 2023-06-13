@@ -70,7 +70,7 @@ export default function Fasttrackpage() {
           />
           <div className='grid'>
             {images.map((image, index) => (
-              <img className='col-4' key={index} src={image} alt={`Image ${index + 1}`} />
+              <img className='col-3' key={index} src={image} alt={`Image ${index + 1}`} />
             ))}
           </div>
           
