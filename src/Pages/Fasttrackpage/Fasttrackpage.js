@@ -1,4 +1,4 @@
-import React, { useState} from 'react'
+import React, { useState, useEffect} from 'react'
 
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
@@ -39,7 +39,9 @@ export default function Fasttrackpage() {
   const [upc, setUpc] = useState(null);
   const [images, setImages] = useState([]);
 
-  
+  useEffect(() => {
+
+  }, [images]);
   
 
   return (
