@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import Camera from 'react-html5-camera-photo';
+import { ListBox } from 'primereact/listbox';
 import axios from 'axios';
 import { FACING_MODES } from 'react-html5-camera-photo';
 import 'react-html5-camera-photo/build/css/index.css';
@@ -34,6 +35,29 @@ const infoReq = [
 ]
 
 export default function Fasttrackpage() {
+  
+
+  const conditions = [
+    'New',
+    'Unused',
+    'Slightly Used',
+    'Used',
+    'Parts & Repair',
+  ]
+
+  const missingStates = [
+    'Battery',
+    'Cable(s)',
+    'Attatchment',
+    'Bag'
+  ]
+
+  const statuses = [
+    'Tested Works',
+    'Partially Tested & Works',
+    'Unable to Test'
+  ]
+
   const [step, setStep] = useState(-1);
   const [manual, setManual] = useState(false);
 
@@ -42,15 +66,54 @@ export default function Fasttrackpage() {
   const [upc, setUpc] = useState(null);
   const [bufferimg, setBufferimg] = useState(null); // datauri buffer because the camera comp is weird and wont allow me to push to state
   const [images, setImages] = useState([]);
+  const [productInfo, setProductInfo] = useState({});
+
+  const [condition, setCondition] = useState('');
+  const [missing, setMissing] = useState([]);
+  const [status, setStatus] = useState('');
+
+
+  const [brand, setBrand] = useState('');
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [color, setColor] = useState('');
+  const [model, setModel] = useState('');
+
+  
+  useEffect(() => {
+    console.log(missing)
+  }, [missing])
 
   function nextStep() {
     setStep(step+1);
   }
 
   function handleUPC() {
-    axios.get(`https://gavelbaseserver.herokuapp.com/api/lookup/${upc}`, {withCredentials: true}).then((res)=>{
+    axios.get(`http://localhost:3001/api/lookup/${upc}`, {withCredentials: true}).then((res)=>{
       console.log(res.data);
-    }).catch();
+      setProductInfo(res.data);
+      for (let i = 0; i < res.data.items.length; i++ ) {
+        if (res.data.items[i].model) {
+          setModel(res.data.items[i].model); 
+        }
+        if (res.data.items[i].brand) {
+          setBrand(res.data.items[i].brand);
+        }
+        if (res.data.items[i].color) {
+          setColor(res.data.items[i].color);
+        }
+        if (res.data.items[i].title) {
+          setTitle(res.data.items[i].title);
+        }
+        if (res.data.items[i].description) {
+          setDescription(res.data.items[i].description);
+        }
+      }
+      console.log(brand, title, description, color, model);
+      
+    }).catch((err)=>{
+      console.log(err.response);
+    });
   }
 
 
@@ -63,11 +126,11 @@ export default function Fasttrackpage() {
       
       {
         step == -1 &&
-      <div className='flex flex-column gap-2 align-items-center'>
+      <form onSubmit={()=>{document.documentElement.requestFullscreen(); nextStep()}} className='flex flex-column gap-2 align-items-center'>
         <div className='text-900 text-xl mt-8'>To begin Enter your name below</div>
-        <InputText onChange={(e)=>setName(e.target.value)} className='sm:w-6 w-10' placeholder='Name' />
-        <Button className='sm:bottom-50 bottom-0 mb-3 w-11 sm:w-6 fixed' onClick={()=>{document.documentElement.requestFullscreen(); nextStep()}} label="Begin Session" icon="pi pi-play" />
-      </div>
+        <InputText autoFocus onChange={(e)=>setName(e.target.value)} className='sm:w-6 w-10' placeholder='Name' />
+        <Button className='sm:bottom-50 bottom-0 mb-3 w-11 sm:w-6 fixed' type='submit' label="Begin Session" icon="pi pi-play" />
+      </form>
       
       }
 
@@ -95,13 +158,7 @@ export default function Fasttrackpage() {
         step == 1 &&
         <>
           <div className='text-900 text-xl mt-8'>What is the condition of the product?</div>
-          <Button className='sm:w-6 w-full' onClick={()=>{nextStep()}} label='New' />
-          <Button className='sm:w-6 w-full' onClick={()=>{nextStep()}} label='Unused' />
-          <Button className='sm:w-6 w-full' onClick={()=>{nextStep()}} label='Slightly Used' />
-          <Button className='sm:w-6 w-full' onClick={()=>{nextStep()}} label='Used' />
-          <Button className='sm:w-6 w-full' onClick={()=>{nextStep()}} label='Parts & Repair' />
-
-
+          <ListBox value={condition} onChange={(e) => {setCondition(e.value); nextStep()}} options={conditions} className="w-full md:w-14rem" />
         </>
       }
 
@@ -109,11 +166,14 @@ export default function Fasttrackpage() {
         step == 2 &&
         <>
           <div className='text-900 text-xl mt-8'>What is the product missing?</div>
-          <Button className='sm:w-6 w-full' onClick={()=>{nextStep()}} label='Nothing' />
-          <Button className='sm:w-6 w-full' onClick={()=>{nextStep()}} label='Battery' />
-          <Button className='sm:w-6 w-full' onClick={()=>{nextStep()}} label='Charger' />
-          <Button className='sm:w-6 w-full' onClick={()=>{nextStep()}} label='Attachments' />
-          <Button className='sm:w-6 w-full' onClick={()=>{nextStep()}} label='Bag' />
+          <ListBox multiple value={missing} onChange={(e) => setMissing(e.value)} options={missingStates} className="w-full md:w-14rem" />
+          {
+            missing.length > 0 ?
+            <Button onClick={()=>{nextStep()}} label='Continue' />
+            :
+            <Button onClick={()=>{nextStep()}} label='Nothing' />
+          }
+          
         </>
       }
 
@@ -121,28 +181,100 @@ export default function Fasttrackpage() {
         step == 3 &&
         <>
           <div className='text-900 text-xl mt-8'>What is the product's testing status?</div>
-          <Button className='sm:w-6 w-full' onClick={()=>{nextStep()}} label='Tested Works' />
-          <Button className='sm:w-6 w-full' onClick={()=>{nextStep()}} label='Partially Tested & Works' />
-          <Button className='sm:w-6 w-full' onClick={()=>{nextStep()}} label='Unable to Test' />
-        </>
+          <ListBox value={status} onChange={(e) => {setStatus(e.value); nextStep()}} options={statuses} className="w-full md:w-14rem" /></>
       }
 
       {
         step == 4 &&
-        <>
+        <form className='flex flex-column align-items-center gap-2' onSubmit={()=>{nextStep()}}>
           <div className='text-900 text-xl mt-8'>Scan or enter the Lot ID.</div>
-          <InputText onChange={(e)=>setLotId(e.target.value)} className='sm:w-6 w-10' placeholder='Lot ID' />
-          <Button className='sm:w-6 w-full' onClick={()=>{nextStep()}} label='Continue' />
-        </>
+          <InputText autoFocus onChange={(e)=>setLotId(e.target.value)} className='sm:w-6 w-10' placeholder='Lot ID' />
+          <Button className='sm:w-6 w-11 bottom-0 fixed m-3' type='submit' label='Continue' />
+        </form>
       }
 
       {
         step == 5 &&
-        <>
+        <form className='flex flex-column align-items-center gap-2' onSubmit={()=>{handleUPC(); nextStep()}}>
           <div className='text-900 text-xl mt-8'>Scan or enter the products UPC (Barcode).</div>
-          <InputText onChange={(e)=>setUpc(e.target.value)} className='sm:w-6 w-10' placeholder='UPC' />
-          <Button className='sm:w-6 w-full' onClick={()=>{handleUPC()}} label='Continue' />
-        </>
+          <InputText autoFocus onChange={(e)=>setUpc(e.target.value)} className='sm:w-6 w-10' placeholder='UPC' />
+          <Button className='sm:w-6 w-11 bottom-0 fixed m-3' type='submit' label='Continue' />
+        </form>
+      }
+
+      {
+        step == 6 && (productInfo.code == 'OK' ?
+        <div>
+
+          <div className='text-900 text-xl mt-8'>Confirm data below</div>
+          
+
+
+          {
+            brand ?
+            <div className='text-900 text-xl mt-8'>Brand: {brand}</div>
+            :
+            <span className="p-float-label">
+              <InputText id="Brand" value={brand} onChange={(e) => setBrand(e.target.value)} />
+              <label htmlFor="Brand">Brand</label>
+            </span>
+          }
+          {
+            title ?
+            <div className='text-900 text-xl mt-8'>Title: {title}</div>
+            :
+            <span className="p-float-label">
+              <InputText id="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
+              <label htmlFor="Title">Title</label>
+            </span>
+          }
+          {
+            description ?
+            <div className='text-900 text-xl mt-8'>Description: {description}</div>
+            :
+            <span className="p-float-label">
+              <InputText id="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
+              <label htmlFor="Description">Description</label>
+            </span>
+          }
+          {
+            color ?
+            <div className='text-900 text-xl mt-8'>Color: {color}</div>
+            :
+            <span className="p-float-label">
+              <InputText id="Color" value={color} onChange={(e) => setColor(e.target.value)} />
+              <label htmlFor="Color">Color</label>
+            </span>
+          }
+          {
+            model ?
+            <div className='text-900 text-xl mt-8'>Model: {model}</div>
+            :
+            <span className="p-float-label">
+              <InputText id="Model" value={model} onChange={(e) => setModel(e.target.value)} />
+              <label htmlFor="Model">Model</label>
+            </span>
+          }
+          
+          <div className='text-900 text-xl mt-8'>Condition: {condition}</div>
+          <div className='text-900 text-xl mt-8'>Missing: 
+            {
+              missing.map((item, index) => (
+                <span key={index}>{item}, </span>
+              ))
+            }
+          </div>
+          <div className='text-900 text-xl mt-8'>Status: {status}</div>
+          
+          
+          <Button className='sm:w-6 w-11 bottom-0 fixed m-3' type='submit' label='Finish & Submit' />
+        </div>
+        :
+        <div>
+          <div className='text-900 text-xl mt-8'>Product not found. Please enter the info below:</div>
+          
+        </div>
+        )
       }
 
 
