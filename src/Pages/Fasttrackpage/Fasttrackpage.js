@@ -9,6 +9,7 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import Camera from 'react-html5-camera-photo';
 import 'react-html5-camera-photo/build/css/index.css';
+import './Fasttrackpage.css'
 
 import Logo from '../../Assets/fasttracklogo.png'
 
@@ -37,27 +38,25 @@ export default function Fasttrackpage() {
   const [name, setName] = useState('');
   const [lotId, setLotId] = useState(null);
   const [upc, setUpc] = useState(null);
+  const [bufferimg, setBufferimg] = useState(null); // datauri buffer because the camera comp is weird and wont allow me to push to state
   const [images, setImages] = useState([]);
 
-  useEffect(() => {
 
-  }, [images]);
-  
 
   return (
-    <div className='flex w-full flex-column w-full align-items-center m-3 gap-2'>
-      <div className='flex align-items-center justify-content-center gap-4'>
-        <img className='w-2' src={Logo} />
+    <div className='flex w-full flex-column w-full align-items-centers gap-2 p-2'>
+      <div className='flex align-items-center sm:justify-content-center justify-content-between gap-4'>
+        <img className='sm:w-2 w-5 ' src={Logo} />
         <Button label="Full Help" icon="pi pi-book" onClick={() => setManual(true)} />
       </div>
       
       {
         step == -1 &&
-      <>
+      <div className='flex flex-column gap-2 align-items-center'>
         <div className='text-900 text-xl mt-8'>To begin Enter your name below</div>
-        <InputText onChange={(e)=>setName(e.target.value)} className='w-6' placeholder='Name' />
-        <Button onClick={()=>{setStep(step+1)}} label="Begin Session" icon="pi pi-play" />
-      </>
+        <InputText onChange={(e)=>setName(e.target.value)} className='sm:w-6 w-10' placeholder='Name' />
+        <Button className='sm:bottom-50 bottom-0 mb-3 w-11 sm:w-6 fixed' onClick={()=>{document.documentElement.requestFullscreen(); setStep(step+1)}} label="Begin Session" icon="pi pi-play" />
+      </div>
       
       }
 
@@ -65,11 +64,11 @@ export default function Fasttrackpage() {
         step == 0 &&
         <>
           <Camera
-            onTakePhoto = { (dataUri) => { images.push(dataUri); console.log(images) } }
+            onTakePhoto = { (dataUri) => {setImages(images => [...images,dataUri] ); } }
           />
           {images.map((image, index) => (
-        <img key={index} src={image} alt={`Image ${index + 1}`} />
-      ))}
+            <img key={index} src={image} alt={`Image ${index + 1}`} />
+          ))}
         </>
       }
 
