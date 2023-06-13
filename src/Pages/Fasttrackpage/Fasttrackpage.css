@@ -1,5 +1,5 @@
 .react-html5-camera-photo>video {
-    width: 100vw ;
+    /* width: 100vw ; */
     position: fixed;
     bottom: 0;
     left: 0;
