@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import Camera from 'react-html5-camera-photo';
+import axios from 'axios';
 import { FACING_MODES } from 'react-html5-camera-photo';
 import 'react-html5-camera-photo/build/css/index.css';
 import './Fasttrackpage.css'
@@ -42,6 +43,15 @@ export default function Fasttrackpage() {
   const [bufferimg, setBufferimg] = useState(null); // datauri buffer because the camera comp is weird and wont allow me to push to state
   const [images, setImages] = useState([]);
 
+  function nextStep() {
+    setStep(step+1);
+  }
+
+  function handleUPC() {
+    axios.get(`https://gavelbaseserver.herokuapp.com/api/lookup/${upc}`, {withCredentials: true}).then((res)=>{
+      console.log(res.data);
+    }).catch();
+  }
 
 
   return (
@@ -56,7 +66,7 @@ export default function Fasttrackpage() {
       <div className='flex flex-column gap-2 align-items-center'>
         <div className='text-900 text-xl mt-8'>To begin Enter your name below</div>
         <InputText onChange={(e)=>setName(e.target.value)} className='sm:w-6 w-10' placeholder='Name' />
-        <Button className='sm:bottom-50 bottom-0 mb-3 w-11 sm:w-6 fixed' onClick={()=>{document.documentElement.requestFullscreen(); setStep(step+1)}} label="Begin Session" icon="pi pi-play" />
+        <Button className='sm:bottom-50 bottom-0 mb-3 w-11 sm:w-6 fixed' onClick={()=>{document.documentElement.requestFullscreen(); nextStep()}} label="Begin Session" icon="pi pi-play" />
       </div>
       
       }
@@ -70,7 +80,7 @@ export default function Fasttrackpage() {
           />
           {
             images.length > 2 &&
-            <Button label='Continue' />
+            <Button onClick={()=>{nextStep()}} label='Continue' />
           }
           <div className='grid'>
             {images.map((image, index) => (
@@ -84,11 +94,59 @@ export default function Fasttrackpage() {
       {
         step == 1 &&
         <>
-          <div className='text-900 text-xl mt-8'>Hi {name}! after you are done testing the product scan the lot label you applied.</div>
-          <InputText className='w-6' placeholder='Product Lot Id' />
-          <Button label="Continue" icon="pi pi-play" />
+          <div className='text-900 text-xl mt-8'>What is the condition of the product?</div>
+          <Button className='sm:w-6 w-full' onClick={()=>{nextStep()}} label='New' />
+          <Button className='sm:w-6 w-full' onClick={()=>{nextStep()}} label='Unused' />
+          <Button className='sm:w-6 w-full' onClick={()=>{nextStep()}} label='Slightly Used' />
+          <Button className='sm:w-6 w-full' onClick={()=>{nextStep()}} label='Used' />
+          <Button className='sm:w-6 w-full' onClick={()=>{nextStep()}} label='Parts & Repair' />
+
+
         </>
       }
+
+      {
+        step == 2 &&
+        <>
+          <div className='text-900 text-xl mt-8'>What is the product missing?</div>
+          <Button className='sm:w-6 w-full' onClick={()=>{nextStep()}} label='Nothing' />
+          <Button className='sm:w-6 w-full' onClick={()=>{nextStep()}} label='Battery' />
+          <Button className='sm:w-6 w-full' onClick={()=>{nextStep()}} label='Charger' />
+          <Button className='sm:w-6 w-full' onClick={()=>{nextStep()}} label='Attachments' />
+          <Button className='sm:w-6 w-full' onClick={()=>{nextStep()}} label='Bag' />
+        </>
+      }
+
+      {
+        step == 3 &&
+        <>
+          <div className='text-900 text-xl mt-8'>What is the product's testing status?</div>
+          <Button className='sm:w-6 w-full' onClick={()=>{nextStep()}} label='Tested Works' />
+          <Button className='sm:w-6 w-full' onClick={()=>{nextStep()}} label='Partially Tested & Works' />
+          <Button className='sm:w-6 w-full' onClick={()=>{nextStep()}} label='Unable to Test' />
+        </>
+      }
+
+      {
+        step == 4 &&
+        <>
+          <div className='text-900 text-xl mt-8'>Scan or enter the Lot ID.</div>
+          <InputText onChange={(e)=>setLotId(e.target.value)} className='sm:w-6 w-10' placeholder='Lot ID' />
+          <Button className='sm:w-6 w-full' onClick={()=>{nextStep()}} label='Continue' />
+        </>
+      }
+
+      {
+        step == 5 &&
+        <>
+          <div className='text-900 text-xl mt-8'>Scan or enter the products UPC (Barcode).</div>
+          <InputText onChange={(e)=>setUpc(e.target.value)} className='sm:w-6 w-10' placeholder='UPC' />
+          <Button className='sm:w-6 w-full' onClick={()=>{handleUPC()}} label='Continue' />
+        </>
+      }
+
+
+
       
       
       
