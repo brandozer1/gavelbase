@@ -65,8 +65,8 @@ export default function Fasttrackpage() {
         step == 0 &&
         <>
           <Camera
-            idealFacingMode = {FACING_MODES.USER}
-            onTakePhoto = { (dataUri) => {setImages(images => [...images,dataUri] ); } }
+            idealFacingMode = {FACING_MODES.ENVIRONMENT}
+            onTakePhoto = { (dataUri) => {setImages(images => [...images,dataUri] ); console.log(FACING_MODES) } }
           />
           {images.map((image, index) => (
             <img key={index} src={image} alt={`Image ${index + 1}`} />
