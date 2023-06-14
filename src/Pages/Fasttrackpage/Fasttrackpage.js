@@ -7,6 +7,7 @@ import { Dialog } from 'primereact/dialog';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
+import { Skeleton } from 'primereact/skeleton';
 import { Link } from 'react-router-dom';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -18,6 +19,7 @@ import 'react-html5-camera-photo/build/css/index.css';
 import './Fasttrackpage.css'
 import success from "../../Assets/success.mp3";
 import error from "../../Assets/fail.mp3";
+import complete from "../../Assets/complete.mp3";
 
 import Logo from '../../Assets/fasttracklogo.png'
 
@@ -86,6 +88,9 @@ export default function Fasttrackpage() {
   const [model, setModel] = useState('');
   const [stockImage, setStockImage] = useState('');
 
+  const [locationInput, setLocationInput] = useState('');
+  const [locationCode, setLocationCode] = useState(null);
+  const [locationLotId, setLocationLotId] = useState(null);
 
   function nextStep(status = null) {
     
@@ -180,6 +185,34 @@ export default function Fasttrackpage() {
     })
   }
 
+  function handleManualSubmission(e) {
+    e.preventDefault();
+    if (locationInput.split('-')[0] == 'loc') {
+      setLocationCode(locationInput);
+    }else{
+      setLocationLotId(locationInput);
+    }
+    setLocationInput('');
+    
+    
+  }
+
+  useEffect(()=>{
+    if (locationCode && locationLotId) {
+      // updateLot
+      axios.post('https://gavelbaseserver.herokuapp.com/api/updateLot', {lotId: locationLotId, loc: locationCode}, {withCredentials: true}).then((res)=>{
+        new Audio(complete).play();
+      }).catch((err)=>{
+        new Audio(error).play();
+        console.log(err.response);
+      });
+      setLocationCode(null);
+      setLocationLotId(null);
+    }else{
+      new Audio(success).play();
+    }
+  }, [locationCode, locationLotId])
+
 
   return (
     <div className='flex w-full flex-column w-full align-items-centers gap-2 p-2'>
@@ -197,12 +230,57 @@ export default function Fasttrackpage() {
         
       </div>
       
+
+      {
+        step == -2 &&
+      <form onSubmit={(e)=>{handleManualSubmission(e)}} className='flex flex-column w-full gap-2 align-items-center'>
+        <InputText value={locationInput} onChange={(e)=>setLocationInput(e.target.value)} className='w-full' autoFocus />
+        {
+          locationCode ?
+          <div className='flex flex-column w-full gap-3 p-3 border-green-200 border-2 border-round-xl'>
+            <h3 className='m-0'>Location Code</h3>
+            <div>Location Code Found, waiting for Lot Id</div>
+            <div className='text-lg'>{locationCode}</div>
+          </div>
+          :
+          
+          <div className='flex flex-column w-full gap-3 p-3 border-200 border-2 border-round-xl'>
+            <h3 className='m-0'>Location Code</h3>
+            <div>Waiting For Scan</div>
+            <Skeleton height="2rem" className="mb-2" borderRadius="16px"></Skeleton>
+          </div>
+            
+          
+        }
+
+        {
+          locationLotId ?
+          <div className='flex flex-column w-full gap-3 p-3 border-green-200 border-2 border-round-xl'>
+            <h3 className='m-0'>Lot Id</h3>
+            <div>Lot Id Found, waiting for Location Code</div>
+            <div className='text-lg'>{locationLotId}</div>
+          </div>
+          :
+          <div className='flex flex-column w-full gap-3 p-3 border-200 border-2 border-round-xl'>
+            <h3 className='m-0'>Lot Id</h3>
+            <div>Waitng For Lot Id Scan</div>
+            <Skeleton height="2rem" className="mb-2" borderRadius="16px"></Skeleton>
+          </div>
+        }
+        
+        
+        <Button className='w-full sm:w-6' label="Manual Submit" icon="pi pi-play" />
+        <Button className='w-full sm:w-6' onClick={()=>{setStep(-1); setLocationCode(null); setLocationLotId(null)}} label="Exit Session" icon="pi pi-times" severity='danger' />
+      </form>
+      
+      }
+      
       {
         step == -1 &&
       <div className='flex flex-column gap-2 align-items-center'>
         <div className='text-900 text-xl mt-8'>To begin Enter your name below</div>
         <InputText autoFocus onChange={(e)=>setName(e.target.value)} className='sm:w-6 w-10' placeholder='Name' />
-        <Button className='sm:bottom-50 bottom-0 mb-8 w-11 sm:w-6 fixed' type='submit' label="Begin Locating Session" icon="pi pi-map-marker" />
+        <Button className='sm:bottom-50 bottom-0 mb-8 w-11 sm:w-6 fixed' onClick={()=>{if (name) {document.documentElement.requestFullscreen(); setStep(-2); new Audio(success).play();} else {new Audio(error).play();}}} label="Begin Locating Session" icon="pi pi-map-marker" />
         <Button onClick={()=>{if (name) {document.documentElement.requestFullscreen(); nextStep(true)} else {nextStep(false)}}} className='sm:bottom-50 bottom-0 mb-3 w-11 sm:w-6 fixed' type='submit' label="Begin Uploading Session" icon="pi pi-cloud-upload" />
       </div>
       
@@ -362,7 +440,7 @@ export default function Fasttrackpage() {
           
           
           <Button className='sm:w-6 w-11 bottom-0 fixed mx-3 mb-8' type='submit' label='Send to Data Entry' />
-          <Button className='sm:w-6 w-11 bottom-0 fixed m-3' onClick={()=>{handleSubmission(); restart()}} label='Finish & Submit' />
+          <Button className='sm:w-6 w-11 bottom-0 fixed m-3' onClick={()=>{handleSubmission(); new Audio(complete).play(); restart()}} label='Finish & Submit' />
         </div>
         
       }
