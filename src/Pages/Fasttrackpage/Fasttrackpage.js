@@ -79,11 +79,8 @@ export default function Fasttrackpage() {
   const [description, setDescription] = useState('');
   const [color, setColor] = useState('');
   const [model, setModel] = useState('');
+  const [stockImage, setStockImage] = useState('');
 
-  
-  useEffect(() => {
-    console.log(missing)
-  }, [missing])
 
   function nextStep() {
     setStep(step+1);
@@ -94,20 +91,23 @@ export default function Fasttrackpage() {
       console.log(res.data);
       setProductInfo(res.data);
       for (let i = 0; i < res.data.items.length; i++ ) {
-        if (res.data.items[i].model) {
+        if (res.data.items[i].model && !model) {
           setModel(res.data.items[i].model); 
         }
-        if (res.data.items[i].brand) {
+        if (res.data.items[i].brand && !brand) {
           setBrand(res.data.items[i].brand);
         }
-        if (res.data.items[i].color) {
+        if (res.data.items[i].color && !color) {
           setColor(res.data.items[i].color);
         }
-        if (res.data.items[i].title) {
+        if (res.data.items[i].title && !title) {
           setTitle(res.data.items[i].title);
         }
-        if (res.data.items[i].description) {
+        if (res.data.items[i].description && !description) {
           setDescription(res.data.items[i].description);
+        }
+        if (res.data.items[i].images && !stockImage) {
+          setStockImage(res.data.items[i].images[0]);
         }
       }
       console.log(brand, title, description, color, model);
@@ -124,7 +124,9 @@ export default function Fasttrackpage() {
         <img className='sm:w-2 w-4 ' src={Logo} />
         <div className='p-inputgroup w-auto sm:h-auto h-2rem'>
           <Button label="Help" icon="pi pi-book" onClick={() => setManual(true)} />
-          <Button severity='danger' label="Restart" icon="pi pi-trash" onClick={() => {
+          { 
+            step >= 0 &&
+            <Button severity='danger' label="Restart" icon="pi pi-trash" onClick={() => {
             setStep(0); 
             setImages([]); 
             setCondition(''); 
@@ -136,6 +138,8 @@ export default function Fasttrackpage() {
             setColor('');
             setModel('');
             }} />
+          }
+          
 
         </div>
         
@@ -221,42 +225,49 @@ export default function Fasttrackpage() {
 
       {
         step == 6 && (productInfo.code == 'OK' ?
-        <div className='flex flex-column justify-content-start gap-4'>
+        <div className='flex flex-column align-items-center gap-4'>
 
           <div className='text-900 text-xl'>Confirm data below</div>
-          <span className="p-float-label">
+          <span className="p-float-label w-full">
             <InputText id="Brand" value={brand} onChange={(e) => setBrand(e.target.value)} className={'w-full ' + (!brand && 'p-invalid')} />
             <label htmlFor="Brand">Brand</label>
           </span>
-          <span className="p-float-label">
+          <span className="p-float-label w-full">
             <InputText id="Title" value={title} onChange={(e) => setTitle(e.target.value)} className={'w-full ' + (!title && 'p-invalid')} />
             <label htmlFor="Title">Title</label>
           </span>
-          <span className="p-float-label">
+          <span className="p-float-label w-full">
             <InputTextarea id="Description" value={description} onChange={(e) => setDescription(e.target.value)} className={'w-full ' + (!description && 'p-invalid')} />
             <label htmlFor="Description">Description</label>
           </span>
-          <span className="p-float-label">
+          <span className="p-float-label w-full">
             <InputText id="Color" value={color} onChange={(e) => setColor(e.target.value)} className={'w-full ' + (!color && 'p-invalid')} />
             <label htmlFor="Color">Color</label>
           </span>
-          <span className="p-float-label">
+          <span className="p-float-label w-full">
             <InputText id="Model" value={model} onChange={(e) => setModel(e.target.value)} className={'w-full ' + (!model && 'p-invalid')} />
             <label htmlFor="Model">Model</label>
           </span>
           
-          <div className='text-900 text-xl'>Condition: {condition}</div>
-          <div className='text-900 text-xl'>Missing:  
-            {
-              missing.length > 0 ?
-              missing.map((item, index) => (
-                <span key={index}>{" "+item}, </span>
-              ))
-              :
-              ' Nothing'
-            }
+          <div className='flex'>
+            <img className='w-4' src={stockImage} />
+            <div className='flex w-8 flex-column'>
+              <div className='text-900 text-xl'>Condition: {condition}</div>
+              <div className='text-900 text-xl'>Missing:  
+                {
+                  missing.length > 0 ?
+                  missing.map((item, index) => (
+                    <span key={index}>{" "+item}, </span>
+                  ))
+                  :
+                  ' Nothing'
+                }
+              </div>
+              <div className='text-900 text-xl'>Status: {status}</div>
+            </div>
           </div>
-          <div className='text-900 text-xl'>Status: {status}</div>
+          
+          
           
           <Button className='sm:w-6 w-11 bottom-0 fixed mx-3 mb-8' type='submit' label='Send to Data Entry' />
           <Button className='sm:w-6 w-11 bottom-0 fixed m-3' type='submit' label='Finish & Submit' />
