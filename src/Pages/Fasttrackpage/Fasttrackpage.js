@@ -141,8 +141,9 @@ export default function Fasttrackpage() {
           setStockImage(res.data.items[i].images[0]);
         }
       }
-      
+      new Audio(success).play();
     }).catch((err)=>{
+      new Audio(error).play();
       console.log(err.response);
     });
   }
@@ -284,7 +285,7 @@ export default function Fasttrackpage() {
 
       {
         step == 5 &&
-        <form className='flex flex-column align-items-center gap-2' onSubmit={()=>{handleUPC(); if (productInfo.code == 'OK') {nextStep(true)} else {nextStep(); new Audio(error).play();}}}>
+        <form className='flex flex-column align-items-center gap-2' onSubmit={()=>{handleUPC(); nextStep()}}>
           <div className='text-900 text-xl mt-8'>Scan or enter the products UPC (Barcode).</div>
           <InputText
             autoFocus
