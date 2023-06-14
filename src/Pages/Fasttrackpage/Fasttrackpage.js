@@ -16,6 +16,8 @@ import axios from 'axios';
 import { FACING_MODES } from 'react-html5-camera-photo';
 import 'react-html5-camera-photo/build/css/index.css';
 import './Fasttrackpage.css'
+import success from "../../Assets/success.mp3";
+import error from "../../Assets/fail.mp3";
 
 import Logo from '../../Assets/fasttracklogo.png'
 
@@ -85,8 +87,19 @@ export default function Fasttrackpage() {
   const [stockImage, setStockImage] = useState('');
 
 
-  function nextStep() {
+  function nextStep(status = null) {
+    
+    if (status == false) {
+      new Audio(error).play();
+      return;
+    }
+    if (status == true) {
+      new Audio(success).play();
+      
+    }
+
     setStep(step+1);
+    
   }
 
   function restart() {
@@ -128,7 +141,6 @@ export default function Fasttrackpage() {
           setStockImage(res.data.items[i].images[0]);
         }
       }
-      console.log(brand, title, description, color, model);
       
     }).catch((err)=>{
       console.log(err.response);
@@ -150,7 +162,15 @@ export default function Fasttrackpage() {
       JSON.stringify(missing),
       status,
       name,
-      new Date()
+      new Date().toLocaleString('en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      })
       
     ], {withCredentials: true}).then((res)=>{
       console.log(res.data);
@@ -178,11 +198,12 @@ export default function Fasttrackpage() {
       
       {
         step == -1 &&
-      <form onSubmit={()=>{document.documentElement.requestFullscreen(); nextStep()}} className='flex flex-column gap-2 align-items-center'>
+      <div className='flex flex-column gap-2 align-items-center'>
         <div className='text-900 text-xl mt-8'>To begin Enter your name below</div>
         <InputText autoFocus onChange={(e)=>setName(e.target.value)} className='sm:w-6 w-10' placeholder='Name' />
-        <Button className='sm:bottom-50 bottom-0 mb-3 w-11 sm:w-6 fixed' type='submit' label="Begin Session" icon="pi pi-play" />
-      </form>
+        <Button className='sm:bottom-50 bottom-0 mb-7 w-11 sm:w-6 fixed' type='submit' label="Begin Locating Session" icon="pi pi-map-marker" />
+        <Button onClick={()=>{if (name) {document.documentElement.requestFullscreen(); nextStep(true)} else {nextStep(false)}}} className='sm:bottom-50 bottom-0 mb-3 w-11 sm:w-6 fixed' type='submit' label="Begin Uploading Session" icon="pi pi-cloud-upload" />
+      </div>
       
       }
 
@@ -195,7 +216,7 @@ export default function Fasttrackpage() {
           />
           {
             images.length > 2 &&
-            <Button onClick={()=>{nextStep()}} label='Continue' />
+            <Button onClick={()=>{nextStep(true)}} label='Continue' />
           }
           <div className='grid'>
             {images.map((image, index) => (
@@ -210,7 +231,7 @@ export default function Fasttrackpage() {
         step == 1 &&
         <>
           <div className='text-900 text-xl mt-8'>What is the condition of the product?</div>
-          <ListBox value={condition} onChange={(e) => {setCondition(e.value); nextStep()}} options={conditions} className="w-full md:w-14rem" />
+          <ListBox value={condition} onChange={(e) => {setCondition(e.value); nextStep(true)}} options={conditions} className="w-full md:w-14rem" />
         </>
       }
 
@@ -221,9 +242,9 @@ export default function Fasttrackpage() {
           <ListBox multiple value={missing} onChange={(e) => setMissing(e.value)} options={missingStates} className="w-full md:w-14rem" />
           {
             missing.length > 0 ?
-            <Button onClick={()=>{nextStep()}} label='Continue' />
+            <Button onClick={()=>{nextStep(true)}} label='Continue' />
             :
-            <Button onClick={()=>{nextStep()}} label='Nothing' />
+            <Button onClick={()=>{nextStep(true)}} label='Nothing' />
           }
           
         </>
@@ -233,12 +254,12 @@ export default function Fasttrackpage() {
         step == 3 &&
         <>
           <div className='text-900 text-xl mt-8'>What is the product's testing status?</div>
-          <ListBox value={status} onChange={(e) => {setStatus(e.value); nextStep()}} options={statuses} className="w-full md:w-14rem" /></>
+          <ListBox value={status} onChange={(e) => {setStatus(e.value); nextStep(true)}} options={statuses} className="w-full md:w-14rem" /></>
       }
 
       {
         step == 4 &&
-        <form className='flex flex-column align-items-center gap-2' onSubmit={nextStep}>
+        <form className='flex flex-column align-items-center gap-2' onSubmit={()=>nextStep(true)}>
           <div className='text-900 text-xl mt-8'>Scan or enter the Lot ID.</div>
           <InputText
             autoFocus
@@ -263,7 +284,7 @@ export default function Fasttrackpage() {
 
       {
         step == 5 &&
-        <form className='flex flex-column align-items-center gap-2' onSubmit={()=>{handleUPC(); nextStep()}}>
+        <form className='flex flex-column align-items-center gap-2' onSubmit={()=>{handleUPC(); if (productInfo.code == 'OK') {nextStep(true)} else {nextStep(); new Audio(error).play();}}}>
           <div className='text-900 text-xl mt-8'>Scan or enter the products UPC (Barcode).</div>
           <InputText
             autoFocus
@@ -287,7 +308,7 @@ export default function Fasttrackpage() {
       }
 
       {
-        step == 6 && (productInfo.code == 'OK' ?
+        step == 6 && 
         <div className='flex flex-column align-items-center gap-4'>
 
           <div className='text-900 text-xl'>Confirm data below</div>
@@ -342,12 +363,7 @@ export default function Fasttrackpage() {
           <Button className='sm:w-6 w-11 bottom-0 fixed mx-3 mb-8' type='submit' label='Send to Data Entry' />
           <Button className='sm:w-6 w-11 bottom-0 fixed m-3' onClick={()=>{handleSubmission(); restart()}} label='Finish & Submit' />
         </div>
-        :
-        <div>
-          <div className='text-900 text-xl mt-8'>Product not found. Please enter the info below:</div>
-          
-        </div>
-        )
+        
       }
 
 
