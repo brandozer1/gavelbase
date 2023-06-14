@@ -217,9 +217,25 @@ export default function Fasttrackpage() {
 
       {
         step == 4 &&
-        <form className='flex flex-column align-items-center gap-2' onSubmit={()=>{nextStep()}}>
+        <form className='flex flex-column align-items-center gap-2' onSubmit={nextStep}>
           <div className='text-900 text-xl mt-8'>Scan or enter the Lot ID.</div>
-          <InputNumber useGrouping={false} autoFocus onChange={(e)=>setLotId(e.value)} className='sm:w-6 w-10' placeholder='Lot ID' />
+          <InputText
+            autoFocus
+            value={lotId}
+            onChange={(e) => {
+              const inputValue = e.target.value.replace(/[^0-9]/g, '');
+              setLotId(inputValue);
+            }}
+            className='sm:w-6 w-10'
+            placeholder='Lot ID'
+            inputMode='numeric'
+            pattern='[0-9]*'
+            autoComplete='off'
+            inputProps={{
+              inputMode: 'numeric',
+              pattern: '[0-9]*',
+            }}
+          />
           <Button className='sm:w-6 w-11 bottom-0 fixed m-3' type='submit' label='Continue' />
         </form>
       }
@@ -228,7 +244,23 @@ export default function Fasttrackpage() {
         step == 5 &&
         <form className='flex flex-column align-items-center gap-2' onSubmit={()=>{handleUPC(); nextStep()}}>
           <div className='text-900 text-xl mt-8'>Scan or enter the products UPC (Barcode).</div>
-          <InputNumber useGrouping={false} autoFocus onChange={(e)=>setUpc(e.value)} className='sm:w-6 w-10' placeholder='UPC' />
+          <InputText
+            autoFocus
+            value={upc}
+            onChange={(e) => {
+              const inputValue = e.target.value.replace(/[^0-9]/g, '');
+              setUpc(inputValue);
+            }}
+            className='sm:w-6 w-10'
+            placeholder='Lot ID'
+            inputMode='numeric'
+            pattern='[0-9]*'
+            autoComplete='off'
+            inputProps={{
+              inputMode: 'numeric',
+              pattern: '[0-9]*',
+            }}
+          />
           <Button className='sm:w-6 w-11 bottom-0 fixed m-3' type='submit' label='Continue' />
         </form>
       }
