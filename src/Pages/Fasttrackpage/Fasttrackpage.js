@@ -187,7 +187,8 @@ export default function Fasttrackpage() {
 
   function handleManualSubmission(e) {
     e.preventDefault();
-    if (locationInput.split('-')[0] == 'loc') {
+    if (locationInput.split('-')[0] == 'loc' || locationInput.split('-')[0] == 'Loc') {
+      setLocationInput(locationInput.replace('Loc', 'loc'))
       setLocationCode(locationInput);
     }else{
       setLocationLotId(locationInput);
