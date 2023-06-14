@@ -1,9 +1,10 @@
 import React, { useState, useEffect} from 'react'
 
 import { Button } from 'primereact/button';
-import { Card } from 'primereact/card';
+import { Divider } from 'primereact/divider';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
+import { InputTextarea } from 'primereact/inputtextarea';
 import { Link } from 'react-router-dom';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -119,9 +120,25 @@ export default function Fasttrackpage() {
 
   return (
     <div className='flex w-full flex-column w-full align-items-centers gap-2 p-2'>
-      <div className='flex align-items-center sm:justify-content-center justify-content-between gap-4'>
-        <img className='sm:w-2 w-5 ' src={Logo} />
-        <Button label="Full Help" icon="pi pi-book" onClick={() => setManual(true)} />
+      <div className='flex justify-content-between w-full align-items-center'>
+        <img className='sm:w-2 w-4 ' src={Logo} />
+        <div className='p-inputgroup w-auto sm:h-auto h-2rem'>
+          <Button label="Help" icon="pi pi-book" onClick={() => setManual(true)} />
+          <Button severity='danger' label="Restart" icon="pi pi-trash" onClick={() => {
+            setStep(0); 
+            setImages([]); 
+            setCondition(''); 
+            setMissing([]); 
+            setStatus('')
+            setBrand('');
+            setTitle('');
+            setDescription('');
+            setColor('');
+            setModel('');
+            }} />
+
+        </div>
+        
       </div>
       
       {
@@ -204,69 +221,44 @@ export default function Fasttrackpage() {
 
       {
         step == 6 && (productInfo.code == 'OK' ?
-        <div>
+        <div className='flex flex-column justify-content-start gap-4'>
 
-          <div className='text-900 text-xl mt-8'>Confirm data below</div>
+          <div className='text-900 text-xl'>Confirm data below</div>
+          <span className="p-float-label">
+            <InputText id="Brand" value={brand} onChange={(e) => setBrand(e.target.value)} className={'w-full ' + (!brand && 'p-invalid')} />
+            <label htmlFor="Brand">Brand</label>
+          </span>
+          <span className="p-float-label">
+            <InputText id="Title" value={title} onChange={(e) => setTitle(e.target.value)} className={'w-full ' + (!title && 'p-invalid')} />
+            <label htmlFor="Title">Title</label>
+          </span>
+          <span className="p-float-label">
+            <InputTextarea id="Description" value={description} onChange={(e) => setDescription(e.target.value)} className={'w-full ' + (!description && 'p-invalid')} />
+            <label htmlFor="Description">Description</label>
+          </span>
+          <span className="p-float-label">
+            <InputText id="Color" value={color} onChange={(e) => setColor(e.target.value)} className={'w-full ' + (!color && 'p-invalid')} />
+            <label htmlFor="Color">Color</label>
+          </span>
+          <span className="p-float-label">
+            <InputText id="Model" value={model} onChange={(e) => setModel(e.target.value)} className={'w-full ' + (!model && 'p-invalid')} />
+            <label htmlFor="Model">Model</label>
+          </span>
           
-
-
-          {
-            brand ?
-            <div className='text-900 text-xl mt-8'>Brand: {brand}</div>
-            :
-            <span className="p-float-label">
-              <InputText id="Brand" value={brand} onChange={(e) => setBrand(e.target.value)} />
-              <label htmlFor="Brand">Brand</label>
-            </span>
-          }
-          {
-            title ?
-            <div className='text-900 text-xl mt-8'>Title: {title}</div>
-            :
-            <span className="p-float-label">
-              <InputText id="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
-              <label htmlFor="Title">Title</label>
-            </span>
-          }
-          {
-            description ?
-            <div className='text-900 text-xl mt-8'>Description: {description}</div>
-            :
-            <span className="p-float-label">
-              <InputText id="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
-              <label htmlFor="Description">Description</label>
-            </span>
-          }
-          {
-            color ?
-            <div className='text-900 text-xl mt-8'>Color: {color}</div>
-            :
-            <span className="p-float-label">
-              <InputText id="Color" value={color} onChange={(e) => setColor(e.target.value)} />
-              <label htmlFor="Color">Color</label>
-            </span>
-          }
-          {
-            model ?
-            <div className='text-900 text-xl mt-8'>Model: {model}</div>
-            :
-            <span className="p-float-label">
-              <InputText id="Model" value={model} onChange={(e) => setModel(e.target.value)} />
-              <label htmlFor="Model">Model</label>
-            </span>
-          }
-          
-          <div className='text-900 text-xl mt-8'>Condition: {condition}</div>
-          <div className='text-900 text-xl mt-8'>Missing: 
+          <div className='text-900 text-xl'>Condition: {condition}</div>
+          <div className='text-900 text-xl'>Missing:  
             {
+              missing.length > 0 ?
               missing.map((item, index) => (
-                <span key={index}>{item}, </span>
+                <span key={index}>{" "+item}, </span>
               ))
+              :
+              ' Nothing'
             }
           </div>
-          <div className='text-900 text-xl mt-8'>Status: {status}</div>
+          <div className='text-900 text-xl'>Status: {status}</div>
           
-          
+          <Button className='sm:w-6 w-11 bottom-0 fixed mx-3 mb-8' type='submit' label='Send to Data Entry' />
           <Button className='sm:w-6 w-11 bottom-0 fixed m-3' type='submit' label='Finish & Submit' />
         </div>
         :
@@ -293,17 +285,24 @@ export default function Fasttrackpage() {
       
       
       
-      <Dialog header="Full Help WIP NOT FINISHED" visible={manual} style={{ width: '50vw' }} onHide={() => setManual(false)}>
-        <Card title='Step 1' className='w-12'>
+      <Dialog header="Full Help WIP NOT FINISHED" visible={manual} className='w-full p-2 flex flex-column' onHide={() => setManual(false)}>
+        <div className='w-12'>
+          <h3>Step 1</h3>
           <p>Retrieve a product and apply a single lot label. Place it on a reasonable location preferably near the barcode of the product, but NOT over it.</p>
-        </Card>
-        <Card title='Step 2' className='w-12'>
+        </div>
+        <Divider />
+        <div className='w-12'>
+          <h3>Step 2</h3>
           <p>Open and test the product by all available methods. Items should be tested by minimum viabillity in that it powers on, is intact, contains parts etc. Do not test products beyond initial use. If an item has a particular condition such as a broken piece or other oddities, leave the box opened for picturing. If you do not have a way to completely test a product, you can continue.</p>
-        </Card>
-        <Card title='Step 3' className='w-12'>
+        </div>
+        <Divider />
+        <div className='w-12'>
+          <h3>Step 3</h3>
           <p>Every product requires that you take a minimum of 3 pictures. These three will be a front facing shot, a back facing shot, and a top down. Make sure the product is in the center of the frame, with margin. Also make sure to take the pictures level/even with the table. Lastly Take pictures of all oddities found while testing. 4-8 pictures is the goal.</p>
-        </Card>
-        <Card title='Step 4' className='w-12'>
+        </div>
+        <Divider />
+        <div className='w-12'>
+          <h3>Step 4</h3>
           <p>Scan the Lot label applied earlier. This will upload as much information as possible about the product. If only partial information is found, you will be expected to perform manual entry according to the chart below. Descriptions should generally include relevant sizes according to the type of product, colors, compatible products etc. There will be a minimum length of 40 words. </p>
           <DataTable value={infoReq} tableStyle={{ minWidth: '50rem' }}>
             <Column field="field" header="field"></Column>
@@ -311,10 +310,12 @@ export default function Fasttrackpage() {
             <Column field="word" header="word requirements"></Column>
             <Column field="nots" header="DO-NOTS"></Column>
         </DataTable>
-        </Card>
-        <Card title='Step 5' className='w-12'>
+        </div>
+        <Divider />
+        <div className='w-12'>
+          <h3>Step 5</h3>
           <p>Once you have completed the above steps, you can submit the product for review. If you have any questions, please contact your supervisor.</p>
-        </Card>
+        </div>
       </Dialog>
       
       
