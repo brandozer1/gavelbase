@@ -2,7 +2,9 @@ import React, { useState, useEffect} from 'react'
 
 import { Button } from 'primereact/button';
 import { Divider } from 'primereact/divider';
+import { Tag } from 'primereact/tag';
 import { Dialog } from 'primereact/dialog';
+import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Link } from 'react-router-dom';
@@ -50,6 +52,7 @@ export default function Fasttrackpage() {
     'Battery',
     'Cable(s)',
     'Attatchment',
+    'Quantity',
     'Bag'
   ]
 
@@ -117,6 +120,12 @@ export default function Fasttrackpage() {
     });
   }
 
+  // function handleSubmission() {
+  //   axios.post('https://gavelbaseserver.herokuapp.com/api/appendLot', {[
+
+  //   ]}, {withCredentials: true}).then((res)=>{
+  // }
+
 
   return (
     <div className='flex w-full flex-column w-full align-items-centers gap-2 p-2'>
@@ -137,6 +146,7 @@ export default function Fasttrackpage() {
             setDescription('');
             setColor('');
             setModel('');
+            setStockImage('');
             }} />
           }
           
@@ -209,7 +219,7 @@ export default function Fasttrackpage() {
         step == 4 &&
         <form className='flex flex-column align-items-center gap-2' onSubmit={()=>{nextStep()}}>
           <div className='text-900 text-xl mt-8'>Scan or enter the Lot ID.</div>
-          <InputText autoFocus onChange={(e)=>setLotId(e.target.value)} className='sm:w-6 w-10' placeholder='Lot ID' />
+          <InputNumber useGrouping={false} autoFocus onChange={(e)=>setLotId(e.value)} className='sm:w-6 w-10' placeholder='Lot ID' />
           <Button className='sm:w-6 w-11 bottom-0 fixed m-3' type='submit' label='Continue' />
         </form>
       }
@@ -218,7 +228,7 @@ export default function Fasttrackpage() {
         step == 5 &&
         <form className='flex flex-column align-items-center gap-2' onSubmit={()=>{handleUPC(); nextStep()}}>
           <div className='text-900 text-xl mt-8'>Scan or enter the products UPC (Barcode).</div>
-          <InputText autoFocus onChange={(e)=>setUpc(e.target.value)} className='sm:w-6 w-10' placeholder='UPC' />
+          <InputNumber useGrouping={false} autoFocus onChange={(e)=>setUpc(e.value)} className='sm:w-6 w-10' placeholder='UPC' />
           <Button className='sm:w-6 w-11 bottom-0 fixed m-3' type='submit' label='Continue' />
         </form>
       }
@@ -249,9 +259,16 @@ export default function Fasttrackpage() {
             <label htmlFor="Model">Model</label>
           </span>
           
-          <div className='flex'>
-            <img className='w-4' src={stockImage} />
-            <div className='flex w-8 flex-column'>
+          <div className='flex justify-content-around w-full'>
+
+            <img className='w-4' src={stockImage ? stockImage : images[0]} />
+            <div className='flex flex-column'>
+              {
+                stockImage ?
+                  <Tag severity="success" value="Stock Image Found"></Tag>
+                :
+                  <Tag severity="danger" value="No Stock Image Found"></Tag>
+              }
               <div className='text-900 text-xl'>Condition: {condition}</div>
               <div className='text-900 text-xl'>Missing:  
                 {
