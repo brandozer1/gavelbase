@@ -89,6 +89,21 @@ export default function Fasttrackpage() {
     setStep(step+1);
   }
 
+  function restart() {
+    setStep(0); 
+    setImages([]); 
+    setCondition(''); 
+    setMissing([]); 
+    setStatus('')
+    setBrand('');
+    setTitle('');
+    setDescription('');
+    setColor('');
+    setModel('');
+    setStockImage('');
+    setUpc('');
+  }
+
   function handleUPC() {
     axios.get(`https://gavelbaseserver.herokuapp.com/api/lookup/${upc}`, {withCredentials: true}).then((res)=>{
       console.log(res.data);
@@ -120,11 +135,29 @@ export default function Fasttrackpage() {
     });
   }
 
-  // function handleSubmission() {
-  //   axios.post('https://gavelbaseserver.herokuapp.com/api/appendLot', {[
-
-  //   ]}, {withCredentials: true}).then((res)=>{
-  // }
+  function handleSubmission() {
+    axios.post('https://gavelbaseserver.herokuapp.com/api/appendLot', [
+      lotId,
+      '',
+      upc,
+      title,
+      description,
+      stockImage,
+      model,
+      brand,
+      color,
+      condition,
+      JSON.stringify(missing),
+      status,
+      name,
+      new Date()
+      
+    ], {withCredentials: true}).then((res)=>{
+      console.log(res.data);
+    }).catch((err)=>{
+      console.log(err.response);
+    })
+  }
 
 
   return (
@@ -135,19 +168,7 @@ export default function Fasttrackpage() {
           <Button label="Help" icon="pi pi-book" onClick={() => setManual(true)} />
           { 
             step >= 0 &&
-            <Button severity='danger' label="Restart" icon="pi pi-trash" onClick={() => {
-            setStep(0); 
-            setImages([]); 
-            setCondition(''); 
-            setMissing([]); 
-            setStatus('')
-            setBrand('');
-            setTitle('');
-            setDescription('');
-            setColor('');
-            setModel('');
-            setStockImage('');
-            }} />
+            <Button severity='danger' label="Restart" icon="pi pi-trash" onClick={()=>restart()} />
           }
           
 
@@ -252,7 +273,7 @@ export default function Fasttrackpage() {
               setUpc(inputValue);
             }}
             className='sm:w-6 w-10'
-            placeholder='Lot ID'
+            placeholder='UPC'
             inputMode='numeric'
             pattern='[0-9]*'
             autoComplete='off'
@@ -319,7 +340,7 @@ export default function Fasttrackpage() {
           
           
           <Button className='sm:w-6 w-11 bottom-0 fixed mx-3 mb-8' type='submit' label='Send to Data Entry' />
-          <Button className='sm:w-6 w-11 bottom-0 fixed m-3' type='submit' label='Finish & Submit' />
+          <Button className='sm:w-6 w-11 bottom-0 fixed m-3' onClick={()=>{handleSubmission(); restart()}} label='Finish & Submit' />
         </div>
         :
         <div>
