@@ -218,7 +218,10 @@ export default function Fasttrackpage() {
   return (
     <div className='flex w-full flex-column w-full align-items-centers gap-2 p-2'>
       <div className='flex justify-content-between w-full align-items-center'>
-        <img className='sm:w-2 w-4 ' src={Logo} />
+        <button className='sm:w-2 w-4 ' style={{border: 'none', background: 'none'}}>
+          <img className=' w-full ' onClick={()=>{setStep(-1)}} src={Logo} />
+        </button>
+        
         <div className='p-inputgroup w-auto sm:h-auto h-2rem'>
           <Button label="Help" icon="pi pi-book" onClick={() => setManual(true)} />
           { 
@@ -312,6 +315,7 @@ export default function Fasttrackpage() {
         <>
           <div className='text-900 text-xl mt-8'>What is the condition of the product?</div>
           <ListBox value={condition} onChange={(e) => {setCondition(e.value); nextStep(true)}} options={conditions} className="w-full md:w-14rem" />
+          <Button label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
         </>
       }
 
@@ -326,15 +330,19 @@ export default function Fasttrackpage() {
             :
             <Button onClick={()=>{nextStep(true)}} label='Nothing' />
           }
+          <Button label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
           
         </>
       }
 
       {
         step == 3 &&
+
         <>
           <div className='text-900 text-xl mt-8'>What is the product's testing status?</div>
-          <ListBox value={status} onChange={(e) => {setStatus(e.value); nextStep(true)}} options={statuses} className="w-full md:w-14rem" /></>
+          <ListBox value={status} onChange={(e) => {setStatus(e.value); nextStep(true)}} options={statuses} className="w-full md:w-14rem" />
+          <Button label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
+        </>
       }
 
       {
@@ -359,6 +367,7 @@ export default function Fasttrackpage() {
             }}
           />
           <Button className='sm:w-6 w-11 bottom-0 fixed m-3' type='submit' label='Continue' />
+          <Button label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
         </form>
       }
 
@@ -383,14 +392,15 @@ export default function Fasttrackpage() {
               pattern: '[0-9]*',
             }}
           />
-          <Button className='sm:w-6 w-11 bottom-0 fixed m-3' type='submit' label='Continue' />
+          <Button className='sm:w-6 w-11 bottom-0 fixed m-3 mb-7' type='submit' label='Continue' />
+          <Button label='Back' className='sm:w-6 w-11 bottom-0 fixed m-3' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
         </form>
       }
 
       {
         step == 6 && 
         <div className='flex flex-column align-items-center gap-4'>
-
+          
           <div className='text-900 text-xl'>Confirm data below</div>
           <span className="p-float-label w-full">
             <InputText id="Brand" value={brand} onChange={(e) => setBrand(e.target.value)} className={'w-full ' + (!brand && 'p-invalid')} />
@@ -436,8 +446,9 @@ export default function Fasttrackpage() {
               </div>
               <div className='text-900 text-xl'>Status: {status}</div>
             </div>
+            
           </div>
-          
+          <Button label='Back' severity='danger' className='w-full' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
           
           
           <Button className='sm:w-6 w-11 bottom-0 fixed mx-3 mb-8' type='submit' label='Send to Data Entry' />
