@@ -46,7 +46,7 @@ export default function Fasttrackpage() {
 
   const conditions = [
     'New',
-    'Unused',
+    'New Open Box',
     'Slightly Used',
     'Used',
     'Parts & Repair',
@@ -62,8 +62,8 @@ export default function Fasttrackpage() {
 
   const statuses = [
     'Tested Works',
-    'Tested & Cosmetic Damage',
-    'Partially Tested & Works',
+    'Tested Works w/ Cosmetic Damage',
+    'Partially Tested Works',
     'Unable to Test'
   ]
 
