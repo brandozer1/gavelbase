@@ -357,14 +357,13 @@ export default function Fasttrackpage() {
             <Button label='Add' onClick={()=>{setMissing(missing => [...missing, missingInput])}}></Button>
             {
               missing.map((detail, index)=>{
-                if (detail.includes('MISSING:')) {
                   return (
                     <div className='flex flex-row w-full justify-between'>
                       <div>{detail}</div>
                       <Button icon='pi pi-times' onClick={()=>{missing(missing.splice(index, 1)); missing(missing => [...missing])}}></Button>
                     </div>
                   )
-                }
+                
               })
             }
           </div>
