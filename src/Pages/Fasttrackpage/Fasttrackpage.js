@@ -62,6 +62,7 @@ export default function Fasttrackpage() {
 
   const statuses = [
     'Tested Works',
+    'Tested & Cosmetic Damage',
     'Partially Tested & Works',
     'Unable to Test'
   ]
@@ -80,7 +81,6 @@ export default function Fasttrackpage() {
   const [missing, setMissing] = useState([]);
   const [missingInput, setMissingInput] = useState(''); // this is the input for the missing item
   const [status, setStatus] = useState('');
-  const [extraDetails, setExtraDetails] = useState([]); // this is the extra details for the status
 
 
   const [brand, setBrand] = useState('');
@@ -158,12 +158,22 @@ export default function Fasttrackpage() {
   }
 
   function handleSubmission() {
+
+    if (missing) {
+      description = 'Missing: ' + JSON.stringify(missing) + ', ' + description;
+    }
+    if (condition) {
+      description = 'Condition: ' + condition + ', ' + description;
+    }
+    if (status) {
+      description = 'Functionality: ' + status + ', ' + description;
+    }
     axios.post('https://gavelbaseserver.herokuapp.com/api/appendLot', [
       lotId,
       JSON.stringify(finalImages),
       upc,
       title,
-      JSON.stringify(extraDetails)+description,
+      JSON.stringify(missing)+description,
       stockImage,
       model,
       brand,
@@ -326,6 +336,7 @@ export default function Fasttrackpage() {
         <>
           <div className='text-900 text-xl mt-8'>What is the condition of the product?</div>
           <ListBox value={condition} onChange={(e) => {setCondition(e.value); nextStep(true)}} options={conditions} className="w-full md:w-14rem" />
+
           <Button label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
         </>
       }
@@ -341,16 +352,16 @@ export default function Fasttrackpage() {
             :
             <Button onClick={()=>{nextStep(true)}} label='Nothing' />
           }
-          <div>
+          <div className='=-inputgroup'>
             <InputText value={missingInput} onChange={(e)=>{setMissingInput(e.target.value)}} placeholder='Custom' />
-            <Button label='Add' onClick={()=>{setExtraDetails(extraDetails => [...extraDetails, 'MISSING: '+missingInput])}}></Button>
+            <Button label='Add' onClick={()=>{setMissing(missing => [...missing, missingInput])}}></Button>
             {
-              extraDetails.map((detail, index)=>{
+              missing.map((detail, index)=>{
                 if (detail.includes('MISSING:')) {
                   return (
-                    <div className='flex flex-row justify-between'>
+                    <div className='flex flex-row w-full justify-between'>
                       <div>{detail}</div>
-                      <Button icon='pi pi-times' onClick={()=>{setExtraDetails(extraDetails.splice(index, 1)); setExtraDetails(extraDetails => [...extraDetails])}}></Button>
+                      <Button icon='pi pi-times' onClick={()=>{missing(missing.splice(index, 1)); missing(missing => [...missing])}}></Button>
                     </div>
                   )
                 }
