@@ -158,7 +158,7 @@ export default function Fasttrackpage() {
   function handleSubmission() {
     axios.post('https://gavelbaseserver.herokuapp.com/api/appendLot', [
       lotId,
-      JSON.stringify(finalImages),
+      '',
       upc,
       title,
       description,
@@ -178,7 +178,8 @@ export default function Fasttrackpage() {
         minute: '2-digit',
         second: '2-digit',
         hour12: false
-      })
+      }),
+      JSON.stringify(finalImages)
       
     ], {withCredentials: true}).then((res)=>{
       console.log(res.data);
