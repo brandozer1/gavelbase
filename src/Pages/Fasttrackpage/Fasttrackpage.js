@@ -87,6 +87,7 @@ export default function Fasttrackpage() {
   const [color, setColor] = useState('');
   const [model, setModel] = useState('');
   const [stockImage, setStockImage] = useState('');
+  const [finalImages, setFinalImages] = useState([]); 
 
   const [locationInput, setLocationInput] = useState('');
   const [locationCode, setLocationCode] = useState(null);
@@ -144,6 +145,7 @@ export default function Fasttrackpage() {
         }
         if (res.data.items[i].images && !stockImage) {
           setStockImage(res.data.items[i].images[0]);
+          setFinalImages(finalImages.concat(res.data.items[i].images));
         }
       }
       new Audio(success).play();
@@ -156,7 +158,7 @@ export default function Fasttrackpage() {
   function handleSubmission() {
     axios.post('https://gavelbaseserver.herokuapp.com/api/appendLot', [
       lotId,
-      '',
+      finalImages,
       upc,
       title,
       description,
@@ -298,7 +300,8 @@ export default function Fasttrackpage() {
             onTakePhoto = { (dataUri) => { if (images.length > 7) {setImages(images.splice(1, 8)); setImages(images => [...images,dataUri] );} else {setImages(images => [...images,dataUri] );}
             console.log(dataUri)
             axios.post('https://gavelbaseserver.herokuapp.com/api/addLotImage/', {image: dataUri}).then((res)=>{
-              console.log(res);
+              const {base64} = res.data;
+              if (finalImages.length > 7) {setFinalImages(finalImages.splice(1, 8)); setFinalImages(finalImages => [...finalImages,base64] );} else {setFinalImages(finalImages => [...finalImages,base64] );}
             }).catch((err)=>{console.log(err.response);});
           } }
           />
