@@ -352,7 +352,7 @@ export default function Fasttrackpage() {
             :
             <Button onClick={()=>{nextStep(true)}} label='Nothing' />
           }
-          <div className='=-inputgroup'>
+          <div className='=-inputgroup w-full'>
             <InputText value={missingInput} onChange={(e)=>{setMissingInput(e.target.value)}} placeholder='Custom' />
             <Button label='Add' onClick={()=>{setMissing(missing => [...missing, missingInput])}}></Button>
             {
