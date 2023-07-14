@@ -78,7 +78,9 @@ export default function Fasttrackpage() {
 
   const [condition, setCondition] = useState('');
   const [missing, setMissing] = useState([]);
+  const [missingInput, setMissingInput] = useState(''); // this is the input for the missing item
   const [status, setStatus] = useState('');
+  const [extraDetails, setExtraDetails] = useState([]); // this is the extra details for the status
 
 
   const [brand, setBrand] = useState('');
@@ -161,7 +163,7 @@ export default function Fasttrackpage() {
       JSON.stringify(finalImages),
       upc,
       title,
-      description,
+      JSON.stringify(extraDetails)+description,
       stockImage,
       model,
       brand,
@@ -339,6 +341,22 @@ export default function Fasttrackpage() {
             :
             <Button onClick={()=>{nextStep(true)}} label='Nothing' />
           }
+          <div>
+            <InputText value={missingInput} onChange={(e)=>{setMissingInput(e.target.value)}} placeholder='Custom' />
+            <Button label='Add' onClick={()=>{setExtraDetails(extraDetails => [...extraDetails, 'MISSING: '+missingInput])}}></Button>
+            {
+              extraDetails.map((detail, index)=>{
+                if (detail.includes('MISSING:')) {
+                  return (
+                    <div className='flex flex-row justify-between'>
+                      <div>{detail}</div>
+                      <Button icon='pi pi-times' onClick={()=>{setExtraDetails(extraDetails.splice(index, 1)); setExtraDetails(extraDetails => [...extraDetails])}}></Button>
+                    </div>
+                  )
+                }
+              }
+            }
+          </div>
           <Button label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
           
         </>
