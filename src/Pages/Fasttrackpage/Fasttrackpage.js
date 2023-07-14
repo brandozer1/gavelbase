@@ -301,9 +301,9 @@ export default function Fasttrackpage() {
             onTakePhoto = { (dataUri) => { if (images.length > 7) {setImages(images.splice(1, 8)); setImages(images => [...images,dataUri] );} else {setImages(images => [...images,dataUri] );}
             // console.log(dataUri)
             axios.post('https://gavelbaseserver.herokuapp.com/api/addLotImage/', {image: dataUri}).then((res)=>{
-              const {base64} = res.data;
-              // if (finalImages.length > 7) {setFinalImages(finalImages.splice(1, 8)); setFinalImages(finalImages => [...finalImages,base64] );} else {setFinalImages(finalImages => [...finalImages,base64] );}
-              console.log(res)
+              
+              if (finalImages.length > 7) {setFinalImages(finalImages.splice(1, 8)); setFinalImages(finalImages => [...finalImages,res.data] );} else {setFinalImages(finalImages => [...finalImages,res.data] );}
+              console.log(res.data);
             }).catch((err)=>{console.log(err.response);});
           } }
           />
