@@ -163,8 +163,6 @@ export default function Fasttrackpage() {
     if (missing) {
       setDescription('Missing: ' + JSON.stringify(missing) + ', ' + description);
     }
-    setDescription('Condition: ' + condition + ', ' + description);
-    setDescription('Functionality: ' + status + ', ' + description);
     
     axios.post('https://gavelbaseserver.herokuapp.com/api/appendLot', [
       lotId,
