@@ -334,7 +334,7 @@ export default function Fasttrackpage() {
         <>
           <div className='text-900 text-xl mt-8'>What is the condition of the product?</div>
           <ListBox value={condition} onChange={(e) => {setCondition(e.value); nextStep(true)}} options={conditions} className="w-full md:w-14rem" />
-          <div>
+          <div className='flex justify-content-between w-full'>
             <InputText value={conditionInput} onChange={(e)=>{setConditionInput(e.target.value)}} placeholder='Custom' />
             <Button label='Set Custom' onClick={()=>{setCondition(conditionInput); nextStep(true)}}></Button>
 
