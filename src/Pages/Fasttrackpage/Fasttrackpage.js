@@ -303,7 +303,7 @@ export default function Fasttrackpage() {
             axios.post('https://gavelbaseserver.herokuapp.com/api/addLotImage/', {image: dataUri}).then((res)=>{
               const {base64} = res.data;
               // if (finalImages.length > 7) {setFinalImages(finalImages.splice(1, 8)); setFinalImages(finalImages => [...finalImages,base64] );} else {setFinalImages(finalImages => [...finalImages,base64] );}
-              console.log(base64)
+              console.log(res)
             }).catch((err)=>{console.log(err.response);});
           } }
           />
