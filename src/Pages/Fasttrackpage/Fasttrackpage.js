@@ -80,6 +80,7 @@ export default function Fasttrackpage() {
   const [condition, setCondition] = useState('');
   const [missing, setMissing] = useState([]);
   const [missingInput, setMissingInput] = useState(''); // this is the input for the missing item
+  const [conditionInput, setConditionInput] = useState(''); // this is the input for the condition
   const [status, setStatus] = useState('');
 
 
@@ -333,6 +334,11 @@ export default function Fasttrackpage() {
         <>
           <div className='text-900 text-xl mt-8'>What is the condition of the product?</div>
           <ListBox value={condition} onChange={(e) => {setCondition(e.value); nextStep(true)}} options={conditions} className="w-full md:w-14rem" />
+          <div>
+            <InputText value={conditionInput} onChange={(e)=>{setConditionInput(e.target.value)}} placeholder='Custom' />
+            <Button label='Set Custom' onClick={()=>{setCondition(conditionInput); nextStep(true)}}></Button>
+
+          </div>
 
           <Button label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
         </>
