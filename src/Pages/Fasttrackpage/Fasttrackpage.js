@@ -162,17 +162,14 @@ export default function Fasttrackpage() {
     if (missing) {
       setDescription('Missing: ' + JSON.stringify(missing) + ', ' + description);
     }
-    if (condition) {
-      setDescription('Condition: ' + condition + ', ' + description);
-    }
-    if (status) {
-      setDescription('Functionality: ' + status + ', ' + description);
-    }
+    setDescription('Condition: ' + condition + ', ' + description);
+    setDescription('Functionality: ' + status + ', ' + description);
+    
     axios.post('https://gavelbaseserver.herokuapp.com/api/appendLot', [
       lotId,
       JSON.stringify(finalImages),
       upc,
-      title,
+      condition + ' ' + title + ' | ' + status + (missing.length > 0 ? ' | Missing Items See Description' : ''),
       "Missing: "+JSON.stringify(missing)+" | "+description,
       stockImage,
       model,
