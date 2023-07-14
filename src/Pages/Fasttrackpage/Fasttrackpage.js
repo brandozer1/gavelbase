@@ -299,11 +299,11 @@ export default function Fasttrackpage() {
           <Camera
             idealFacingMode = {FACING_MODES.ENVIRONMENT}
             onTakePhoto = { (dataUri) => { if (images.length > 7) {setImages(images.splice(1, 8)); setImages(images => [...images,dataUri] );} else {setImages(images => [...images,dataUri] );}
-            console.log(dataUri)
+            // console.log(dataUri)
             axios.post('https://gavelbaseserver.herokuapp.com/api/addLotImage/', {image: dataUri}).then((res)=>{
               const {base64} = res.data;
               // if (finalImages.length > 7) {setFinalImages(finalImages.splice(1, 8)); setFinalImages(finalImages => [...finalImages,base64] );} else {setFinalImages(finalImages => [...finalImages,base64] );}
-              setFinalImages(finalImages => [...finalImages,base64] );
+              console.log(base64)
             }).catch((err)=>{console.log(err.response);});
           } }
           />
