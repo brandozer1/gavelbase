@@ -360,7 +360,7 @@ export default function Fasttrackpage() {
                   return (
                     <div className='flex flex-row w-full justify-between'>
                       <div>{detail}</div>
-                      <Button icon='pi pi-times' onClick={()=>{missing(missing.splice(index, 1)); missing(missing => [...missing])}}></Button>
+                      <Button icon='pi pi-times' onClick={()=>{setMissing(missing.splice(index, 1)); }}></Button>
                     </div>
                   )
                 
