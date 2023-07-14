@@ -160,13 +160,13 @@ export default function Fasttrackpage() {
   function handleSubmission() {
 
     if (missing) {
-      description = 'Missing: ' + JSON.stringify(missing) + ', ' + description;
+      setDescription('Missing: ' + JSON.stringify(missing) + ', ' + description);
     }
     if (condition) {
-      description = 'Condition: ' + condition + ', ' + description;
+      setDescription('Condition: ' + condition + ', ' + description);
     }
     if (status) {
-      description = 'Functionality: ' + status + ', ' + description;
+      setDescription('Functionality: ' + status + ', ' + description);
     }
     axios.post('https://gavelbaseserver.herokuapp.com/api/appendLot', [
       lotId,
@@ -355,12 +355,17 @@ export default function Fasttrackpage() {
           <div className='=-inputgroup w-full'>
             <InputText value={missingInput} onChange={(e)=>{setMissingInput(e.target.value)}} placeholder='Custom' />
             <Button label='Add' onClick={()=>{setMissing(missing => [...missing, missingInput])}}></Button>
-            {
+            {missing.length > 0 &&
               missing.map((detail, index)=>{
                   return (
                     <div className='flex flex-row w-full justify-between'>
                       <div>{detail}</div>
-                      <Button icon='pi pi-times' onClick={()=>{setMissing(missing.splice(index, 1)); }}></Button>
+                      {
+                        index == 0 ?
+                        <Button icon='pi pi-times' onClick={()=>{setMissing(missing.shift()); }}></Button>
+                        :
+                        <Button icon='pi pi-times' onClick={()=>{setMissing(missing.splice(index, 1)); }}></Button>
+                      }
                     </div>
                   )
                 
