@@ -297,11 +297,9 @@ export default function Fasttrackpage() {
             idealFacingMode = {FACING_MODES.ENVIRONMENT}
             onTakePhoto = { (dataUri) => { if (images.length > 7) {setImages(images.splice(1, 8)); setImages(images => [...images,dataUri] );} else {setImages(images => [...images,dataUri] );}
             console.log(dataUri)
-            axios.get('https://freeimage.host/api/1/upload?key=6d207e02198a847aa98d0a2a901485a5&source='+dataUri+'&format=json').then(response => {
-                console.log(response.data.display_url);
-            }).catch(err => {
-                console.log(err);
-            });
+            axios.post('https://gavelbaseserver.herokuapp.com/api/addLotImage/'+dataUri, {withCredentials: true}).then((res)=>{
+              console.log(res);
+            }).catch((err)=>{console.log(err.response);});
           } }
           />
           {
