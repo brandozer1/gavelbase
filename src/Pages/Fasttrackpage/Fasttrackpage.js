@@ -302,8 +302,8 @@ export default function Fasttrackpage() {
             console.log(dataUri)
             axios.post('https://gavelbaseserver.herokuapp.com/api/addLotImage/', {image: dataUri}).then((res)=>{
               const {base64} = res.data;
-              if (finalImages.length > 7) {setFinalImages(finalImages.splice(1, 8)); setFinalImages(finalImages => [...finalImages,base64] );} else {setFinalImages(finalImages => [...finalImages,base64] );}
-              console.log(finalImages)
+              // if (finalImages.length > 7) {setFinalImages(finalImages.splice(1, 8)); setFinalImages(finalImages => [...finalImages,base64] );} else {setFinalImages(finalImages => [...finalImages,base64] );}
+              setFinalImages(finalImages => [...finalImages,base64] );
             }).catch((err)=>{console.log(err.response);});
           } }
           />
