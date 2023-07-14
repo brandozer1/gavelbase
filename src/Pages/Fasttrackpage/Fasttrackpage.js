@@ -295,7 +295,9 @@ export default function Fasttrackpage() {
         <>
           <Camera
             idealFacingMode = {FACING_MODES.ENVIRONMENT}
-            onTakePhoto = { (dataUri) => { if (images.length > 7) {setImages(images.splice(1, 8)); setImages(images => [...images,dataUri] );} else {setImages(images => [...images,dataUri] );} } }
+            onTakePhoto = { (dataUri) => { if (images.length > 7) {setImages(images.splice(1, 8)); setImages(images => [...images,dataUri] );} else {setImages(images => [...images,dataUri] );}
+            console.log(dataUri)
+          } }
           />
           {
             images.length > 2 &&
