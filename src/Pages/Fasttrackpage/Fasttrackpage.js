@@ -173,7 +173,7 @@ export default function Fasttrackpage() {
       JSON.stringify(finalImages),
       upc,
       title,
-      JSON.stringify(missing)+description,
+      "Missing: "+JSON.stringify(missing)+" | "+description,
       stockImage,
       model,
       brand,
