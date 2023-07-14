@@ -171,7 +171,7 @@ export default function Fasttrackpage() {
       JSON.stringify(finalImages),
       upc,
       condition + ' ' + title + ' | ' + status + (missing.length > 0 ? ' | Missing Items See Description' : ''),
-      "Missing: "+JSON.stringify(missing)+" | "+description,
+      "Missing: "+JSON.stringify(missing).replace('"', '')+" | "+description,
       stockImage,
       model,
       brand,
