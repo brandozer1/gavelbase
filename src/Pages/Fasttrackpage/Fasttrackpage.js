@@ -354,7 +354,7 @@ export default function Fasttrackpage() {
                     </div>
                   )
                 }
-              }
+              })
             }
           </div>
           <Button label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
