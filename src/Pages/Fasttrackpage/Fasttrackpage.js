@@ -135,6 +135,7 @@ export default function Fasttrackpage() {
     setConditionInput('');
     setStatusInput('');
     setFinalImages([]);
+
     
   }
 
@@ -445,7 +446,6 @@ export default function Fasttrackpage() {
             className='sm:w-6 w-10'
             placeholder='Lot ID'
             inputMode='numeric'
-            pattern='[0-9]*'
             autoComplete='off'
             inputProps={{
               inputMode: 'numeric',
