@@ -174,7 +174,7 @@ export default function Fasttrackpage() {
       lotId,
       JSON.stringify(finalImages),
       upc,
-      condition + ' ' + title + ' | ' + toString(status).toUpperCase() + (missing.length > 0 ? ' | MISSING ITEMS SEE DESCRIPTION' : ''),
+      condition + ' ' + title + ' | ' + toString(status) + (missing.length > 0 ? ' | MISSING ITEMS SEE DESCRIPTION' : ''),
       (missing.length> 0 ? "Missing: "+JSON.stringify(missing).replace('"', '')+" | ": '')+ "Condition: "+condition+' | Testing Status: '+status+' | '+description,
       stockImage,
       model,
@@ -559,7 +559,7 @@ export default function Fasttrackpage() {
           <p>Once you have completed the above steps, you can submit the product for review. If you have any questions, please contact your supervisor.</p>
         </div>
       </Dialog>
-      
+      <div className='h-20rem'></div>
       
     </div>
   )
