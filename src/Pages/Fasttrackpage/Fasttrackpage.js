@@ -7,6 +7,7 @@ import { Dialog } from 'primereact/dialog';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
+import {ProgressSpinner} from 'primereact/progressspinner';
 import { Skeleton } from 'primereact/skeleton';
 import { Link } from 'react-router-dom';
 import { DataTable } from 'primereact/datatable';
@@ -83,6 +84,7 @@ export default function Fasttrackpage() {
   const [conditionInput, setConditionInput] = useState(''); // this is the input for the condition
   const [statusInput, setStatusInput] = useState('');
   const [status, setStatus] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
 
   const [brand, setBrand] = useState('');
@@ -134,36 +136,43 @@ export default function Fasttrackpage() {
   }
 
   function handleUPC() {
-    axios.get(`https://gavelbaseserver.herokuapp.com/api/lookup/${upc}`, {withCredentials: true}).then((res)=>{
-      console.log(res.data);
-      setProductInfo(res.data);
-      for (let i = 0; i < res.data.items.length; i++ ) {
-        if (res.data.items[i].model && !model) {
-          setModel(res.data.items[i].model); 
-        }
-        if (res.data.items[i].brand && !brand) {
-          setBrand(res.data.items[i].brand);
-        }
-        if (res.data.items[i].color && !color) {
-          setColor(res.data.items[i].color);
-        }
-        if (res.data.items[i].title && !title) {
-          setTitle(res.data.items[i].title);
-        }
-        if (res.data.items[i].description && !description) {
-          setDescription(res.data.items[i].description);
-        }
-        if (res.data.items[i].images && !stockImage) {
-          setStockImage(res.data.items[i].images[0]);
-          setFinalImages(finalImages.concat(res.data.items[i].images));
-        }
-      }
-      new Audio(success).play();
-    }).catch((err)=>{
-      new Audio(error).play();
-      console.log(err.response);
+    return new Promise((resolve, reject) => {
+      axios.get(`https://gavelbaseserver.herokuapp.com/api/lookup/${upc}`, { withCredentials: true })
+        .then((res) => {
+          console.log(res.data);
+          setProductInfo(res.data);
+          for (let i = 0; i < res.data.items.length; i++) {
+            if (res.data.items[i].model && !model) {
+              setModel(res.data.items[i].model);
+            }
+            if (res.data.items[i].brand && !brand) {
+              setBrand(res.data.items[i].brand);
+            }
+            if (res.data.items[i].color && !color) {
+              setColor(res.data.items[i].color);
+            }
+            if (res.data.items[i].title && !title) {
+              setTitle(res.data.items[i].title);
+            }
+            if (res.data.items[i].description && !description) {
+              setDescription(res.data.items[i].description);
+            }
+            if (res.data.items[i].images && !stockImage) {
+              setStockImage(res.data.items[i].images[0]);
+              setFinalImages(finalImages.concat(res.data.items[i].images));
+            }
+          }
+          new Audio(success).play();
+          resolve(); // Resolve the promise with the response data
+        })
+        .catch((err) => {
+          new Audio(error).play();
+          console.log(err.response);
+          reject(); // Reject the promise with the error
+        });
     });
   }
+  
 
   function handleSubmission() {
 
@@ -233,6 +242,13 @@ export default function Fasttrackpage() {
 
 
   return (
+  <>
+  {
+    isLoading ?
+    <div className='flex w-full align-items-center justify-content-center'>
+      <ProgressSpinner />
+    </div>
+    :
     <div className='flex w-full flex-column w-full align-items-centers gap-2 p-2'>
       <div className='flex justify-content-between w-full align-items-center'>
         <button className='sm:w-2 w-4 ' style={{border: 'none', background: 'none'}}>
@@ -339,13 +355,14 @@ export default function Fasttrackpage() {
         <>
           <div className='text-900 text-xl mt-8'>What is the condition of the product?</div>
           <ListBox value={condition} onChange={(e) => {setCondition(e.value); nextStep(true)}} options={conditions} className="w-full md:w-14rem" />
-          <div className='flex justify-content-between gap-2 w-full'>
-            <InputText value={conditionInput} onChange={(e)=>{setConditionInput(e.target.value)}} placeholder='Custom' />
-            <Button label='Set Custom' onClick={()=>{setCondition(conditionInput); nextStep(true)}}></Button>
 
+          <div className='sm:w-6 w-full bottom-0 left-0 fixed flex flex-column gap-2 p-2 surface-ground shadow-3'>
+            <div className='p-inputgroup w-full'>
+              <InputText value={conditionInput} onChange={(e)=>{setConditionInput(e.target.value)}} placeholder='Custom' />
+              <Button label='Set Custom' onClick={()=>{setCondition(conditionInput); nextStep(true)}}></Button>
+            </div>
+            <Button className='w-full' label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
           </div>
-
-          <Button label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
         </>
       }
 
@@ -354,15 +371,9 @@ export default function Fasttrackpage() {
         <>
           <div className='text-900 text-xl mt-8'>What is the product missing?</div>
           <ListBox multiple value={missing} onChange={(e) => setMissing(e.value)} options={missingStates} className="w-full md:w-14rem" />
-          {
-            missing.length > 0 ?
-            <Button onClick={()=>{nextStep(true)}} label='Continue' />
-            :
-            <Button onClick={()=>{nextStep(true)}} label='Nothing' />
-          }
+          
           <div className='w-full'>
-            <InputText value={missingInput} onChange={(e)=>{setMissingInput(e.target.value)}} placeholder='Custom' />
-            <Button label='Add' onClick={()=>{setMissing(missing => [...missing, missingInput])}}></Button>
+            
             {missing.length > 0 &&
               missing.map((detail, index)=>{
                   return (
@@ -380,8 +391,20 @@ export default function Fasttrackpage() {
               })
             }
           </div>
-          <Button label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
-          
+          <div className='sm:w-6 w-full bottom-0 left-0 fixed flex flex-column gap-2 p-2 surface-ground shadow-3'>
+            <div className='w-full p-inputgroup'>
+              <InputText value={missingInput} onChange={(e)=>{setMissingInput(e.target.value)}} placeholder='Custom' />
+              <Button label='Add' onClick={()=>{setMissing(missing => [...missing, missingInput])}}></Button>
+            </div>
+            <Button className='w-full' label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
+            
+            {
+              missing.length > 0 ?
+              <Button onClick={()=>{nextStep(true)}} label='Continue' />
+              :
+              <Button onClick={()=>{nextStep(true)}} label='Nothing' />
+            }
+          </div>
         </>
       }
 
@@ -391,12 +414,14 @@ export default function Fasttrackpage() {
         <>
           <div className='text-900 text-xl mt-8'>What is the product's testing status?</div>
           <ListBox value={status} onChange={(e) => {setStatus(e.value); nextStep(true)}} options={statuses} className="w-full md:w-14rem" />
-          <div className='flex justify-content-between gap-2 w-full'>
-            <InputText value={statusInput} onChange={(e)=>{setStatusInput(e.target.value)}} placeholder='Custom Status' />
-            <Button label='Set Custom' onClick={()=>{setStatus(statusInput); nextStep(true)}}></Button>
-
+          
+          <div className='sm:w-6 w-full bottom-0 left-0 fixed flex flex-column gap-2 p-2 surface-ground shadow-3'>
+            <div className='p-inputgroup w-full'>
+              <InputText value={statusInput} onChange={(e)=>{setStatusInput(e.target.value)}} placeholder='Custom Status' />
+              <Button label='Use Custom' onClick={()=>{setStatus(statusInput); nextStep(true)}}></Button>
+            </div>
+            <Button className='w-full' label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
           </div>
-          <Button label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
         </>
       }
 
@@ -421,14 +446,18 @@ export default function Fasttrackpage() {
               pattern: '[0-9]*',
             }}
           />
-          <Button className='sm:w-6 w-11 bottom-0 fixed m-3' type='submit' label='Continue' />
-          <Button label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
+          <div className='sm:w-6 w-full bottom-0 fixed flex flex-column gap-2 p-2 surface-ground shadow-3'>
+            <Button className='w-full' label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
+            <Button className='w-full' type='submit' label='Continue' />
+          </div>
+          
+          
         </form>
       }
 
       {
         step == 5 &&
-        <form className='flex flex-column align-items-center gap-2' onSubmit={()=>{handleUPC(); nextStep()}}>
+        <form className='flex flex-column align-items-center gap-2' onSubmit={()=>{handleUPC().then(()=>{nextStep(); setIsLoading(false)}).catch(()=>{nextStep(); setIsLoading(false)}); setIsLoading(true) }}>
           <div className='text-900 text-xl mt-8'>Scan or enter the products UPC (Barcode).</div>
           <InputText
             autoFocus
@@ -447,8 +476,10 @@ export default function Fasttrackpage() {
               pattern: '[0-9]*',
             }}
           />
-          <Button className='sm:w-6 w-11 bottom-0 fixed m-3 mb-7' type='submit' label='Continue' />
-          <Button label='Back' className='sm:w-6 w-11 bottom-0 fixed m-3' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
+          <div className='sm:w-6 w-full bottom-0 fixed flex flex-column gap-2 p-2 surface-ground shadow-3'>
+            <Button className='w-full' label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
+            <Button className='w-full' type='submit' label='Continue' />
+          </div>
         </form>
       }
 
@@ -503,11 +534,14 @@ export default function Fasttrackpage() {
             </div>
             
           </div>
+          
+          
+          <div className='sm:w-6 w-full bottom-0 fixed flex flex-column gap-2 p-2 surface-ground shadow-3'>
           <Button label='Back' severity='danger' className='w-full' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
-          
-          
-          <Button className='sm:w-6 w-11 bottom-0 fixed mx-3 mb-8' type='submit' label='Send to Data Entry' />
-          <Button className='sm:w-6 w-11 bottom-0 fixed m-3' onClick={()=>{handleSubmission(); new Audio(complete).play(); restart()}} label='Finish & Submit' />
+            <Button className='w-full' type='submit' label='Send to Data Entry' />
+            <Button className='w-full' onClick={()=>{handleSubmission(); new Audio(complete).play(); restart()}} label='Finish & Submit' />
+          </div>
+
         </div>
         
       }
@@ -561,7 +595,12 @@ export default function Fasttrackpage() {
         </div>
       </Dialog>
       <div className='h-20rem'></div>
+
       
+
     </div>
+
+  }
+  </>
   )
 }
