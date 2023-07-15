@@ -125,6 +125,7 @@ export default function Fasttrackpage() {
     setModel('');
     setStockImage('');
     setUpc('');
+    setLotId(null)
     setMissingInput('');
     setConditionInput('');
     setStatusInput('');
