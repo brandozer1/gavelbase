@@ -174,7 +174,7 @@ export default function Fasttrackpage() {
       lotId,
       JSON.stringify(finalImages),
       upc,
-      condition + ' ' + title + ' | ' + status.toUpperCase() + (missing.length > 0 ? ' | MISSING ITEMS SEE DESCRIPTION' : ''),
+      condition + ' ' + title + ' | ' + toString(status).toUpperCase() + (missing.length > 0 ? ' | MISSING ITEMS SEE DESCRIPTION' : ''),
       (missing.length> 0 ? "Missing: "+JSON.stringify(missing).replace('"', '')+" | ": '')+ "Condition: "+condition+' | Testing Status: '+status+' | '+description,
       stockImage,
       model,
