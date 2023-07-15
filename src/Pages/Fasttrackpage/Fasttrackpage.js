@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react'
+import React, { useState, useEffect, useRef} from 'react'
 
 import { Button } from 'primereact/button';
 import { Divider } from 'primereact/divider';
@@ -8,6 +8,7 @@ import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import {ProgressSpinner} from 'primereact/progressspinner';
+import { Toast } from 'primereact/toast';
 import { Skeleton } from 'primereact/skeleton';
 import { Link } from 'react-router-dom';
 import { DataTable } from 'primereact/datatable';
@@ -53,20 +54,22 @@ export default function Fasttrackpage() {
     'Parts & Repair',
   ]
 
-  const missingStates = [
-    'Battery',
-    'Cable(s)',
-    'Attatchment',
-    'Quantity',
-    'Bag'
-  ]
-
   const statuses = [
     'Tested Works',
     'Tested Works w/ Cosmetic Damage',
     'Partially Tested Works',
     'Unable to Test'
   ]
+
+  const toast = useRef(null);
+
+  const [missingStates, setMissingStates] = useState([
+    'Battery',
+    'Cable(s)',
+    'Attatchment',
+    'Quantity',
+    'Bag'
+  ]);
 
   const [step, setStep] = useState(-1);
   const [manual, setManual] = useState(false);
@@ -134,6 +137,21 @@ export default function Fasttrackpage() {
     setFinalImages([]);
     
   }
+
+  function message(type, message) {
+    toast.current.show({severity: type, summary: message, life: 3000});
+    switch (type) {
+      case 'success':
+        new Audio(success).play();
+        break;
+      case 'error':
+        new Audio(error).play();
+        break;
+      default:
+        break;
+    }
+  }
+
 
   function handleUPC() {
     return new Promise((resolve, reject) => {
@@ -371,31 +389,13 @@ export default function Fasttrackpage() {
         <>
           <div className='text-900 text-xl mt-8'>What is the product missing?</div>
           <ListBox multiple value={missing} onChange={(e) => setMissing(e.value)} options={missingStates} className="w-full md:w-14rem" />
-          
-          <div className='w-full'>
-            
-            {missing.length > 0 &&
-              missing.map((detail, index)=>{
-                  return (
-                    <div className='flex flex-row w-full justify-between'>
-                      <div>{detail}</div>
-                      {
-                        index == 0 ?
-                        <Button icon='pi pi-times' onClick={()=>{setMissing(missing.shift()); }}></Button>
-                        :
-                        <Button icon='pi pi-times' onClick={()=>{setMissing(missing.splice(index, 1)); }}></Button>
-                      }
-                    </div>
-                  )
-                
-              })
-            }
-          </div>
+
           <div className='sm:w-6 w-full bottom-0 left-0 fixed flex flex-column gap-2 p-2 surface-ground shadow-3'>
             <div className='w-full p-inputgroup'>
               <InputText value={missingInput} onChange={(e)=>{setMissingInput(e.target.value)}} placeholder='Custom' />
-              <Button label='Add' onClick={()=>{setMissing(missing => [...missing, missingInput])}}></Button>
+              <Button label='Add' onClick={()=>{setMissingStates(missingStates=>[...missingStates, missingInput]); setMissing(missing => [...missing, missingInput])}}></Button>
             </div>
+            
             <Button className='w-full' label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
             
             {
@@ -427,13 +427,19 @@ export default function Fasttrackpage() {
 
       {
         step == 4 &&
-        <form className='flex flex-column align-items-center gap-2' onSubmit={()=>nextStep(true)}>
+        <form className='flex flex-column align-items-center gap-2' onSubmit={(e)=>{if (lotId.includes('LOT-')) {
+          nextStep(true);
+        }else{
+          message('error', 'Invalid Lot ID Scan');
+        }
+        e.preventDefault();
+        }}>
           <div className='text-900 text-xl mt-8'>Scan or enter the Lot ID.</div>
           <InputText
             autoFocus
             value={lotId}
             onChange={(e) => {
-              const inputValue = e.target.value.replace(/[^0-9]/g, '');
+              const inputValue = e.target.value
               setLotId(inputValue);
             }}
             className='sm:w-6 w-10'
@@ -594,6 +600,7 @@ export default function Fasttrackpage() {
           <p>Once you have completed the above steps, you can submit the product for review. If you have any questions, please contact your supervisor.</p>
         </div>
       </Dialog>
+      <Toast ref={toast} />
       <div className='h-20rem'></div>
 
       
