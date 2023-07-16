@@ -179,7 +179,7 @@ export default function Fasttrackpage() {
             }
             if (res.data.items[i].images && !stockImage) {
               setStockImage(res.data.items[i].images[0]);
-              setFinalImages(finalImages.concat(res.data.items[i].images));
+              setFinalImages(res.data.items[i].images.concat(finalImages));
             }
           }
           new Audio(success).play();
@@ -301,11 +301,12 @@ export default function Fasttrackpage() {
         </button>
         
         <div className='p-inputgroup w-auto sm:h-auto h-2rem'>
-          <Button label="Menu" icon="pi pi-bars" onClick={() => setManual(true)} />
           { 
             step >= 0 &&
             <Button severity='danger' label="Restart" icon="pi pi-trash" onClick={()=>restart()} />
           }
+          <Button label="Menu" icon="pi pi-bars" onClick={() => setManual(true)} />
+          
           
 
         </div>
@@ -375,16 +376,20 @@ export default function Fasttrackpage() {
             idealFacingMode = {FACING_MODES.ENVIRONMENT}
             onTakePhoto = { (dataUri) => { if (images.length > 7) {setImages(images.splice(1, 8)); setImages(images => [...images,dataUri] );} else {setImages(images => [...images,dataUri] );}
             // console.log(dataUri)
-            axios.post('https://gavelbaseserver.herokuapp.com/api/addLotImage/', {image: dataUri}).then((res)=>{
-              
-              if (finalImages.length > 7) {setFinalImages(finalImages.splice(1, 8)); setFinalImages(finalImages => [...finalImages,res.data] );} else {setFinalImages(finalImages => [...finalImages,res.data] );}
-              console.log(res.data);
-            }).catch((err)=>{console.log(err.response);});
+            
           } }
           />
           {
             images.length > 2 &&
-            <Button onClick={()=>{nextStep(true)}} label='Continue' />
+            <Button onClick={()=>{
+              setIsLoading(true);
+              axios.post('https://gavelbaseserver.herokuapp.com/api/addLotImage/', {images: images}).then((res)=>{
+              
+                if (finalImages.length > 7) {setFinalImages(finalImages.splice(1, 8)); setFinalImages(finalImages.concat(res.data));} else {setFinalImages(finalImages.concat(res.data));}
+                setIsLoading(false);
+                nextStep(true)
+              }).catch((err)=>{console.log(err.response);});
+            }} label='Continue' />
           }
           <div className='grid'>
             {images.map((image, index) => (
