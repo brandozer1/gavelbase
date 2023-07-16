@@ -545,8 +545,8 @@ export default function Fasttrackpage() {
           
           
           <div className='sm:w-6 w-full bottom-0 fixed flex flex-column gap-2 p-2 surface-ground shadow-3'>
-          <Button label='Back' severity='danger' className='w-full' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
-            <Button className='w-full' type='submit' label='Send to Data Entry' />
+            <Button label='Back' severity='danger' className='w-full' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
+            {/* <Button className='w-full' type='submit' label='Send to Data Entry' /> */}
             <Button className='w-full' onClick={()=>{handleSubmission(); new Audio(complete).play(); restart()}} label='Finish & Submit' />
           </div>
 
