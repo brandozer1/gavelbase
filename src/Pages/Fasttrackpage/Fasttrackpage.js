@@ -17,6 +17,7 @@ import Camera from 'react-html5-camera-photo';
 import { ListBox } from 'primereact/listbox';
 import axios from 'axios';
 import { FACING_MODES } from 'react-html5-camera-photo';
+import FasttrackMenu from '../../Components/FasttrackMenu/FasttrackMenu';
 import 'react-html5-camera-photo/build/css/index.css';
 import './Fasttrackpage.css'
 import success from "../../Assets/success.mp3";
@@ -275,7 +276,7 @@ export default function Fasttrackpage() {
         </button>
         
         <div className='p-inputgroup w-auto sm:h-auto h-2rem'>
-          <Button label="Help" icon="pi pi-book" onClick={() => setManual(true)} />
+          <Button label="Menu" icon="pi pi-bars" onClick={() => setManual(true)} />
           { 
             step >= 0 &&
             <Button severity='danger' label="Restart" icon="pi pi-trash" onClick={()=>restart()} />
@@ -429,6 +430,7 @@ export default function Fasttrackpage() {
       {
         step == 4 &&
         <form className='flex flex-column align-items-center gap-2' onSubmit={(e)=>{if (lotId.includes('LOT-')) {
+          setLotId(lotId.replace('LOT-', ''));
           nextStep(true);
         }else{
           message('error', 'Invalid Lot ID Scan');
@@ -557,6 +559,10 @@ export default function Fasttrackpage() {
       
       
       
+      {
+        manual &&
+        <FasttrackMenu open={setManual} />
+      }
       
       
       
@@ -568,38 +574,6 @@ export default function Fasttrackpage() {
       
       
       
-      <Dialog header="Full Help WIP NOT FINISHED" visible={manual} className='w-full p-2 flex flex-column' onHide={() => setManual(false)}>
-        <div className='w-12'>
-          <h3>Step 1</h3>
-          <p>Retrieve a product and apply a single lot label. Place it on a reasonable location preferably near the barcode of the product, but NOT over it.</p>
-        </div>
-        <Divider />
-        <div className='w-12'>
-          <h3>Step 2</h3>
-          <p>Open and test the product by all available methods. Items should be tested by minimum viabillity in that it powers on, is intact, contains parts etc. Do not test products beyond initial use. If an item has a particular condition such as a broken piece or other oddities, leave the box opened for picturing. If you do not have a way to completely test a product, you can continue.</p>
-        </div>
-        <Divider />
-        <div className='w-12'>
-          <h3>Step 3</h3>
-          <p>Every product requires that you take a minimum of 3 pictures. These three will be a front facing shot, a back facing shot, and a top down. Make sure the product is in the center of the frame, with margin. Also make sure to take the pictures level/even with the table. Lastly Take pictures of all oddities found while testing. 4-8 pictures is the goal.</p>
-        </div>
-        <Divider />
-        <div className='w-12'>
-          <h3>Step 4</h3>
-          <p>Scan the Lot label applied earlier. This will upload as much information as possible about the product. If only partial information is found, you will be expected to perform manual entry according to the chart below. Descriptions should generally include relevant sizes according to the type of product, colors, compatible products etc. There will be a minimum length of 40 words. </p>
-          <DataTable value={infoReq} tableStyle={{ minWidth: '50rem' }}>
-            <Column field="field" header="field"></Column>
-            <Column field="general" header="general requirments"></Column>
-            <Column field="word" header="word requirements"></Column>
-            <Column field="nots" header="DO-NOTS"></Column>
-        </DataTable>
-        </div>
-        <Divider />
-        <div className='w-12'>
-          <h3>Step 5</h3>
-          <p>Once you have completed the above steps, you can submit the product for review. If you have any questions, please contact your supervisor.</p>
-        </div>
-      </Dialog>
       <Toast ref={toast} />
       <div className='h-20rem'></div>
 
