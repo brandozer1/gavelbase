@@ -288,8 +288,10 @@ export default function Fasttrackpage() {
   <>
   {
     isLoading ?
-    <div className='flex w-full align-items-center justify-content-center'>
+    <div className='flex flex-column h-screen w-full align-items-center justify-content-center'>
+      
       <ProgressSpinner />
+      <h2>Loading...</h2>
     </div>
     :
     <div className='flex w-full flex-column w-full align-items-centers gap-2 p-2'>
