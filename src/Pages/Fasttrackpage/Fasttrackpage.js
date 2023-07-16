@@ -244,6 +244,29 @@ export default function Fasttrackpage() {
     
   }
 
+  function editLot(lotId) {
+
+    axios.get('https://gavelbaseserver.herokuapp.com/api/getLot?lotNumber='+lotId, {withCredentials: true}).then((res)=>{
+      console.log(res.data);
+      setLotId(lotId);
+      setImages(JSON.parse(res.data[1]));
+      // setFinalImages(res.data.images);
+      // setUpc(res.data.upc);
+      // setCondition(res.data.condition);
+      // setMissing(res.data.missing);
+      // setStatus(res.data.status);
+      // setBrand(res.data.brand);
+      // setTitle(res.data.title);
+      // setDescription(res.data.description);
+      // setColor(res.data.color);
+      // setModel(res.data.model);
+      // setStockImage(res.data.stockImage);
+      setStep(6);
+    }).catch((err)=>{
+      console.log(err.response);
+    });
+  }
+
   useEffect(()=>{
     if (locationCode && locationLotId) {
       // updateLot
@@ -447,7 +470,6 @@ export default function Fasttrackpage() {
             }}
             className='sm:w-6 w-10'
             placeholder='Lot ID'
-            inputMode='numeric'
             autoComplete='off'
             inputProps={{
               inputMode: 'numeric',
@@ -559,10 +581,11 @@ export default function Fasttrackpage() {
       
       
       
-      {
-        manual &&
-        <FasttrackMenu open={setManual} />
-      }
+      <Dialog header="Menu" visible={manual} className='w-full p-2 flex flex-column' onHide={() => {setManual(false);}}>
+        <FasttrackMenu functions={{open: setManual, editLot: editLot}} />   
+      </Dialog>
+        
+      
       
       
       

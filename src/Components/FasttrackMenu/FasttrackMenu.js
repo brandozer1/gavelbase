@@ -1,16 +1,24 @@
 import React, {useState} from 'react'
 import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
+import { InputText } from 'primereact/inputtext';
 
 
-export default function FasttrackMenu({open}) {
-    const [manual, setManual] = useState(true)
+export default function FasttrackMenu({functions}) {
+    const [editInput, setEditInput] = useState('')
     return (
-        <Dialog header="Menu" visible={manual} className='w-full p-2 flex flex-column' onHide={() => {setManual(false); open(false)}}>
-            <div className='w-12 flex flex-column gap-2'>
-                <Button label='Edit Mode'></Button>
-                <Button label='View Past Entries'></Button>
-            </div>
-        </Dialog>
+        <div className='w-12 flex flex-column gap-2 mt-1'>
+            {editInput}
+            <form className='p-inputgroup' onSubmit={(e)=>{
+                e.preventDefault()
+                functions.editLot(editInput)
+                functions.open(false);
+            }}>
+                <InputText onChange={(e)=>setEditInput(e.target.value)} placeholder='Lot ID to edit' ></InputText>
+                <Button severity='info' icon='pi pi-file-edit' label='Edit'></Button>
+            </form>
+            <Button severity='info' label='View Past Entries'></Button>
+        </div>
+        
     )
 }
