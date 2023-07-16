@@ -376,7 +376,7 @@ export default function Fasttrackpage() {
           <div className='text-900 text-xl mt-8'>What is the condition of the product?</div>
           <ListBox value={condition} onChange={(e) => {setCondition(e.value); nextStep(true)}} options={conditions} className="w-full md:w-14rem" />
 
-          <div className='sm:w-6 w-full bottom-0 left-0 fixed flex flex-column gap-2 p-2 surface-ground shadow-3'>
+          <div className='sm:w-6 w-full bottom-0 left-0 fixed flex flex-column gap-2 p-2 surface-100 shadow-3'>
             <div className='p-inputgroup w-full'>
               <InputText value={conditionInput} onChange={(e)=>{setConditionInput(e.target.value)}} placeholder='Custom' />
               <Button label='Set Custom' onClick={()=>{setCondition(conditionInput); nextStep(true)}}></Button>
@@ -392,7 +392,7 @@ export default function Fasttrackpage() {
           <div className='text-900 text-xl mt-8'>What is the product missing?</div>
           <ListBox multiple value={missing} onChange={(e) => setMissing(e.value)} options={missingStates} className="w-full md:w-14rem" />
 
-          <div className='sm:w-6 w-full bottom-0 left-0 fixed flex flex-column gap-2 p-2 surface-ground shadow-3'>
+          <div className='sm:w-6 w-full bottom-0 left-0 fixed flex flex-column gap-2 p-2 surface-100 shadow-3'>
             <div className='w-full p-inputgroup'>
               <InputText value={missingInput} onChange={(e)=>{setMissingInput(e.target.value)}} placeholder='Custom' />
               <Button label='Add' onClick={()=>{setMissingStates(missingStates=>[...missingStates, missingInput]); setMissing(missing => [...missing, missingInput])}}></Button>
@@ -417,7 +417,7 @@ export default function Fasttrackpage() {
           <div className='text-900 text-xl mt-8'>What is the product's testing status?</div>
           <ListBox value={status} onChange={(e) => {setStatus(e.value); nextStep(true)}} options={statuses} className="w-full md:w-14rem" />
           
-          <div className='sm:w-6 w-full bottom-0 left-0 fixed flex flex-column gap-2 p-2 surface-ground shadow-3'>
+          <div className='sm:w-6 w-full bottom-0 left-0 fixed flex flex-column gap-2 p-2 surface-100 shadow-3'>
             <div className='p-inputgroup w-full'>
               <InputText value={statusInput} onChange={(e)=>{setStatusInput(e.target.value)}} placeholder='Custom Status' />
               <Button label='Use Custom' onClick={()=>{setStatus(statusInput); nextStep(true)}}></Button>
@@ -454,7 +454,7 @@ export default function Fasttrackpage() {
               pattern: '[0-9]*',
             }}
           />
-          <div className='sm:w-6 w-full bottom-0 fixed flex flex-column gap-2 p-2 surface-ground shadow-3'>
+          <div className='sm:w-6 w-full bottom-0 fixed flex flex-column gap-2 p-2 surface-100 shadow-3'>
             <Button className='w-full' label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
             <Button className='w-full' type='submit' label='Continue' />
           </div>
@@ -484,7 +484,7 @@ export default function Fasttrackpage() {
               pattern: '[0-9]*',
             }}
           />
-          <div className='sm:w-6 w-full bottom-0 fixed flex flex-column gap-2 p-2 surface-ground shadow-3'>
+          <div className='sm:w-6 w-full bottom-0 fixed flex flex-column gap-2 p-2 surface-100 shadow-3'>
             <Button className='w-full' label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
             <Button className='w-full' type='submit' label='Continue' />
           </div>
@@ -544,7 +544,7 @@ export default function Fasttrackpage() {
           </div>
           
           
-          <div className='sm:w-6 w-full bottom-0 fixed flex flex-column gap-2 p-2 surface-ground shadow-3'>
+          <div className='sm:w-6 w-full bottom-0 fixed flex flex-column gap-2 p-2 surface-100 shadow-3'>
             <Button label='Back' severity='danger' className='w-full' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
             {/* <Button className='w-full' type='submit' label='Send to Data Entry' /> */}
             <Button className='w-full' onClick={()=>{handleSubmission(); new Audio(complete).play(); restart()}} label='Finish & Submit' />
