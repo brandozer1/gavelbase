@@ -596,7 +596,7 @@ export default function Fasttrackpage() {
       
       
       <Dialog header="Menu" visible={manual} className='w-full p-2 flex flex-column' onHide={() => {setManual(false);}}>
-        <FasttrackMenu functions={{open: setManual, editLot: editLot}} />   
+        <FasttrackMenu functions={{open: setManual, editLot: editLot, message: message}} />   
       </Dialog>
         
       
@@ -611,7 +611,7 @@ export default function Fasttrackpage() {
       
       
       
-      <Toast ref={toast} />
+      <Toast position="top-center" ref={toast} />
       <div className='h-20rem'></div>
 
       
