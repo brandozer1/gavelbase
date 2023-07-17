@@ -251,16 +251,16 @@ export default function Fasttrackpage() {
       setLotId(lotId);
       setImages(JSON.parse(res.data[1]));
       // setFinalImages(res.data.images);
-      // setUpc(res.data.upc);
-      // setCondition(res.data.condition);
-      // setMissing(res.data.missing);
-      // setStatus(res.data.status);
-      // setBrand(res.data.brand);
-      // setTitle(res.data.title);
-      // setDescription(res.data.description);
-      // setColor(res.data.color);
-      // setModel(res.data.model);
-      // setStockImage(res.data.stockImage);
+      setUpc(res.data[2]);
+      setCondition(res.data[9]);
+      setMissing(JSON.parse(res.data[10]));
+      setStatus(res.data[11]);
+      setBrand(res.data[7]);
+      setTitle(res.data[3]);
+      setDescription(res.data[4]);
+      setColor(res.data[8]);
+      setModel(res.data[6]);
+      setStockImage(res.data[5]);
       setStep(6);
     }).catch((err)=>{
       console.log(err.response);
