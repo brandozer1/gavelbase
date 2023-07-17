@@ -254,6 +254,7 @@ export default function Fasttrackpage() {
       setUpc(res.data[2]);
       setCondition(res.data[9]);
       setMissing(JSON.parse(res.data[10]));
+      setMissingStates([...missingStates, ...new Set(JSON.parse(res.data[10]))]);
       setStatus(res.data[11]);
       setBrand(res.data[7]);
       setTitle(res.data[3]);
