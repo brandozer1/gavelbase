@@ -162,22 +162,22 @@ export default function Fasttrackpage() {
           console.log(res.data);
           setProductInfo(res.data);
           for (let i = 0; i < res.data.items.length; i++) {
-            if (res.data.items[i].model && !model) {
+            if (res.data.items[i].model) {
               setModel(res.data.items[i].model);
             }
-            if (res.data.items[i].brand && !brand) {
+            if (res.data.items[i].brand) {
               setBrand(res.data.items[i].brand);
             }
-            if (res.data.items[i].color && !color) {
+            if (res.data.items[i].color) {
               setColor(res.data.items[i].color);
             }
-            if (res.data.items[i].title && !title) {
+            if (res.data.items[i].title) {
               setTitle(res.data.items[i].title);
             }
-            if (res.data.items[i].description && !description) {
+            if (res.data.items[i].description) {
               setDescription(res.data.items[i].description);
             }
-            if (res.data.items[i].images && !stockImage) {
+            if (res.data.items[i].images) {
               setStockImage(res.data.items[i].images[0]);
               setFinalImages(res.data.items[i].images.concat(finalImages));
             }
@@ -459,13 +459,15 @@ export default function Fasttrackpage() {
 
       {
         step == 4 &&
-        <form className='flex flex-column align-items-center gap-2' onSubmit={(e)=>{if (lotId.includes('lot-')) {
+        <form className='flex flex-column align-items-center gap-2' onSubmit={(e)=>{
+        e.preventDefault();
+        if (lotId.includes('lot-')) {
           setLotId(lotId.replace('lot-', ''));
           nextStep(true);
         }else{
           message('error', 'Invalid Lot ID Scan');
         }
-        e.preventDefault();
+        
         }}>
           <div className='text-900 text-xl mt-8'>Scan or enter the Lot ID.</div>
           <InputText
@@ -484,7 +486,7 @@ export default function Fasttrackpage() {
             }}
           />
           <div className='sm:w-6 w-full bottom-0 fixed flex flex-column gap-2 p-2 surface-100 shadow-3'>
-            <Button className='w-full' label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
+            <Button className='w-full' type='button' label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
             <Button className='w-full' type='submit' label='Continue' />
           </div>
           
@@ -494,7 +496,12 @@ export default function Fasttrackpage() {
 
       {
         step == 5 &&
-        <form className='flex flex-column align-items-center gap-2' onSubmit={()=>{handleUPC().then(()=>{nextStep(); setIsLoading(false)}).catch(()=>{nextStep(); setIsLoading(false)}); setIsLoading(true) }}>
+        <form className='flex flex-column align-items-center gap-2' onSubmit={(e)=>{
+          e.preventDefault();
+          handleUPC().then(()=>{
+            nextStep(); 
+            setIsLoading(false)
+            }).catch(()=>{nextStep(); setIsLoading(false)}); setIsLoading(true) }}>
           <div className='text-900 text-xl mt-8'>Scan or enter the products UPC (Barcode).</div>
           <InputText
             autoFocus
@@ -514,7 +521,7 @@ export default function Fasttrackpage() {
             }}
           />
           <div className='sm:w-6 w-full bottom-0 fixed flex flex-column gap-2 p-2 surface-100 shadow-3'>
-            <Button className='w-full' label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
+            <Button className='w-full' type='button' label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
             <Button className='w-full' type='submit' label='Continue' />
           </div>
         </form>
