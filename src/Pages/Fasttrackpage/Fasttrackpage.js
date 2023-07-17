@@ -459,8 +459,8 @@ export default function Fasttrackpage() {
 
       {
         step == 4 &&
-        <form className='flex flex-column align-items-center gap-2' onSubmit={(e)=>{if (lotId.includes('LOT-')) {
-          setLotId(lotId.replace('LOT-', ''));
+        <form className='flex flex-column align-items-center gap-2' onSubmit={(e)=>{if (lotId.includes('lot-')) {
+          setLotId(lotId.replace('lot-', ''));
           nextStep(true);
         }else{
           message('error', 'Invalid Lot ID Scan');
