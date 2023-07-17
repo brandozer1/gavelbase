@@ -263,13 +263,12 @@ export default function Fasttrackpage() {
     if (locationInput.split('-')[0] == 'loc' || locationInput.split('-')[0] == 'Loc') {
       setLocationInput(locationInput.replace('Loc', 'loc'))
       setLocationCode(locationInput.replace('loc-', ''));
-    }else{
-      message('error', 'Invalid Location/Lot Scan');
     }
     if (locationInput.split('-')[0] == 'lot' || locationInput.split('-')[0] == 'Lot') {
       setLocationInput(locationInput)
       setLocationLotId(locationInput.replace('lot-', ''));
-    }else{
+    }
+    if (!(locationInput.split('-')[0] == 'lot' || locationInput.split('-')[0] == 'Lot')&!(locationInput.split('-')[0] == 'loc' || locationInput.split('-')[0] == 'Loc')) {
       message('error', 'Invalid Location/Lot Scan');
     }
     setLocationInput('');
@@ -305,7 +304,7 @@ export default function Fasttrackpage() {
   useEffect(()=>{
     if (locationCode && locationLotId) {
       // updateLot
-      axios.post('https://gavelbaseserver.herokuapp.com/api/updateLot', {lotId: locationLotId, loc: locationCode, locator: name}, {withCredentials: true}).then((res)=>{
+      axios.post('https://gavelbaseserver.herokuapp.com/api/updateLot', {lotId: locationLotId, loc: locationCode, locator: name, time: new Date().toLocaleString() }, {withCredentials: true}).then((res)=>{
         new Audio(complete).play();
       }).catch((err)=>{
         new Audio(error).play();
