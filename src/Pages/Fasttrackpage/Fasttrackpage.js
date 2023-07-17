@@ -303,9 +303,13 @@ export default function Fasttrackpage() {
         <div className='p-inputgroup w-auto sm:h-auto h-2rem'>
           { 
             step >= 0 &&
-            <Button severity='danger' label="Restart" icon="pi pi-trash" onClick={()=>restart()} />
+            <>
+              <Button severity='danger' label="Restart" icon="pi pi-trash" onClick={()=>restart()} />
+              <Button label="Menu" icon="pi pi-bars" onClick={() => setManual(true)} />
+            </>
+            
           }
-          <Button label="Menu" icon="pi pi-bars" onClick={() => setManual(true)} />
+          
           
           
 
@@ -432,9 +436,9 @@ export default function Fasttrackpage() {
             
             {
               missing.length > 0 ?
-              <Button onClick={()=>{nextStep(true)}} label='Continue' />
+              <Button severity='success' onClick={()=>{nextStep(true)}} label='Continue' />
               :
-              <Button onClick={()=>{nextStep(true)}} label='Nothing' />
+              <Button severity='info' onClick={()=>{nextStep(true)}} label='Nothing' />
             }
           </div>
         </>
@@ -487,7 +491,7 @@ export default function Fasttrackpage() {
           />
           <div className='sm:w-6 w-full bottom-0 fixed flex flex-column gap-2 p-2 surface-100 shadow-3'>
             <Button className='w-full' type='button' label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
-            <Button className='w-full' type='submit' label='Continue' />
+            <Button className='w-full' severity='success' type='submit' label='Continue' />
           </div>
           
           
@@ -522,11 +526,11 @@ export default function Fasttrackpage() {
           />
           <div className='sm:w-6 w-full bottom-0 fixed flex flex-column gap-2 p-2 surface-100 shadow-3'>
             <div className='flex w-full p-inputgroup'>
-              <Button className='w-full' type='button' label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
+              <Button className='w-6' type='button' label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
               <Button className='w-full' onClick={()=>nextStep()} type='button' label='Continue Without Search' />
             </div>
             
-            <Button className='w-full' type='submit' label='Continue' />
+            <Button className='w-full' severity='success' type='submit' label='Continue' />
           </div>
         </form>
       }
@@ -587,7 +591,7 @@ export default function Fasttrackpage() {
           <div className='sm:w-6 w-full bottom-0 fixed flex flex-column gap-2 p-2 surface-100 shadow-3'>
             <Button label='Back' severity='danger' className='w-full' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
             {/* <Button className='w-full' type='submit' label='Send to Data Entry' /> */}
-            <Button className='w-full' onClick={()=>{handleSubmission(); new Audio(complete).play(); restart()}} label='Finish & Submit' />
+            <Button severity='success' className='w-full' onClick={()=>{handleSubmission(); new Audio(complete).play(); restart()}} label='Finish & Submit' />
           </div>
 
         </div>
