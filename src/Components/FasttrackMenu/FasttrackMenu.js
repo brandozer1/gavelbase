@@ -14,7 +14,7 @@ export default function FasttrackMenu({functions}) {
                 if (!editInput.includes('lot-')) {
                     functions.message('error', 'Invalid Lot ID')
                 }else{
-                    functions.editLot(editInput)
+                    functions.editLot(editInput.replace('lot-', ''))
                     functions.open(false);
                 }
                 
