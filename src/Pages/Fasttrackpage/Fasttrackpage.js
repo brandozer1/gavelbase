@@ -149,6 +149,9 @@ export default function Fasttrackpage() {
       case 'error':
         new Audio(error).play();
         break;
+      case 'submit':
+        new Audio(complete).play();
+        break;
       default:
         break;
     }
@@ -199,45 +202,61 @@ export default function Fasttrackpage() {
     if (missing) {
       setDescription('Missing: ' + JSON.stringify(missing) + ', ' + description);
     }
+
+    setIsLoading(true);
+    axios.post('https://gavelbaseserver.herokuapp.com/api/addLotImage/', {images: images}).then((res)=>{
     
-    axios.post('https://gavelbaseserver.herokuapp.com/api/appendLot', [
-      lotId,
-      JSON.stringify(finalImages),
-      upc,
-      condition + ' ' + title + ' | ' + status + (missing.length > 0 ? ' | MISSING ITEMS SEE DESCRIPTION' : ''),
-      (missing.length> 0 ? "Missing: "+JSON.stringify(missing).replace('"', '')+" | ": '')+ "Condition: "+condition+' | Testing Status: '+status+' | '+description,
-      stockImage,
-      model,
-      brand,
-      color,
-      condition,
-      JSON.stringify(missing),
-      status,
-      name,
-      new Date().toLocaleString('en-US', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false
+      if (finalImages.length > 7) {setFinalImages(finalImages.splice(1, 8)); setFinalImages(finalImages.concat(res.data));} else {setFinalImages(finalImages.concat(res.data));}
+      axios.post('https://gavelbaseserver.herokuapp.com/api/appendLot', [
+        lotId,
+        JSON.stringify(finalImages),
+        upc,
+        condition + ' ' + title + ' | ' + status + (missing.length > 0 ? ' | MISSING ITEMS SEE DESCRIPTION' : ''),
+        (missing.length> 0 ? "Missing: "+JSON.stringify(missing).replace('"', '')+" | ": '')+ "Condition: "+condition+' | Testing Status: '+status+' | '+description,
+        stockImage,
+        model,
+        brand,
+        color,
+        condition,
+        JSON.stringify(missing),
+        status,
+        name,
+        new Date().toLocaleString('en-US', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false
+        })
+        
+      ], {withCredentials: true}).then((res)=>{
+        setIsLoading(false);
+        // message('submit', 'Lot Added Successfully');
+        
+        restart();
+          
+      }).catch((err)=>{
+        console.log(err);
       })
-      
-    ], {withCredentials: true}).then((res)=>{
-      console.log(res.data);
-    }).catch((err)=>{
-      console.log(err.response);
-    })
+    }).catch((err)=>{console.log(err.response);});
+    
   }
 
   function handleManualSubmission(e) {
     e.preventDefault();
     if (locationInput.split('-')[0] == 'loc' || locationInput.split('-')[0] == 'Loc') {
       setLocationInput(locationInput.replace('Loc', 'loc'))
-      setLocationCode(locationInput);
+      setLocationCode(locationInput.replace('loc-', ''));
     }else{
-      setLocationLotId(locationInput);
+      message('error', 'Invalid Location/Lot Scan');
+    }
+    if (locationInput.split('-')[0] == 'lot' || locationInput.split('-')[0] == 'Lot') {
+      setLocationInput(locationInput)
+      setLocationLotId(locationInput.replace('lot-', ''));
+    }else{
+      message('error', 'Invalid Location/Lot Scan');
     }
     setLocationInput('');
     
@@ -388,13 +407,7 @@ export default function Fasttrackpage() {
           {
             images.length > 2 &&
             <Button onClick={()=>{
-              setIsLoading(true);
-              axios.post('https://gavelbaseserver.herokuapp.com/api/addLotImage/', {images: images}).then((res)=>{
-              
-                if (finalImages.length > 7) {setFinalImages(finalImages.splice(1, 8)); setFinalImages(finalImages.concat(res.data));} else {setFinalImages(finalImages.concat(res.data));}
-                setIsLoading(false);
-                nextStep(true)
-              }).catch((err)=>{console.log(err.response);});
+              nextStep(true);
             }} label='Continue' />
           }
           <div className='grid'>
@@ -593,7 +606,7 @@ export default function Fasttrackpage() {
           <div className='sm:w-6 w-full bottom-0 fixed flex flex-column gap-2 p-2 surface-100 shadow-3'>
             <Button label='Back' severity='danger' className='w-full' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
             {/* <Button className='w-full' type='submit' label='Send to Data Entry' /> */}
-            <Button severity='success' className='w-full' onClick={()=>{handleSubmission(); new Audio(complete).play(); restart()}} label='Finish & Submit' />
+            <Button severity='success' className='w-full' onClick={()=>{handleSubmission();}} label='Finish & Submit' />
           </div>
 
         </div>
