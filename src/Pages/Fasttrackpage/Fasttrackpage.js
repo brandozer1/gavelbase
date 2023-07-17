@@ -521,7 +521,11 @@ export default function Fasttrackpage() {
             }}
           />
           <div className='sm:w-6 w-full bottom-0 fixed flex flex-column gap-2 p-2 surface-100 shadow-3'>
-            <Button className='w-full' type='button' label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
+            <div className='p-inputgroup'>
+              <Button className='w-full' type='button' label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
+              <Button className='w-full' onClick={()=>nextStep()} type='button' label='Continue Without Search' />
+            </div>
+            
             <Button className='w-full' type='submit' label='Continue' />
           </div>
         </form>
