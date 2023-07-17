@@ -248,13 +248,15 @@ export default function Fasttrackpage() {
 
     axios.get('https://gavelbaseserver.herokuapp.com/api/getLot?lotNumber='+lotId, {withCredentials: true}).then((res)=>{
       console.log(res.data);
+      let missingStatesTemp = missingStates.concat(JSON.parse(res.data[10]));
+      missingStatesTemp = [...new Set(missingStatesTemp)]
       setLotId(lotId);
       setImages(JSON.parse(res.data[1]));
       // setFinalImages(res.data.images);
       setUpc(res.data[2]);
       setCondition(res.data[9]);
       setMissing(JSON.parse(res.data[10]));
-      setMissingStates([...missingStates, ...new Set(JSON.parse(res.data[10]))]);
+      setMissingStates(missingStatesTemp);
       setStatus(res.data[11]);
       setBrand(res.data[7]);
       setTitle(res.data[3]);
