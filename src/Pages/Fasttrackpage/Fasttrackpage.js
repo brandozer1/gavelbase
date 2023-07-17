@@ -89,6 +89,7 @@ export default function Fasttrackpage() {
   const [statusInput, setStatusInput] = useState('');
   const [status, setStatus] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [itemCount, setItemCount] = useState(1);
 
 
   const [brand, setBrand] = useState('');
@@ -136,6 +137,8 @@ export default function Fasttrackpage() {
     setConditionInput('');
     setStatusInput('');
     setFinalImages([]);
+    setItemCount(1);
+
 
     
   }
@@ -198,21 +201,32 @@ export default function Fasttrackpage() {
   
 
   function handleSubmission() {
-
-    if (missing) {
-      setDescription('Missing: ' + JSON.stringify(missing) + ', ' + description);
+    if (itemCount < 1) {
+      message('error', 'Item count must be greater than 0');
+      return;
     }
+
+    if (condition == '') {
+      message('error', 'Condition must be selected');
+      return;
+    }
+
+    if (status == '') {
+      message('error', 'Status must be selected');
+      return;
+    }
+    
+
+    
 
     setIsLoading(true);
     axios.post('https://gavelbaseserver.herokuapp.com/api/addLotImage/', {images: images}).then((res)=>{
-    
-      if (finalImages.length > 7) {setFinalImages(finalImages.splice(1, 8)); setFinalImages(finalImages.concat(res.data));} else {setFinalImages(finalImages.concat(res.data));}
       axios.post('https://gavelbaseserver.herokuapp.com/api/appendLot', [
         lotId,
-        JSON.stringify(finalImages),
+        JSON.stringify(finalImages.concat(res.data)),
         upc,
-        condition + ' ' + title + ' | ' + status + (missing.length > 0 ? ' | MISSING ITEMS SEE DESCRIPTION' : ''),
-        (missing.length> 0 ? "Missing: "+JSON.stringify(missing).replace('"', '')+" | ": '')+ "Condition: "+condition+' | Testing Status: '+status+' | '+description,
+        (itemCount > 1? itemCount+' ' : '') + condition + ' ' + title+ ' | ' + status + (missing.length > 0 ? ' | MISSING ITEMS SEE DESCRIPTION' : ''),
+        (missing.length> 0 ? "Missing: "+JSON.stringify(missing).replace('"', '')+" | ": '')+ "Condition: "+condition+' | Testing Status: '+status+' | Quantity: '+itemCount+' | '+description,
         stockImage,
         model,
         brand,
@@ -234,8 +248,8 @@ export default function Fasttrackpage() {
       ], {withCredentials: true}).then((res)=>{
         setIsLoading(false);
         // message('submit', 'Lot Added Successfully');
-        
         restart();
+        new Audio(complete).play();
           
       }).catch((err)=>{
         console.log(err);
@@ -291,7 +305,7 @@ export default function Fasttrackpage() {
   useEffect(()=>{
     if (locationCode && locationLotId) {
       // updateLot
-      axios.post('https://gavelbaseserver.herokuapp.com/api/updateLot', {lotId: locationLotId, loc: locationCode}, {withCredentials: true}).then((res)=>{
+      axios.post('https://gavelbaseserver.herokuapp.com/api/updateLot', {lotId: locationLotId, loc: locationCode, locator: name}, {withCredentials: true}).then((res)=>{
         new Audio(complete).play();
       }).catch((err)=>{
         new Audio(error).play();
@@ -552,9 +566,12 @@ export default function Fasttrackpage() {
 
       {
         step == 6 && 
-        <div className='flex flex-column align-items-center gap-4'>
+        <div className='flex flex-column align-items-center gap-4 pt-3'>
           
-          <div className='text-900 text-xl'>Confirm data below</div>
+          <span className="p-float-label w-full">
+            <InputNumber inputMode='numeric' id="Quantity" value={itemCount} onChange={(e) => {setItemCount(e.value);}} className={'w-full ' + (!itemCount && 'p-invalid')} />
+            <label htmlFor="Quantity">Quantity</label>
+          </span>
           <span className="p-float-label w-full">
             <InputText id="Brand" value={brand} onChange={(e) => setBrand(e.target.value)} className={'w-full ' + (!brand && 'p-invalid')} />
             <label htmlFor="Brand">Brand</label>
@@ -567,14 +584,17 @@ export default function Fasttrackpage() {
             <InputTextarea id="Description" value={description} onChange={(e) => setDescription(e.target.value)} className={'w-full ' + (!description && 'p-invalid')} />
             <label htmlFor="Description">Description</label>
           </span>
-          <span className="p-float-label w-full">
-            <InputText id="Color" value={color} onChange={(e) => setColor(e.target.value)} className={'w-full ' + (!color && 'p-invalid')} />
-            <label htmlFor="Color">Color</label>
-          </span>
-          <span className="p-float-label w-full">
-            <InputText id="Model" value={model} onChange={(e) => setModel(e.target.value)} className={'w-full ' + (!model && 'p-invalid')} />
-            <label htmlFor="Model">Model</label>
-          </span>
+          <div className='flex gap-2 w-full'>
+            <span className="p-float-label w-full">
+              <InputText id="Color" value={color} onChange={(e) => setColor(e.target.value)} className={'w-full ' + (!color && 'p-invalid')} />
+              <label htmlFor="Color">Color</label>
+            </span>
+            <span className="p-float-label w-full">
+              <InputText id="Model" value={model} onChange={(e) => setModel(e.target.value)} className={'w-full ' + (!model && 'p-invalid')} />
+              <label htmlFor="Model">Model</label>
+            </span>
+          </div>
+          
           
           <div className='flex justify-content-around w-full'>
 
