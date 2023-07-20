@@ -505,7 +505,7 @@ export default function Fasttrackpage() {
         }
 
         if (!(lotId.includes('?lot=lot-') && lotId.split('=')[1].length == 5) && !(lotId.includes('lot-') && lotId.split('-')[1].length == 5 && lotId.length === 9)) {
-          setLotId(null);
+          setLotId('');
           message('error', 'Invalid Lot Id Scan');
         }
         
