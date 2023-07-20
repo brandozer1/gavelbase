@@ -494,8 +494,15 @@ export default function Fasttrackpage() {
         step == 4 &&
         <form className='flex flex-column align-items-center gap-2' onSubmit={(e)=>{
         e.preventDefault();
-        if (lotId.includes('lot-')) {
+        if (lotId.includes('lot-') && lotId.split('-')[1].length == 5) {
           setLotId(lotId.replace('lot-', ''));
+          nextStep(true);
+        }else{
+          message('error', 'Invalid Lot ID Scan');
+        }
+
+        if (lotId.includes('?lot=') && lotId.split('=')[1].length == 5) {
+          setLotId(lotId.split('=')[1]);
           nextStep(true);
         }else{
           message('error', 'Invalid Lot ID Scan');
