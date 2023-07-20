@@ -223,7 +223,7 @@ export default function Fasttrackpage() {
     axios.post('https://gavelbaseserver.herokuapp.com/api/addLotImage/', {images: images}).then((res)=>{
       axios.post('https://gavelbaseserver.herokuapp.com/api/appendLot', [
         lotId,
-        '',
+        '=IMAGE(getFirstItemInStringifiedArray(INDIRECT(ADDRESS(ROW(), COLUMN()+1))))',
         JSON.stringify(finalImages.concat(res.data)),
         upc,
         (itemCount > 1? itemCount+' ' : '') + condition + ' ' + title+ ' | ' + status + (missing.length > 0 ? ' | MISSING ITEMS SEE DESCRIPTION' : ''),
