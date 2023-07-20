@@ -73,22 +73,30 @@ export default function Fasttrackpage() {
   ]);
 
   const [step, setStep] = useState(-1);
+  const [isLoading, setIsLoading] = useState(false);
   const [manual, setManual] = useState(false);
 
   const [name, setName] = useState('');
+
   const [lotId, setLotId] = useState(null);
+
   const [upc, setUpc] = useState(null);
+  const [searchInput, setSearchInput] = useState(null);
+  const [searchResults, setSearchResults] = useState([]);
+  
   const [bufferimg, setBufferimg] = useState(null); // datauri buffer because the camera comp is weird and wont allow me to push to state
   const [images, setImages] = useState([]);
   const [productInfo, setProductInfo] = useState({});
 
   const [condition, setCondition] = useState('');
+  const [conditionInput, setConditionInput] = useState(''); // this is the input for the condition
+
   const [missing, setMissing] = useState([]);
   const [missingInput, setMissingInput] = useState(''); // this is the input for the missing item
-  const [conditionInput, setConditionInput] = useState(''); // this is the input for the condition
-  const [statusInput, setStatusInput] = useState('');
+  
   const [status, setStatus] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [statusInput, setStatusInput] = useState('');
+
   const [itemCount, setItemCount] = useState(1);
 
 
@@ -138,6 +146,7 @@ export default function Fasttrackpage() {
     setStatusInput('');
     setFinalImages([]);
     setItemCount(1);
+    setSearchInput('');
 
 
     
@@ -198,6 +207,21 @@ export default function Fasttrackpage() {
         });
     });
   }
+
+  function handleSearch () {
+    return new Promise((resolve, reject) => {
+      axios.get(`https://gavelbaseserver.herokuapp.com/api/lot/search/${searchInput}`, { withCredentials: true })
+        .then((res) => {
+          setSearchResults(res.data);
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err.response);
+        });
+    });
+  }  
+        
+
   
 
   function handleSubmission() {
@@ -549,24 +573,92 @@ export default function Fasttrackpage() {
             nextStep(); 
             setIsLoading(false)
             }).catch(()=>{nextStep(); setIsLoading(false)}); setIsLoading(true) }}>
-          <div className='text-900 text-xl mt-8'>Scan or enter the products UPC (Barcode).</div>
-          <InputText
-            autoFocus
-            value={upc}
-            onChange={(e) => {
-              const inputValue = e.target.value.replace(/[^0-9]/g, '');
-              setUpc(inputValue);
-            }}
-            className='sm:w-6 w-10'
-            placeholder='UPC'
-            inputMode='numeric'
-            pattern='[0-9]*'
-            autoComplete='off'
-            inputProps={{
-              inputMode: 'numeric',
-              pattern: '[0-9]*',
-            }}
-          />
+          <div className='text-900 text-xl mt-8 text-center'>Scan or enter the products UPC (Barcode).</div>
+          <div className='p-inputgroup w-9'>
+            <InputText
+              autoFocus
+              id='UPC'
+              value={upc}
+              onChange={(e) => {
+                const inputValue = e.target.value.replace(/[^0-9]/g, '');
+                setUpc(inputValue);
+              }}
+              className='sm:w-6 w-10'
+              placeholder='UPC'
+              inputMode='numeric'
+              pattern='[0-9]*'
+              autoComplete='off'
+              inputProps={{
+                inputMode: 'numeric',
+                pattern: '[0-9]*',
+              }}
+            />
+            <Button type='button' severity='danger' icon=' pi pi-times' onClick={()=>{setUpc(''); document.getElementById("UPC").focus();}} />
+          </div>
+          <div className='text-900 text-xl text-center'>Or search for an item by keyword, model, or brand</div>
+          <div className='p-inputgroup w-9'>
+            <InputText
+              placeholder='Keyword Search'
+              value={searchInput}
+              onChange={(e) => {
+                setSearchInput(e.target.value);
+              }}
+              className='sm:w-6 w-10'
+              autoComplete='off'
+
+            />
+            <Button type='button' severity='info' icon=' pi pi-search' onClick={()=>{handleSearch()}} />
+          </div>
+
+          <div className='flex flex-column gap-2 w-full'>
+            {searchResults.products.length > 0 && <div className='text-900 text-xl'>Product Info</div>}
+            {
+              searchResults.products.length > 0 &&
+              searchResults.products.map((item, index) => (
+                <div key={index} className='flex border-round flex-column gap-2 w-full p-2 surface-100 shadow-3' onClick={()=>{
+                  setBrand(item.brand);
+                  setTitle(item.title);
+                  setDescription(item.description);
+                  setColor(item.color);
+
+                  if (item.model) {
+                    setModel(item.model);
+                  }else{
+                    setModel(item.mpn);
+                  }
+                  // setStockImage(res.data.items[i].images[0]);
+                  
+                  // setFinalImages(res.data.items[i].images.concat(finalImages));
+                  setFinalImages(item.images.concat(finalImages));
+                  setStockImage(item.images[0]);
+                  nextStep(true);
+                  
+                }}>
+                  <div className='flex gap-1 w-full justify-content-between'>
+                    {
+                      item.images.length > 0 &&
+                      <img className=' w-2' src={item.images[0]} /> 
+                    }
+                    
+                    <div className='text-900 text-m text-overflow-ellipsis'>{item.title}</div>
+                  </div>
+                  <div className='flex w-full justify-content-between'>
+                    <div className='flex flex-column'>
+                      <div>UPC:</div>
+                      <div className='text-900 text-m'>{item.barcode_number}</div>
+                    </div>
+
+                    <div className='flex flex-column'>
+                      <div>Model:</div>
+                      <div className='text-900 text-m'>{item.model?item.model:item.mpn?item.mpn:'Unkown'}</div>
+                    </div>
+                  </div>
+                </div>
+              ))
+            }
+
+          </div>
+
           <div className='sm:w-6 w-full bottom-0 fixed flex flex-column gap-2 p-2 surface-100 shadow-3'>
             <div className='flex w-full p-inputgroup'>
               <Button className='w-6' type='button' label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1); setLotId('lot-'+lotId)}} />
