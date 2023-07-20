@@ -611,9 +611,9 @@ export default function Fasttrackpage() {
           </div>
 
           <div className='flex flex-column gap-2 w-full'>
-            {searchResults.products.length > 0 && <div className='text-900 text-xl'>Product Info</div>}
+            {searchResults.products && <div className='text-900 text-xl'>Product Info</div>}
             {
-              searchResults.products.length > 0 &&
+              searchResults.products &&
               searchResults.products.map((item, index) => (
                 <div key={index} className='flex border-round flex-column gap-2 w-full p-2 surface-100 shadow-3' onClick={()=>{
                   setBrand(item.brand);
