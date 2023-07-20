@@ -494,41 +494,44 @@ export default function Fasttrackpage() {
         step == 4 &&
         <form className='flex flex-column align-items-center gap-2' onSubmit={(e)=>{
         e.preventDefault();
-        if (lotId.includes('lot-') && lotId.split('-')[1].length == 5 && lotId.length === 9) {
-          alert(lotId.replace('lot-', ''))
+        if (lotId.includes('lot-') && lotId.length === 10) {
           setLotId(lotId.replace('lot-', ''));
-          
           nextStep(true);
         }
 
-        if (lotId.includes('?lot=lot-') && lotId.split('=')[1].length == 5) {
-          alert(lotId.split('=')[1])
-          setLotId(lotId.split('=')[1]);
+        if (lotId.includes('?lot=lot-')) {
+          setLotId(lotId.split('=')[1].replace('lot-', ''));
           nextStep(true);
         }
 
-        // if (!(lotId.includes('?lot=lot-') && lotId.split('=')[1].length == 5) && !(lotId.includes('lot-') && lotId.split('-')[1].length == 5 && lotId.length === 9)) {
-        //   setLotId('');
-        //   message('error', 'Invalid Lot Id Scan');
-        // }
+        if (!(lotId.includes('?lot=lot-')) && !(lotId.includes('lot-') && lotId.length === 10)) {
+          setLotId('');
+          message('error', 'Invalid Lot Id Scan');
+        }
         
         }}>
           <div className='text-900 text-xl mt-8'>Scan or enter the Lot ID.</div>
-          <InputText
-            autoFocus
-            value={lotId}
-            onChange={(e) => {
-              const inputValue = e.target.value
-              setLotId(inputValue);
-            }}
-            className='sm:w-6 w-10'
-            placeholder='Lot ID'
-            autoComplete='off'
-            inputProps={{
-              inputMode: 'numeric',
-              pattern: '[0-9]*',
-            }}
-          />
+          <div className='p-inputgroup w-9'>
+            <InputText
+              autoFocus
+              value={lotId}
+              onChange={(e) => {
+                const inputValue = e.target.value
+                setLotId(inputValue);
+              }}
+              className='sm:w-6 w-10'
+              placeholder='Lot ID'
+              autoComplete='off'
+              inputProps={{
+                inputMode: 'numeric',
+                pattern: '[0-9]*',
+              }}
+            />
+
+            <Button type='button' label='Clear' severity='danger' icon=' pi pi-times' onClick={()=>{setLotId('')}} />
+
+          </div>
+          
           <div className='sm:w-6 w-full bottom-0 fixed flex flex-column gap-2 p-2 surface-100 shadow-3'>
             <Button className='w-full' type='button' label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
             <Button className='w-full' severity='success' type='submit' label='Continue' />
@@ -566,7 +569,7 @@ export default function Fasttrackpage() {
           />
           <div className='sm:w-6 w-full bottom-0 fixed flex flex-column gap-2 p-2 surface-100 shadow-3'>
             <div className='flex w-full p-inputgroup'>
-              <Button className='w-6' type='button' label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
+              <Button className='w-6' type='button' label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1); setLotId('lot-'+lotId)}} />
               <Button className='w-full' onClick={()=>nextStep()} type='button' label='Continue Without Search' />
             </div>
             
