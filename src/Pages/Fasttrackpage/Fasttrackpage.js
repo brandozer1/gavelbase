@@ -504,8 +504,8 @@ export default function Fasttrackpage() {
           nextStep(true);
         }
 
-        if (lotId.length !== 9) {
-          setLotId(0);
+        if (lotId.length !== 5) {
+          setLotId('');
           message('error', 'Invalid Lot Id Scan');
 
         }
