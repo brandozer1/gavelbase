@@ -494,18 +494,20 @@ export default function Fasttrackpage() {
         step == 4 &&
         <form className='flex flex-column align-items-center gap-2' onSubmit={(e)=>{
         e.preventDefault();
-        if (lotId.includes('lot-') && lotId.split('-')[1].length == 5) {
+        if (lotId.includes('lot-') && lotId.split('-')[1].length == 5 && lotId.length === 9) {
           setLotId(lotId.replace('lot-', ''));
           nextStep(true);
-        }else{
-          message('error', 'Invalid Lot ID Scan');
         }
 
-        if (lotId.includes('?lot=') && lotId.split('=')[1].length == 5) {
+        if (lotId.includes('?lot=lot-') && lotId.split('=')[1].length == 5) {
           setLotId(lotId.split('=')[1]);
           nextStep(true);
-        }else{
-          message('error', 'Invalid Lot ID Scan');
+        }
+
+        if (lotId.length !== 9) {
+          setLotId(0);
+          message('error', 'Invalid Lot Id Scan');
+
         }
         
         }}>
