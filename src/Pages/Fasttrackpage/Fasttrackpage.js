@@ -206,15 +206,15 @@ export default function Fasttrackpage() {
       return;
     }
 
-    if (condition == '') {
-      message('error', 'Condition must be selected');
-      return;
-    }
+    // if (condition == '') {
+    //   message('error', 'Condition must be selected');
+    //   return;
+    // }
 
-    if (status == '') {
-      message('error', 'Status must be selected');
-      return;
-    }
+    // if (status == '') {
+    //   message('error', 'Status must be selected');
+    //   return;
+    // }
     
 
     
@@ -420,7 +420,8 @@ export default function Fasttrackpage() {
           {
             images.length > 2 &&
             <Button onClick={()=>{
-              nextStep(true);
+              // nextStep(true);
+              setStep(4);
             }} label='Continue' />
           }
           <div className='grid'>
@@ -495,7 +496,8 @@ export default function Fasttrackpage() {
         e.preventDefault();
         if (lotId.includes('lot-')) {
           setLotId(lotId.replace('lot-', ''));
-          nextStep(true);
+          // nextStep(true);
+          setStep(6);
         }else{
           message('error', 'Invalid Lot ID Scan');
         }
@@ -518,7 +520,7 @@ export default function Fasttrackpage() {
             }}
           />
           <div className='sm:w-6 w-full bottom-0 fixed flex flex-column gap-2 p-2 surface-100 shadow-3'>
-            <Button className='w-full' type='button' label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
+            {/* <Button className='w-full' type='button' label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} /> */}
             <Button className='w-full' severity='success' type='submit' label='Continue' />
           </div>
           
