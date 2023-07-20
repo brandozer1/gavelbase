@@ -495,19 +495,22 @@ export default function Fasttrackpage() {
         <form className='flex flex-column align-items-center gap-2' onSubmit={(e)=>{
         e.preventDefault();
         if (lotId.includes('lot-') && lotId.split('-')[1].length == 5 && lotId.length === 9) {
+          alert(lotId.replace('lot-', ''))
           setLotId(lotId.replace('lot-', ''));
+          
           nextStep(true);
         }
 
         if (lotId.includes('?lot=lot-') && lotId.split('=')[1].length == 5) {
+          alert(lotId.split('=')[1])
           setLotId(lotId.split('=')[1]);
           nextStep(true);
         }
 
-        if (!(lotId.includes('?lot=lot-') && lotId.split('=')[1].length == 5) && !(lotId.includes('lot-') && lotId.split('-')[1].length == 5 && lotId.length === 9)) {
-          setLotId('');
-          message('error', 'Invalid Lot Id Scan');
-        }
+        // if (!(lotId.includes('?lot=lot-') && lotId.split('=')[1].length == 5) && !(lotId.includes('lot-') && lotId.split('-')[1].length == 5 && lotId.length === 9)) {
+        //   setLotId('');
+        //   message('error', 'Invalid Lot Id Scan');
+        // }
         
         }}>
           <div className='text-900 text-xl mt-8'>Scan or enter the Lot ID.</div>
