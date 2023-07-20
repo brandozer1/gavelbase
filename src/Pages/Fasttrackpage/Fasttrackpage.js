@@ -528,7 +528,7 @@ export default function Fasttrackpage() {
               }}
             />
 
-            <Button type='button' label='Clear' severity='danger' icon=' pi pi-times' onClick={()=>{setLotId('')}} />
+            <Button type='button' severity='danger' icon=' pi pi-times' onClick={()=>{setLotId('')}} />
 
           </div>
           
