@@ -23,6 +23,7 @@ export default function FasttrackMenu({functions}) {
                 <Button severity='info' icon='pi pi-file-edit' label='Edit'></Button>
             </form>
             <Button severity='info' label='View Past Entries'></Button>
+            <Button severity='danger' label='Restart' onClick={()=>functions.restart()}></Button>
         </div>
         
     )

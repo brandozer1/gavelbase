@@ -356,27 +356,26 @@ export default function Fasttrackpage() {
     </div>
     :
     <div className='flex w-full flex-column w-full align-items-centers gap-2 p-2'>
-      <div className='flex justify-content-between w-full align-items-center'>
+      <div className='flex sm:justify-content-between justify-content-center w-full align-items-center'>
         <button className='sm:w-2 sm:block hidden ' style={{border: 'none', background: 'none'}}>
           <img className='w-full ' onClick={()=>{setStep(-1)}} src={Logo} />
         </button>
-        
+        {step >= 0 &&
         <div className='flex border-200 border-1 border-round'>
           <div className='text-900 sm:text-l text-m flex align-items-center justify-content-center sm:px-3 px-1'>
             pal-{palletId}
           </div>
           <div className='p-inputgroup w-auto sm:h-auto h-2rem'>
-            { 
-              step >= 0 &&
+            
               <>
                 <Button severity='info' label="Change Pallet" icon="pi pi-box" onClick={()=>{setStep(-1); setPalletId(null)}} />
                 <Button label="Menu" icon="pi pi-bars" onClick={() => setManual(true)} />
               </>
               
-            }
+            
           </div>
         </div>
-        
+        }
         
       </div>
       
@@ -794,7 +793,7 @@ export default function Fasttrackpage() {
       
       
       <Dialog header="Menu" visible={manual} className='w-full p-2 flex flex-column' onHide={() => {setManual(false);}}>
-        <FasttrackMenu functions={{open: setManual, editLot: editLot, message: message}} />   
+        <FasttrackMenu functions={{open: setManual, editLot: editLot, message: message, restart: restart}} />   
       </Dialog>
         
       
