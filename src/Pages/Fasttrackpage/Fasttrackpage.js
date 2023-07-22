@@ -72,11 +72,13 @@ export default function Fasttrackpage() {
     'Bag'
   ]);
 
-  const [step, setStep] = useState(-1);
+  const [step, setStep] = useState(-2);
   const [isLoading, setIsLoading] = useState(false);
   const [manual, setManual] = useState(false);
 
   const [name, setName] = useState('');
+
+  const [palletId, setPalletId] = useState(null);
 
   const [lotId, setLotId] = useState(null);
 
@@ -355,30 +357,32 @@ export default function Fasttrackpage() {
     :
     <div className='flex w-full flex-column w-full align-items-centers gap-2 p-2'>
       <div className='flex justify-content-between w-full align-items-center'>
-        <button className='sm:w-2 w-4 ' style={{border: 'none', background: 'none'}}>
-          <img className=' w-full ' onClick={()=>{setStep(-1)}} src={Logo} />
+        <button className='sm:w-2 sm:block hidden ' style={{border: 'none', background: 'none'}}>
+          <img className='w-full ' onClick={()=>{setStep(-1)}} src={Logo} />
         </button>
         
-        <div className='p-inputgroup w-auto sm:h-auto h-2rem'>
-          { 
-            step >= 0 &&
-            <>
-              <Button severity='danger' label="Restart" icon="pi pi-trash" onClick={()=>restart()} />
-              <Button label="Menu" icon="pi pi-bars" onClick={() => setManual(true)} />
-            </>
-            
-          }
-          
-          
-          
-
+        <div className='flex border-200 border-1 border-round'>
+          <div className='text-900 sm:text-l text-m flex align-items-center justify-content-center sm:px-3 px-1'>
+            pal-{palletId}
+          </div>
+          <div className='p-inputgroup w-auto sm:h-auto h-2rem'>
+            { 
+              step >= 0 &&
+              <>
+                <Button severity='info' label="Change Pallet" icon="pi pi-box" onClick={()=>{setStep(-1); setPalletId(null)}} />
+                <Button label="Menu" icon="pi pi-bars" onClick={() => setManual(true)} />
+              </>
+              
+            }
+          </div>
         </div>
+        
         
       </div>
       
 
       {
-        step == -2 &&
+        step == -3 &&
       <form onSubmit={(e)=>{handleManualSubmission(e)}} className='flex flex-column w-full gap-2 align-items-center'>
         <InputText value={locationInput} onChange={(e)=>setLocationInput(e.target.value)} className='w-full' autoFocus />
         {
@@ -422,13 +426,58 @@ export default function Fasttrackpage() {
       }
       
       {
-        step == -1 &&
+        step == -2 &&
       <div className='flex flex-column gap-2 align-items-center'>
         <div className='text-900 text-xl mt-8'>To begin Enter your name below</div>
         <InputText onChange={(e)=>setName(e.target.value)} className='sm:w-6 w-10' placeholder='Name' />
         <Button className='sm:bottom-50 bottom-0 mb-8 w-11 sm:w-6 fixed' onClick={()=>{if (name) {setStep(-2); new Audio(success).play();} else {new Audio(error).play();}}} label="Begin Locating Session" icon="pi pi-map-marker" />
         <Button onClick={()=>{if (name) {nextStep(true)} else {nextStep(false)}}} className='sm:bottom-50 bottom-0 mb-3 w-11 sm:w-6 fixed' type='submit' label="Begin Uploading Session" icon="pi pi-cloud-upload" />
       </div>
+      
+      }
+      
+      {
+        step == -1 &&
+        <form className='flex flex-column align-items-center gap-2' onSubmit={(e)=>{
+        e.preventDefault();
+        if (palletId.includes('pal-') && palletId.length === 8) {
+          setPalletId(palletId.replace('pal-', ''));
+          nextStep(true);
+        }else{
+          setPalletId('');
+          message('error', 'Invalid Pallet Id Scan');
+        }
+        
+        }}>
+          <div className='text-900 text-xl mt-8'>Scan or enter the Pallet ID.</div>
+          <div className='p-inputgroup w-9'>
+            <InputText
+              autoFocus
+              value={palletId}
+              onChange={(e) => {
+                const inputValue = e.target.value
+                setPalletId(inputValue);
+              }}
+              className='sm:w-6 w-10'
+              placeholder='Pallet ID'
+              autoComplete='off'
+              inputProps={{
+                inputMode: 'numeric',
+                pattern: '[0-9]*',
+              }}
+            />
+
+            <Button type='button' severity='danger' icon=' pi pi-times' onClick={()=>{setPalletId('')}} />
+
+          </div>
+          
+          <div className='sm:w-6 w-full bottom-0 fixed flex flex-column gap-2 p-2 surface-100 shadow-3'>
+            <Button className='w-full' type='button' label='Back' severity='danger' icon=' pi pi-chevron-left' onClick={()=>{setStep(step-1)}} />
+            <Button className='w-full' severity='success' type='submit' label='Continue' />
+          </div>
+          
+          
+        </form>
       
       }
 
