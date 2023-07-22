@@ -262,6 +262,7 @@ export default function Fasttrackpage() {
         JSON.stringify(missing),
         status,
         name,
+        palletId,
         new Date().toLocaleString('en-US', {
           year: 'numeric',
           month: '2-digit',
