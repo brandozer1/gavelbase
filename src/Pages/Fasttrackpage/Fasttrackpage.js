@@ -249,11 +249,12 @@ export default function Fasttrackpage() {
     axios.post('https://gavelbaseserver.herokuapp.com/api/addLotImage/', {images: images}).then((res)=>{
       axios.post('https://gavelbaseserver.herokuapp.com/api/appendLot', [
         lotId,
+        palletId,
         '=IMAGE(getFirstItemInStringifiedArray(INDIRECT(ADDRESS(ROW(), COLUMN()+1))))',
         JSON.stringify(finalImages.concat(res.data)),
         upc,
-        (itemCount > 1? itemCount+' ' : '') + condition + ' ' + title+ ' | ' + status + (missing.length > 0 ? ' | MISSING ITEMS SEE DESCRIPTION' : ''),
-        (missing.length> 0 ? "Missing: "+JSON.stringify(missing).replace('"', '')+" | ": '')+ "Condition: "+condition+' | Testing Status: '+status+' | Quantity: '+itemCount+' | '+description,
+        title,
+        description,
         stockImage,
         model,
         brand,
@@ -262,7 +263,6 @@ export default function Fasttrackpage() {
         JSON.stringify(missing),
         status,
         name,
-        palletId,
         new Date().toLocaleString('en-US', {
           year: 'numeric',
           month: '2-digit',
@@ -274,6 +274,7 @@ export default function Fasttrackpage() {
         })
         
       ], {withCredentials: true}).then((res)=>{
+        console.log("=TO_TEXT("+palletId+")")
         setIsLoading(false);
         // message('submit', 'Lot Added Successfully');
         restart();
