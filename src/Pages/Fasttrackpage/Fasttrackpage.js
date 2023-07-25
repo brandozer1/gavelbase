@@ -441,7 +441,7 @@ export default function Fasttrackpage() {
         step == -1 &&
         <form className='flex flex-column align-items-center gap-2' onSubmit={(e)=>{
         e.preventDefault();
-        if (palletId.includes('pal-') && palletId.length === 8) {
+        if ((palletId.includes('pal-') || palletId.includes('Pal-')) && palletId.length === 8) {
           setPalletId(palletId.replace('pal-', ''));
           nextStep(true);
         }else{
