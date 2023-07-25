@@ -443,6 +443,7 @@ export default function Fasttrackpage() {
         e.preventDefault();
         if ((palletId.includes('pal-') || palletId.includes('Pal-')) && palletId.length === 8) {
           setPalletId(palletId.replace('pal-', ''));
+          setPalletId(palletId.replace('Pal-', ''));
           nextStep(true);
         }else{
           setPalletId('');
@@ -568,8 +569,10 @@ export default function Fasttrackpage() {
         step == 4 &&
         <form className='flex flex-column align-items-center gap-2' onSubmit={(e)=>{
         e.preventDefault();
-        if (lotId.includes('lot-') && lotId.length === 10) {
+        if ((lotId.includes('lot-') || lotId.includes('Lot-') ) && lotId.length === 10) {
           setLotId(lotId.replace('lot-', ''));
+          setLotId(lotId.replace('Lot-', ''));
+
           nextStep(true);
         }
 
