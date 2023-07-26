@@ -246,12 +246,12 @@ export default function Fasttrackpage() {
     
 
     setIsLoading(true);
-    axios.post('https://gavelbaseserver.herokuapp.com/api/addLotImage/', {images: images}).then((res)=>{
+    axios.post('https://gavelbaseserver.herokuapp.com/api/addLotImage/', {images: images, lotnumber: lotId}).then((res)=>{
       axios.post('https://gavelbaseserver.herokuapp.com/api/appendLot', [
         lotId,
         palletId,
         '=IMAGE(getFirstItemInStringifiedArray(INDIRECT(ADDRESS(ROW(), COLUMN()+1))))',
-        JSON.stringify(finalImages.concat(res.data)),
+        JSON.stringify(finalImages.concat(res.data)), //concat the images after being uploaded to the s3 bucket
         upc,
         title,
         description,
@@ -282,9 +282,15 @@ export default function Fasttrackpage() {
         new Audio(complete).play();
           
       }).catch((err)=>{
+        message('error', 'Lot Failed to Add');
+        // setIsLoading(false);
         console.log(err);
       })
-    }).catch((err)=>{console.log(err.response);});
+    }).catch((err)=>{
+      message('error', 'Lot Failed to Add');
+      // setIsLoading(false);
+      console.log(err.response);
+    });
     
   }
 
@@ -364,7 +370,7 @@ export default function Fasttrackpage() {
           <img className='w-full ' onClick={()=>{setStep(-1)}} src={Logo} />
         </button>
         {step >= 0 &&
-        <div className='flex border-200 border-1 border-round'>
+        <div className='sm:flex flex-column border-200 border-1 border-round'>
           <div className='text-900 sm:text-l text-m flex align-items-center justify-content-center sm:px-3 px-1'>
             pal-{palletId}
           </div>
