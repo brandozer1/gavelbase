@@ -262,6 +262,7 @@ export default function Fasttrackpage() {
         condition,
         JSON.stringify(missing),
         status,
+        itemCount,
         name,
         new Date().toLocaleString('en-US', {
           year: 'numeric',
@@ -442,8 +443,7 @@ export default function Fasttrackpage() {
         <form className='flex flex-column align-items-center gap-2' onSubmit={(e)=>{
         e.preventDefault();
         if ((palletId.includes('pal-') || palletId.includes('Pal-')) && palletId.length === 8) {
-          setPalletId(palletId.replace('pal-', ''));
-          setPalletId(palletId.replace('Pal-', ''));
+          setPalletId(palletId.split('-')[1]);
           nextStep(true);
         }else{
           setPalletId('');
@@ -570,8 +570,7 @@ export default function Fasttrackpage() {
         <form className='flex flex-column align-items-center gap-2' onSubmit={(e)=>{
         e.preventDefault();
         if ((lotId.includes('lot-') || lotId.includes('Lot-') ) && lotId.length === 10) {
-          setLotId(lotId.replace('lot-', ''));
-          setLotId(lotId.replace('Lot-', ''));
+          setLotId(lotId.split('-')[1]);
 
           nextStep(true);
         }
@@ -756,7 +755,6 @@ export default function Fasttrackpage() {
           
           
           <div className='flex justify-content-around w-full'>
-
             <img className='w-4' src={stockImage ? stockImage : images[0]} />
             <div className='flex flex-column'>
               {
