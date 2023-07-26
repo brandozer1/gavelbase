@@ -500,7 +500,7 @@ export default function Fasttrackpage() {
           } }
           />
           {
-            images.length > 2 &&
+            images.length > 1 &&
             <Button onClick={()=>{
               nextStep(true);
             }} label='Continue' />
