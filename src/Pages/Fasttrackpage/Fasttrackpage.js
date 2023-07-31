@@ -251,7 +251,7 @@ export default function Fasttrackpage() {
       axios.post('https://gavelbaseserver.herokuapp.com/api/appendLot', [
         lotId,
         palletId,
-        '=IMAGE(getFirstItemInStringifiedArray(INDIRECT(ADDRESS(ROW(), COLUMN()+1))))',
+        'IMAGE(getFirstItemInStringifiedArray(INDIRECT(ADDRESS(ROW(), COLUMN()+1))))',
         JSON.stringify(finalImages.concat(res.data)), //concat the images after being uploaded to the s3 bucket
         upc,
         title,
