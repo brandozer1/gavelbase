@@ -249,14 +249,14 @@ export default function Fasttrackpage() {
     setIsLoading(true);
     axios.post('https://gavelbaseserver.herokuapp.com/api/addLotImage/', {images: images, lotnumber: lotId}).then((res)=>{
       axios.post('https://gavelbaseserver.herokuapp.com/api/appendLot', [
+        "False",
         lotId,
         palletId,
-        'IMAGE(getFirstItemInStringifiedArray(INDIRECT(ADDRESS(ROW(), COLUMN()+1))))',
+        '=IMAGE('+finalImages.concat(res.data)[0]+')',
         JSON.stringify(finalImages.concat(res.data)), //concat the images after being uploaded to the s3 bucket
         upc,
         title,
         description,
-        stockImage,
         model,
         brand,
         color,
@@ -315,7 +315,7 @@ export default function Fasttrackpage() {
 
   function editLot(lotId) {
 
-    axios.get('https://gavelbaseserver.herokuapp.com/api/getLot?lotNumber='+lotId, {withCredentials: true}).then((res)=>{
+    axios.get('https://gavelbaseserver.herokuapp.com/api/getLot?lotNumber='+lotId+'&pallet='+palletId, {withCredentials: true}).then((res)=>{
       let missingStatesTemp = missingStates.concat(JSON.parse(res.data[10]));
       missingStatesTemp = [...new Set(missingStatesTemp)]
       setLotId(lotId);
