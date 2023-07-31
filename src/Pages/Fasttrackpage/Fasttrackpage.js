@@ -73,6 +73,7 @@ export default function Fasttrackpage() {
   ]);
 
   const [step, setStep] = useState(-2);
+  const [mode, setMode] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [manual, setManual] = useState(false);
 
@@ -438,8 +439,8 @@ export default function Fasttrackpage() {
       <div className='flex flex-column gap-2 align-items-center'>
         <div className='text-900 text-xl mt-8'>To begin Enter your name below</div>
         <InputText onChange={(e)=>setName(e.target.value)} className='sm:w-6 w-10' placeholder='Name' />
-        <Button className='sm:bottom-50 bottom-0 mb-8 w-11 sm:w-6 fixed' onClick={()=>{if (name) {setStep(-2); new Audio(success).play();} else {new Audio(error).play();}}} label="Begin Locating Session" icon="pi pi-map-marker" />
-        <Button onClick={()=>{if (name) {nextStep(true)} else {nextStep(false)}}} className='sm:bottom-50 bottom-0 mb-3 w-11 sm:w-6 fixed' type='submit' label="Begin Uploading Session" icon="pi pi-cloud-upload" />
+        <Button className='sm:bottom-50 bottom-0 mb-8 w-11 sm:w-6 fixed' onClick={()=>{if (name) {nextStep(true); setMode('locate');} else {new Audio(error).play();}}} label="Begin Locating Session" icon="pi pi-map-marker" />
+        <Button onClick={()=>{if (name) {nextStep(true);  setMode('upload');} else {nextStep(false)}}} className='sm:bottom-50 bottom-0 mb-3 w-11 sm:w-6 fixed' type='submit' label="Begin Uploading Session" icon="pi pi-cloud-upload" />
       </div>
       
       }
@@ -450,7 +451,13 @@ export default function Fasttrackpage() {
         e.preventDefault();
         if ((palletId.includes('pal-') || palletId.includes('Pal-')) && palletId.length === 8) {
           setPalletId(palletId.split('-')[1]);
-          nextStep(true);
+          if (mode === 'locate') {
+            setStep(-3);
+            new Audio(success).play();
+          }else{
+            nextStep(true);
+          }
+          
         }else{
           setPalletId('');
           message('error', 'Invalid Pallet Id Scan');
