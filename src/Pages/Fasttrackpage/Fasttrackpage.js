@@ -249,7 +249,6 @@ export default function Fasttrackpage() {
     setIsLoading(true);
     axios.post('https://gavelbaseserver.herokuapp.com/api/addLotImage/', {images: images, lotnumber: lotId}).then((res)=>{
       axios.post('https://gavelbaseserver.herokuapp.com/api/appendLot', [
-        "False",
         lotId,
         palletId,
         '=IMAGE('+finalImages.concat(res.data)[0]+')',
