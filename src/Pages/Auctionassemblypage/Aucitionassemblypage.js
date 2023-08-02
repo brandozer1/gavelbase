@@ -6,6 +6,7 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Skeleton } from 'primereact/skeleton';
 import axios from 'axios';
+import { ProgressSpinner } from 'primereact/progressspinner';
 
         
 
@@ -14,6 +15,7 @@ import axios from 'axios';
 
 export default function Aucitionassemblypage() {
     const [page, setPage] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
     const [update, setUpdate] = useState(false)
     const [palletInput, setPalletInput] = useState('')
     const [pallets, setPallets] = useState([])
@@ -24,13 +26,13 @@ export default function Aucitionassemblypage() {
     const [descriptionTemplateAfter, setDescriptionTemplateAfter] = useState('')
 
     const downloadImages = async (pallets) => {
-        const response = await axios.post('https://gavelbaseserver.herokuapp.com/api/auction/getImages', { pallets }, { responseType: 'blob' });
+        const response = await axios.post('https://gavelbaseserver.herokuapp.com/api/auction/getImages', { pallets }, { responseType: 'blob' }).then((response) => {setIsLoading(false); return response});
         const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement('a');
-        link.innerHTML = 'Download Images';
+        const link = document.getElementById('imageDownload');
         link.href = url;
-        link.setAttribute('download', 'images.zip');
-        document.body.appendChild(link);
+        let now = new Date().toISOString().slice(0,10).replace(/-/g, "/");
+        link.setAttribute('download', 'images'+now+'.zip');
+        
     }
 
     function removePallet(pallet) {
@@ -43,6 +45,13 @@ export default function Aucitionassemblypage() {
 
   return (
     <div className='w-screen p-3 gap-3 flex'>
+        {
+            isLoading ? 
+            <div className='w-6 flex flex-column align-items-center gap-3'>
+                <ProgressSpinner />
+            </div>
+            :
+        
         <div className='w-6 flex flex-column align-items-center gap-3'>
             <h1>Auction Assembly</h1>
             <div className='p-inputgroup'>
@@ -66,6 +75,7 @@ export default function Aucitionassemblypage() {
             </div>
             <div className='w-full flex flex-column align-items-center'>
                 <h3>Title Template</h3>
+                <div>*quantity* = quantity, *condition* = condition, *testingstatus* = testing status, *missing* = missing array ie "[thing 1, thing 2, etc]"</div>
                 <div className='flex p-inputgroup'>
                     <InputText value={titleTemplateBefore} onChange={(e)=>setTitleTemplateBefore(e.target.value)} className='w-full text-right'/>
                     <div className='p-2'>
@@ -88,7 +98,16 @@ export default function Aucitionassemblypage() {
             </div>
             
 
-            <Button label='Assemble Auction' onClick={()=>{downloadImages(pallets)}} />
+            <Button label='Assemble Auction' onClick={()=>{downloadImages(pallets); setIsLoading(true); setPallets([])}} />
+        </div>
+        }
+        <div>
+            <a id="imageDownload">
+                <Button label='Download Images' />
+            </a>
+            <a>
+                <Button label='Download Import Sheet' />
+            </a>
         </div>
 
         <div className='w-6 flex flex-column gap-3 align-items-center'>
