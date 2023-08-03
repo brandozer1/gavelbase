@@ -21,7 +21,7 @@ export default function Aucitionassemblypage() {
     const [pallets, setPallets] = useState([])
 
     const [titleTemplateBefore, setTitleTemplateBefore] = useState('*quantity* *condition* ')
-    const [titleTemplateAfter, setTitleTemplateAfter] = useState(' MISSING: *missing*')
+    const [titleTemplateAfter, setTitleTemplateAfter] = useState(' *missing*')
     const [descriptionTemplateBefore, setDescriptionTemplateBefore] = useState('*quantity* COUNT | *condition* | *testingstatus* | MISSING: *missing* | ')
     const [descriptionTemplateAfter, setDescriptionTemplateAfter] = useState('')
 
