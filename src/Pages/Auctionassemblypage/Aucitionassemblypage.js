@@ -20,9 +20,9 @@ export default function Aucitionassemblypage() {
     const [palletInput, setPalletInput] = useState('')
     const [pallets, setPallets] = useState([])
 
-    const [titleTemplateBefore, setTitleTemplateBefore] = useState('')
-    const [titleTemplateAfter, setTitleTemplateAfter] = useState('')
-    const [descriptionTemplateBefore, setDescriptionTemplateBefore] = useState('')
+    const [titleTemplateBefore, setTitleTemplateBefore] = useState('*quantity* *condition* ')
+    const [titleTemplateAfter, setTitleTemplateAfter] = useState(' MISSING: *missing*')
+    const [descriptionTemplateBefore, setDescriptionTemplateBefore] = useState('*quantity* COUNT | *condition* | *testingstatus* | MISSING: *missing* | ')
     const [descriptionTemplateAfter, setDescriptionTemplateAfter] = useState('')
 
     const downloadImages = async (pallets) => {
@@ -105,7 +105,7 @@ export default function Aucitionassemblypage() {
             <a id="imageDownload">
                 <Button label='Download Images' />
             </a>
-            <a>
+            <a href={"https://gavelbaseserver.herokuapp.com/api/auction/getImportSheet?pallets="+JSON.stringify(pallets)+`&titlePrepend=${titleTemplateBefore}&titleAppend=${titleTemplateAfter}&descriptionPrepend=${descriptionTemplateBefore}&descriptionAppend=${descriptionTemplateAfter}`}>
                 <Button label='Download Import Sheet' />
             </a>
         </div>
