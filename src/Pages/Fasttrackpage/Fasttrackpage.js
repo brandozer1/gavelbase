@@ -299,7 +299,6 @@ export default function Fasttrackpage() {
     if (locationInput.split('-')[0] == 'loc' || locationInput.split('-')[0] == 'Loc') {
       setLocationInput(locationInput.replace('Loc', 'loc'))
       setLocationCode(locationInput.replace('loc-', ''));
-      setLocationCode(locationCode);
     }
     if (locationInput.split('-')[0] == 'lot' || locationInput.split('-')[0] == 'Lot') {
       setLocationInput(locationInput)
