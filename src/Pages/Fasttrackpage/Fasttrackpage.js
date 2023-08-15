@@ -367,7 +367,7 @@ export default function Fasttrackpage() {
   useEffect(()=>{
     if (locationCode && locationLotId) {
       // updateLot
-      axios.post('https://gavelbaseserver.herokuapp.com/api/updateLot', {lotNumber: locationLotId, loc: locationCode, locator: name, pallet: palletId, time: new Date().toLocaleString() }).then((res)=>{
+      axios.post('https://gavelbaseserver.herokuapp.com/api/updateLot', {lotNumber: locationLotId, loc: locationCode, locator: name, pallet: palletId, time: new Date().toLocaleString() }, {withCredentials: true}).then((res)=>{
         new Audio(complete).play();
       }).catch((err)=>{
         new Audio(error).play();
