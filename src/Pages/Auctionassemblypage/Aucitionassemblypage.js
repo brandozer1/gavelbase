@@ -105,7 +105,7 @@ export default function Aucitionassemblypage() {
             <a id="imageDownload">
                 <Button label='Download Images' />
             </a>
-            <a href={"https://gavelbaseserver.herokuapp.com/api/auction/getImportSheet?pallets="+JSON.stringify(pallets)+`&titlePrepend=${titleTemplateBefore}&titleAppend=${titleTemplateAfter}&descriptionPrepend=${descriptionTemplateBefore}&descriptionAppend=${descriptionTemplateAfter}`}>
+            <a href={"http://localhost:3001/api/auction/getImportSheet?pallets="+JSON.stringify(pallets)+`&titlePrepend=${titleTemplateBefore}&titleAppend=${titleTemplateAfter}&descriptionPrepend=${descriptionTemplateBefore}&descriptionAppend=${descriptionTemplateAfter}`}>
                 <Button label='Download Import Sheet' />
             </a>
         </div>

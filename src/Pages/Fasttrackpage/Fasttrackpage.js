@@ -110,10 +110,35 @@ export default function Fasttrackpage() {
   const [model, setModel] = useState('');
   const [stockImage, setStockImage] = useState('');
   const [finalImages, setFinalImages] = useState([]); 
+  const [category, setCategory] = useState(null);
 
   const [locationInput, setLocationInput] = useState('');
   const [locationCode, setLocationCode] = useState(null);
   const [locationLotId, setLocationLotId] = useState(null);
+
+  const catmap = {
+    "Animals & Pet Supplies": 288,
+    "Apparel & Accessories": 195,
+    "Arts & Entertainment": 134,
+    "Baby & Toddler": 290,
+    "Business & Industrial": 147,
+    "Cameras & Optics": 190,
+    "Electronics": 140,
+    "Food, Beverages & Tobacco": 204,
+    "Furniture": 197,
+    "Hardware": 154,
+    "Health & Beauty": 164,
+    "Home & Garden": 149,
+    "Luggage & Bags": 253,
+    "Mature": 154,
+    "Media": 140,
+    "Office Supplies": 229,
+    "Religious & Ceremonial": 154,
+    "Software": 140,
+    "Sporting Goods": 146,
+    "Toys & Games": 168,
+    "Vehicles & Parts": 295
+  }
 
   function nextStep(status = null) {
     
@@ -177,7 +202,7 @@ export default function Fasttrackpage() {
     return new Promise((resolve, reject) => {
       axios.get(`https://gavelbaseserver.herokuapp.com/api/lookup/${upc}`, { withCredentials: true })
         .then((res) => {
-          console.log(res.data);
+          setCategory(catmap[res.data.items[0].category.split(" > ")[0]]);
           setProductInfo(res.data);
           for (let i = 0; i < res.data.items.length; i++) {
             if (res.data.items[i].model) {
@@ -195,6 +220,7 @@ export default function Fasttrackpage() {
             if (res.data.items[i].description) {
               setDescription(res.data.items[i].description);
             }
+            
             if (res.data.items[i].images) {
               setStockImage(res.data.items[i].images[0]);
               setFinalImages(res.data.items[i].images.concat(finalImages));
@@ -272,7 +298,8 @@ export default function Fasttrackpage() {
           minute: '2-digit',
           second: '2-digit',
           hour12: true
-        })
+        }),
+        category
         
       ], {withCredentials: true}).then((res)=>{
         console.log("=TO_TEXT("+palletId+")")
@@ -801,28 +828,11 @@ export default function Fasttrackpage() {
         </div>
         
       }
-
-
-
-      
-      
       
       <Dialog header="Menu" visible={manual} className='w-full p-2 flex flex-column' onHide={() => {setManual(false);}}>
         <FasttrackMenu functions={{open: setManual, editLot: editLot, message: message, restart: restart}} />   
       </Dialog>
-        
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
+
       <Toast position="top-center" ref={toast} />
       <div className='h-20rem'></div>
 
