@@ -1,70 +1,149 @@
-# Getting Started with Create React App
+THE NUMBER 1 GOAL IN THIS CODE IS CLARITY AND EDITABILLITY. SIZE AND SPEED ARE 2nd.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Use Comments everywhere and prudently. 
 
-## Available Scripts
 
-In the project directory, you can run:
 
-### `npm start`
+INTERNAL FILE STRUCTURE:               1/7/2024
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+    The order of the parts of a file should be exactly or close to this
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+    1. Notes-Imports
+    2. Constants
+    3. Hooks-States
+    4. Functions
+    5. Component Function
 
-### `npm test`
+FUNCTIONS:                               1/7/2024
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+    When Writing, function as many single useful events as possible for future use.
 
-### `npm run build`
+    FUNCTIONS IN LIBARY (Lib.js in /Hooks/Lib.js)
+    NONE YET
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+FUNCTIONAL NAMING CONVENTION (CODE ONLY)  1/7/2024
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+    STATE VARIABLES:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+        Prefix Booleans(True/False) Varaibles with "is" or "has" or "should"
 
-### `npm run eject`
+        Aside from that, use Pascal Case See below or google it
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+        Good:
+            isActive, setIsActive
+            hasErrors, setHasErrors
+            shouldRender, setShouldRender
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+    VARIABLES:
+        
+        Camel Case is always the main recommendation. If you need to use something else Comment it.
+        Google for more examples
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+        Good:
+            helloWorld
+            hello
+            variableName
+        
+        Bad:
+            HELLOWORLD
+            Hello
+            hello_World
 
-## Learn More
+        Variable names should be prudently named for the scope of the function. Globals ESPECIALLY!
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+    CLASSNAMES & CONSTRUCTORS:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+        Use PASCAL CASE WITH HYPHENS. Google it or see below.
 
-### Code Splitting
+        BE SPECIFIC. CLASSNAMES ARE GLOBAL IN REACT. WHEN NAMING USE FULL NAMES THAT ARE VERY SPECIFIC AND THAT CANNOT BE MISTAKENLY USED ELSEWHERE.
+    
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-### Analyzing the Bundle Size
+Component Index                  1/7/2024
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+    Index.js: Root of the react setup includes root setup. Contains no Practical Code but is required
 
-### Making a Progressive Web App
+    App.js: Needs to be under Index.js and contains all React Routing for directories, may contain other code aswell but routing is the primary function. 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+    UI Components: (Larger more specific Components)
 
-### Advanced Configuration
+        Nav.js: Header with navigation for all pages May be switched out for future Dashboard nav when users are using dashboard. or vice versa. 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+        Page.js: Used as a container for all pages. Contains all margins and padding that each page will have for consistancy and will have options for changing them in the future. Also Contains nav and applies to each page.
 
-### Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-### `npm run build` fails to minify
+Page Index                          1/7/2024
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+    Home.js: Landing page as of now. May contain purchasing and login options in the future.    
+
+-------------------------------FILES AND STRUCTURE------------------------------------
+Component and File Naming Convention                  1/7/2024
+
+    Google PascalCase for more examples.
+
+    Captialize Every Word of the file name. 
+
+    Use full words and no shorthands when naming components.
+
+    GOOD:
+        Home.js
+        HomePage.js
+        UserNavigation.js
+    BAD:
+        homePage.js
+        UsrNav.js
+        Usernavigation.js
+
+    Each Component is names as Unique as possible relative to its level on the tree. For example: the name Home.js is not very unique but since it is so important and is basically the top/first thing any user will see this works.
+
+    If a component is to be used constanstly DO NOT give it an uselessly Long name. It is annoying.
+
+File Convention
+
+    Each Component is wrapped in a folder of the same name excluding file extension. So "Home.js" is inside "/Home", This allows for more customization if you need to apply a css file specific to the Component, you can put the css folder inside "/Home" and everyone will know where it is.
+
+Current Full Project File Structure      1/7/2024
+
+```
+└── 📁gavelbase                     ROOT
+    └── .gitattributes
+    └── .gitignore
+    └── package-lock.json
+    └── package.json
+    └── 📁public
+        └── favicon.ico
+        └── index.html
+        └── logo192.png
+        └── logo512.png
+        └── manifest.json
+        └── robots.txt
+    └── README.md
+    └── 📁src                         MAIN FOLDER
+        └── App.css 
+        └── App.js                     REACT ROUTER
+        └── 📁Assets                  ASSETS, MUSIC, PICTURES ETC
+            └── complete.mp3
+            └── fail.mp3
+            └── fasttracklogo.png
+            └── LandingBackground.png
+            └── Logo.jpg
+            └── Logo.png
+            └── Logo.webp
+            └── success.mp3
+        └── 📁Components               HOLDS REACT COMPONENTS
+            └── 📁Shade                Shade Components from library
+            └── 📁Ui                   Larger more specific and handmade components
+                └── 📁Nav
+                    └── Nav.js
+                └── 📁Page
+                    └── Page.js
+        └── index.css
+        └── index.js
+        └── 📁Pages                     Larged form of components, entire pages
+            └── 📁Home
+                └── Home.js
+        └── setupTests.js
+    └── tailwind.config.js
+```
