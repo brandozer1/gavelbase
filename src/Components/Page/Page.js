@@ -5,7 +5,6 @@ import React from 'react'
 
 //components imported below
 import Navigation from '../Navigation/Navigation' // this is the navigation bar that will be displayed on each page of the application
-
 export default function Page({children}) {
     return (
         <div>
@@ -13,4 +12,5 @@ export default function Page({children}) {
             {children}
         </div>
     )
+
 }
