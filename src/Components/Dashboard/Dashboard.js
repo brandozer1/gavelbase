@@ -1,5 +1,6 @@
 
 import { Fragment, useState } from 'react'
+import { useParams } from 'react-router-dom';
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
   Bars3Icon,
@@ -22,21 +23,15 @@ import Logo from '../../Assets/Images/Logo.webp'
 import { CubeIcon } from '@radix-ui/react-icons'
 import { Wallet2Icon, WalletIcon } from 'lucide-react'
 
-const navigation = [
-  { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
-//   { name: 'Auctions', href: '#', icon: UsersIcon, current: false },
-  { name: 'Payment Center', href: '#', icon: WalletIcon, current: false },
-  { name: 'Fast-Track', href: '#', icon: CubeIcon, current: false },
-  { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
-  { name: 'Settings', href: '#', icon: Cog6ToothIcon, current: false },
+
+
+//TEST DATA THIS WILL BE REPLACED WITH REAL DATA FROM A DATABASE, current will be set to true if the current path matches the href
+const Shortcuts = [
+  { id: 1, name: 'My Profile', href: '#', initial: 'TC', current: false },
 ]
-const Data = [
-  { id: 1, name: 'Heroicons', href: '#', initial: 'H', current: false },
-  { id: 2, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
-  { id: 3, name: 'Workcation', href: '#', initial: 'W', current: false },
-]
+  
+
 const userNavigation = [
-  { name: 'Your profile', href: '#' },
   { name: 'Sign out', href: '#' },
 ]
 
@@ -44,8 +39,19 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Dashboard() {
+export default function Dashboard({ Children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  // Collect path from url to determine which page to render in the dashboard
+  const {path} = useParams();
+  // this is only here because the current var needs to know the routers path
+  const navigation = [
+    { name: 'Dashboard', href: '/Dashboard/', icon: HomeIcon, current: path === '' },
+    { name: 'Payments', href: '/Dashboard/Payments', icon: WalletIcon, current: path === 'Payments'},
+    { name: 'Fast-Track', href: '/Dashboard/Fasttrack', icon: CubeIcon, current: path === 'Fasttrack'},
+    { name: 'Data', href: '/Dashboard/Data', icon: FolderIcon, current: path === 'Data'},
+    { name: 'Reports', href: '/Dashboard/Reports', icon: ChartPieIcon, current: path === 'Reports'},
+  
+  ]
 
   return (
     <>
@@ -129,9 +135,9 @@ export default function Dashboard() {
                           </ul>
                         </li>
                         <li>
-                          <div className="text-xs font-semibold leading-6 text-gray-400">Your Data</div>
+                          <div className="text-xs font-semibold leading-6 text-gray-400">Shortcuts</div>
                           <ul role="list" className="-mx-2 mt-2 space-y-1">
-                            {Data.map((team) => (
+                            {Shortcuts.map((team) => (
                               <li key={team.name}>
                                 <a
                                   href={team.href}
@@ -219,9 +225,9 @@ export default function Dashboard() {
                   </ul>
                 </li>
                 <li>
-                  <div className="text-xs font-semibold leading-6 text-gray-400">Your Data</div>
+                  <div className="text-xs font-semibold leading-6 text-gray-400">Shortcuts</div>
                   <ul role="list" className="-mx-2 mt-2 space-y-1">
-                    {Data.map((team) => (
+                    {Shortcuts.map((team) => (
                       <li key={team.name}>
                         <a
                           href={team.href}
@@ -350,7 +356,24 @@ export default function Dashboard() {
           </div>
 
           <main className="py-10">
-            <div className="px-4 sm:px-6 lg:px-8">{/* Your content */}</div>
+            <div className="px-4 sm:px-6 lg:px-8">
+              {/* Simple router for routing the path from the react router param */}
+              {
+                path === undefined && <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
+              }
+              {
+                path === 'Payments' && <h1 className="text-2xl font-semibold text-gray-900">Payments</h1>
+              }
+              {
+                path === 'Fasttrack' && <h1 className="text-2xl font-semibold text-gray-900">Fast-Track</h1>
+              }
+              {
+                path === 'Data' && <h1 className="text-2xl font-semibold text-gray-900">Data</h1>
+              }
+              {
+                path === 'Reports' && <h1 className="text-2xl font-semibold text-gray-900">Reports</h1>
+              }
+            </div>
           </main>
         </div>
       </div>
