@@ -1,20 +1,21 @@
 
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useEffect } from 'react'
+import axios from 'axios'
 import { useParams } from 'react-router-dom';
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
   Bars3Icon,
   BellIcon,
-  CalendarIcon,
+  // CalendarIcon,
   ChartPieIcon,
   Cog6ToothIcon,
-  DocumentDuplicateIcon,
-  DocumentTextIcon,
+  // DocumentDuplicateIcon,
+  // DocumentTextIcon,
   FolderIcon,
   HomeIcon,
-  Square2StackIcon,
-  Square3Stack3DIcon,
-  UsersIcon,
+  // Square2StackIcon,
+  // Square3Stack3DIcon,
+  // UsersIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
@@ -22,6 +23,7 @@ import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import Logo from '../../Assets/Images/Logo.webp'
 import { CubeIcon } from '@radix-ui/react-icons'
 import { Wallet2Icon, WalletIcon } from 'lucide-react'
+import useLib from '../../Hooks/useLib'
 
 
 
@@ -31,13 +33,15 @@ const Shortcuts = [
 ]
   
 
-const userNavigation = [
-  { name: 'Sign out', href: '#' },
+const memberNavigation = [
+  { name: 'Sign out', onClick: useLib.signOut},
 ]
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
+
+
 
 export default function Dashboard({ Children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -52,6 +56,23 @@ export default function Dashboard({ Children }) {
     { name: 'Reports', href: '/Dashboard/Reports', icon: ChartPieIcon, current: path === 'Reports'},
   
   ]
+
+  useEffect(() => {
+    document.title = 'Dashboard - Gavelbase'
+  
+    // check if the user is already logged in
+    axios.get(useLib.createServerUrl('/api/v1/member/verify'), {
+      withCredentials: true
+    })
+    .then((response) => {
+      if (response.status !== 200) {
+        window.location.href = '/Sign-In#Login Expired'
+      }
+    })
+    .catch((error) => {
+      window.location.href = '/Sign-In#Login Expired'
+    })
+  }, [])
 
   return (
     <>
@@ -310,15 +331,10 @@ export default function Dashboard({ Children }) {
                 {/* Profile dropdown */}
                 <Menu as="div" className="relative">
                   <Menu.Button className="-m-1.5 flex items-center p-1.5">
-                    <span className="sr-only">Open user menu</span>
-                    <img
-                      className="h-8 w-8 rounded-full bg-gray-50"
-                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                      alt=""
-                    />
+                    <span className="sr-only">Open Member menu</span>
                     <span className="hidden lg:flex lg:items-center">
                       <span className="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">
-                        Tom Cook
+                        {useLib.getCookie('gavelbase_username')}
                       </span>
                       <ChevronDownIcon className="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
                     </span>
@@ -333,11 +349,12 @@ export default function Dashboard({ Children }) {
                     leaveTo="transform opacity-0 scale-95"
                   >
                     <Menu.Items className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
-                      {userNavigation.map((item) => (
+                      {memberNavigation.map((item) => (
                         <Menu.Item key={item.name}>
                           {({ active }) => (
                             <a
                               href={item.href}
+                              onClick={item.onClick}
                               className={classNames(
                                 active ? 'bg-gray-50' : '',
                                 'block px-3 py-1 text-sm leading-6 text-gray-900'

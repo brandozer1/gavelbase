@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import axios from 'axios'
 import Logo from  '../../Assets/Images/Logo.webp'
 import useLib from '../../Hooks/useLib'
@@ -9,20 +9,40 @@ export default function Signin() {
 
   const signin = (e) => {
     e.preventDefault()
-    axios.post(useLib.createServerUrl('/api/v1/login'), {
+    axios.post(useLib.createServerUrl('/api/v1/member/login'), {
       username: username,
       password: password,
-    }).then((response) => {
+    }, {
+      withCredentials: true
+    })
+    .then((response) => {
       if (response.status === 200) {
-        window.location.href = '/Dashboard'
+        window.location.href = '/Dashboard#Logged-In Successfully!'
       }else{
         alert('There was an error signing in')
       }
-    }).catch((error) => {
-      alert(error.response)
+    })
+    .catch((error) => {
       console.log(error)
+      alert(error.response.data)
     })
   }
+
+  useEffect(() => {
+    document.title = 'Sign in - Gavelbase'
+
+    // check if the user is already logged in
+    axios.get(useLib.createServerUrl('/api/v1/member/verify'), {
+      withCredentials: true
+    })
+    .then((response) => {
+      if (response.status === 200) {
+        window.location.href = '/Dashboard'
+      }
+    })
+    .catch((error) => {
+    })
+  }, [])
 
   return (
     <>
@@ -39,17 +59,16 @@ export default function Signin() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" onClick={signin} method="POST">
+          <form className="space-y-6" onSubmit={signin} method="POST">
             <div>
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-                Email address
+                Username/Email address
               </label>
               <div className="mt-2">
                 <input
                   onChange={(e) => setUsername(e.target.value)}
                   id="email"
                   name="email"
-                  type="email"
                   autoComplete="email"
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -63,7 +82,7 @@ export default function Signin() {
                   Password
                 </label>
                 <div className="text-sm">
-                  <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
+                  <a href="/" className="font-semibold text-indigo-600 hover:text-indigo-500">
                     Forgot password?
                   </a>
                 </div>
@@ -90,10 +109,9 @@ export default function Signin() {
               </button>
             </div>
           </form>
-
           <p className="mt-10 text-center text-sm text-gray-500">
             Not a member?{' '}
-            <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+            <a href="/" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
               Start a 30 day free trial
             </a>
           </p>
