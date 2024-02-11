@@ -140,6 +140,7 @@ export default function Dashboard({ Children }) {
                             {navigation.map((item) => (
                               <li key={item.name}>
                                 <NavLink
+                                  onClick={()=>setSidebarOpen(false)}
                                   to={item.href}
                                   className={classNames(
                                     item.current
@@ -383,11 +384,11 @@ export default function Dashboard({ Children }) {
               {/* Simple router for routing the path from the react router param */}
               <Routes>
                 <Route path="/" element={<h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>} />
-                <Route path={`Create`} element={<Create />} />
-                <Route path="/Payments" element={<h1 className="text-2xl font-semibold text-gray-900">Payments</h1>} />
-                <Route path="/Fasttrack" element={<h1 className="text-2xl font-semibold text-gray-900">Fast-Track</h1>} />
-                <Route path="/Data" element={<h1 className="text-2xl font-semibold text-gray-900">Data</h1>} />
-                <Route path="/Reports" element={<h1 className="text-2xl font-semibold text-gray-900">Reports</h1>} />
+                <Route path="/Create/*" element={<Create />} />
+                <Route path="/Payments/*" element={<h1 className="text-2xl font-semibold text-gray-900">Payments</h1>} />
+                <Route path="/Fasttrack/*" element={<h1 className="text-2xl font-semibold text-gray-900">Fast-Track</h1>} />
+                <Route path="/Data/*" element={<h1 className="text-2xl font-semibold text-gray-900">Data</h1>} />
+                <Route path="/Reports/*" element={<h1 className="text-2xl font-semibold text-gray-900">Reports</h1>} />
               </Routes>
             </div>
           </main>
