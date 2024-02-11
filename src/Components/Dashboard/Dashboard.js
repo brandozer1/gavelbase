@@ -1,7 +1,7 @@
 
 import { Fragment, useState, useEffect } from 'react'
 import axios from 'axios'
-import { useParams } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Routes, useParams, NavLink } from 'react-router-dom';
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
   Bars3Icon,
@@ -22,8 +22,12 @@ import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 
 import Logo from '../../Assets/Images/Logo.webp'
 import { CubeIcon } from '@radix-ui/react-icons'
-import { Wallet2Icon, WalletIcon } from 'lucide-react'
+import { PlusSquareIcon, Wallet2Icon, WalletIcon } from 'lucide-react'
 import useLib from '../../Hooks/useLib'
+
+//import pages
+import Create from '../../Pages/Create/Create';
+
 
 
 
@@ -50,8 +54,9 @@ export default function Dashboard({ Children }) {
   // this is only here because the current var needs to know the routers path
   const navigation = [
     { name: 'Dashboard', href: '/Dashboard/', icon: HomeIcon, current: path === '' },
+    { name: 'Create', href: '/Dashboard/Create', icon: PlusSquareIcon, current: path === 'Create'},
     { name: 'Payments', href: '/Dashboard/Payments', icon: WalletIcon, current: path === 'Payments'},
-    { name: 'Fast-Track', href: '/Dashboard/Fasttrack', icon: CubeIcon, current: path === 'Fasttrack'},
+    // { name: 'Fast-Track', href: '/Dashboard/Fasttrack', icon: CubeIcon, current: path === 'Fasttrack'},
     { name: 'Data', href: '/Dashboard/Data', icon: FolderIcon, current: path === 'Data'},
     { name: 'Reports', href: '/Dashboard/Reports', icon: ChartPieIcon, current: path === 'Reports'},
   
@@ -133,8 +138,8 @@ export default function Dashboard({ Children }) {
                           <ul role="list" className="-mx-2 space-y-1">
                             {navigation.map((item) => (
                               <li key={item.name}>
-                                <a
-                                  href={item.href}
+                                <NavLink
+                                  to={item.href}
                                   className={classNames(
                                     item.current
                                       ? 'bg-gray-50 text-indigo-600'
@@ -150,7 +155,7 @@ export default function Dashboard({ Children }) {
                                     aria-hidden="true"
                                   />
                                   {item.name}
-                                </a>
+                                </NavLink>
                               </li>
                             ))}
                           </ul>
@@ -160,8 +165,8 @@ export default function Dashboard({ Children }) {
                           <ul role="list" className="-mx-2 mt-2 space-y-1">
                             {Shortcuts.map((team) => (
                               <li key={team.name}>
-                                <a
-                                  href={team.href}
+                                <NavLink
+                                  to={team.href}
                                   className={classNames(
                                     team.current
                                       ? 'bg-gray-50 text-indigo-600'
@@ -180,14 +185,14 @@ export default function Dashboard({ Children }) {
                                     {team.initial}
                                   </span>
                                   <span className="truncate">{team.name}</span>
-                                </a>
+                                </NavLink>
                               </li>
                             ))}
                           </ul>
                         </li>
                         <li className="mt-auto">
-                          <a
-                            href="#"
+                          <NavLink
+                            to="#"
                             className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600"
                           >
                             <Cog6ToothIcon
@@ -195,7 +200,7 @@ export default function Dashboard({ Children }) {
                               aria-hidden="true"
                             />
                             Settings
-                          </a>
+                          </NavLink>
                         </li>
                       </ul>
                     </nav>
@@ -223,8 +228,8 @@ export default function Dashboard({ Children }) {
                   <ul role="list" className="-mx-2 space-y-1">
                     {navigation.map((item) => (
                       <li key={item.name}>
-                        <a
-                          href={item.href}
+                        <NavLink
+                          to={item.href}
                           className={classNames(
                             item.current
                               ? 'bg-gray-50 text-indigo-600'
@@ -240,7 +245,7 @@ export default function Dashboard({ Children }) {
                             aria-hidden="true"
                           />
                           {item.name}
-                        </a>
+                        </NavLink>
                       </li>
                     ))}
                   </ul>
@@ -250,8 +255,8 @@ export default function Dashboard({ Children }) {
                   <ul role="list" className="-mx-2 mt-2 space-y-1">
                     {Shortcuts.map((team) => (
                       <li key={team.name}>
-                        <a
-                          href={team.href}
+                        <NavLink
+                          to={team.href}
                           className={classNames(
                             team.current
                               ? 'bg-gray-50 text-indigo-600'
@@ -270,14 +275,14 @@ export default function Dashboard({ Children }) {
                             {team.initial}
                           </span>
                           <span className="truncate">{team.name}</span>
-                        </a>
+                        </NavLink>
                       </li>
                     ))}
                   </ul>
                 </li>
                 <li className="mt-auto">
-                  <a
-                    href="#"
+                  <NavLink
+                    to="#"
                     className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600"
                   >
                     <Cog6ToothIcon
@@ -285,7 +290,7 @@ export default function Dashboard({ Children }) {
                       aria-hidden="true"
                     />
                     Settings
-                  </a>
+                  </NavLink>
                 </li>
               </ul>
             </nav>
@@ -352,8 +357,8 @@ export default function Dashboard({ Children }) {
                       {memberNavigation.map((item) => (
                         <Menu.Item key={item.name}>
                           {({ active }) => (
-                            <a
-                              href={item.href}
+                            <NavLink
+                              to={item.href}
                               onClick={item.onClick}
                               className={classNames(
                                 active ? 'bg-gray-50' : '',
@@ -361,7 +366,7 @@ export default function Dashboard({ Children }) {
                               )}
                             >
                               {item.name}
-                            </a>
+                            </NavLink>
                           )}
                         </Menu.Item>
                       ))}
@@ -372,24 +377,18 @@ export default function Dashboard({ Children }) {
             </div>
           </div>
 
-          <main className="py-10">
-            <div className="px-4 sm:px-6 lg:px-8">
+          <main>
+            <div>
               {/* Simple router for routing the path from the react router param */}
-              {
-                path === undefined && <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
-              }
-              {
-                path === 'Payments' && <h1 className="text-2xl font-semibold text-gray-900">Payments</h1>
-              }
-              {
-                path === 'Fasttrack' && <h1 className="text-2xl font-semibold text-gray-900">Fast-Track</h1>
-              }
-              {
-                path === 'Data' && <h1 className="text-2xl font-semibold text-gray-900">Data</h1>
-              }
-              {
-                path === 'Reports' && <h1 className="text-2xl font-semibold text-gray-900">Reports</h1>
-              }
+              
+              <Routes>
+                <Route path="/" element={<h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>} />
+                <Route path="/Create" element={<Create />} />
+                <Route path="/Payments" element={<h1 className="text-2xl font-semibold text-gray-900">Payments</h1>} />
+                <Route path="/Fasttrack" element={<h1 className="text-2xl font-semibold text-gray-900">Fast-Track</h1>} />
+                <Route path="/Data" element={<h1 className="text-2xl font-semibold text-gray-900">Data</h1>} />
+                <Route path="/Reports" element={<h1 className="text-2xl font-semibold text-gray-900">Reports</h1>} />
+              </Routes>
             </div>
           </main>
         </div>
