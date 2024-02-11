@@ -10,6 +10,7 @@ import {
   PencilIcon,
 } from '@heroicons/react/20/solid'
 import { Menu, Transition } from '@headlessui/react'
+import { BoxIcon, HammerIcon, TimerIcon, User2Icon } from 'lucide-react'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -25,19 +26,19 @@ export default function PageHeading({title}) {
         <div className="mt-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6">
           <div className="mt-2 flex items-center text-sm text-gray-500">
             <BriefcaseIcon className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
-            Full-time
+            0 Crew Members
           </div>
           <div className="mt-2 flex items-center text-sm text-gray-500">
-            <MapPinIcon className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
-            Remote
+            <TimerIcon className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
+            0 Auctions
           </div>
           <div className="mt-2 flex items-center text-sm text-gray-500">
-            <CurrencyDollarIcon className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
-            $120k &ndash; $140k
+            <BoxIcon className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
+            0 Lots
           </div>
           <div className="mt-2 flex items-center text-sm text-gray-500">
-            <CalendarIcon className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
-            Closing on January 9, 2020
+            <User2Icon className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
+            0 Users
           </div>
         </div>
       </div>

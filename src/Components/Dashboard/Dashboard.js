@@ -53,12 +53,12 @@ export default function Dashboard({ Children }) {
   const {path} = useParams();
   // this is only here because the current var needs to know the routers path
   const navigation = [
-    { name: 'Dashboard', href: '/Dashboard/', icon: HomeIcon, current: path === '' },
-    { name: 'Create', href: '/Dashboard/Create', icon: PlusSquareIcon, current: path === 'Create'},
-    { name: 'Payments', href: '/Dashboard/Payments', icon: WalletIcon, current: path === 'Payments'},
+    { name: 'Dashboard', href: '/Dashboard', icon: HomeIcon, current: path === '' },
+    { name: 'Create', href: './Create', icon: PlusSquareIcon, current: path === 'Create'},
+    { name: 'Payments', href: './Payments', icon: WalletIcon, current: path === 'Payments'},
     // { name: 'Fast-Track', href: '/Dashboard/Fasttrack', icon: CubeIcon, current: path === 'Fasttrack'},
-    { name: 'Data', href: '/Dashboard/Data', icon: FolderIcon, current: path === 'Data'},
-    { name: 'Reports', href: '/Dashboard/Reports', icon: ChartPieIcon, current: path === 'Reports'},
+    { name: 'Data', href: './Data', icon: FolderIcon, current: path === 'Data'},
+    { name: 'Reports', href: './Reports', icon: ChartPieIcon, current: path === 'Reports'},
   
   ]
 
@@ -78,6 +78,7 @@ export default function Dashboard({ Children }) {
       window.location.href = '/Sign-In#Login Expired'
     })
   }, [])
+
 
   return (
     <>
@@ -166,7 +167,7 @@ export default function Dashboard({ Children }) {
                             {Shortcuts.map((team) => (
                               <li key={team.name}>
                                 <NavLink
-                                  to={team.href}
+                                  href={team.href}
                                   className={classNames(
                                     team.current
                                       ? 'bg-gray-50 text-indigo-600'
@@ -192,7 +193,7 @@ export default function Dashboard({ Children }) {
                         </li>
                         <li className="mt-auto">
                           <NavLink
-                            to="#"
+                            href="#"
                             className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600"
                           >
                             <Cog6ToothIcon
@@ -380,10 +381,9 @@ export default function Dashboard({ Children }) {
           <main>
             <div>
               {/* Simple router for routing the path from the react router param */}
-              
               <Routes>
                 <Route path="/" element={<h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>} />
-                <Route path="/Create" element={<Create />} />
+                <Route path={`Create`} element={<Create />} />
                 <Route path="/Payments" element={<h1 className="text-2xl font-semibold text-gray-900">Payments</h1>} />
                 <Route path="/Fasttrack" element={<h1 className="text-2xl font-semibold text-gray-900">Fast-Track</h1>} />
                 <Route path="/Data" element={<h1 className="text-2xl font-semibold text-gray-900">Data</h1>} />
