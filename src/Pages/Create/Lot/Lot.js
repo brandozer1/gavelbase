@@ -1,6 +1,7 @@
 import React from 'react'
 import TextInput from '../../../Components/TextInput/TextInput'
 import { Dialog } from '@headlessui/react'
+import { AirplayIcon } from 'lucide-react'
 
 
 export default function Lot() {
@@ -21,7 +22,7 @@ export default function Lot() {
         <div>
 
             <TextInput placeholder={'Title'} scanner={true}  />
-            <TextInput label="Lot Description" />
+            <TextInput label="Lot Description" trailingIcon={<AirplayIcon className='h-5 w-5 text-gray-400' />} />
             <TextInput label="Lot Location" helpText={'This is so you know where the item is.'} />
             <TextInput label="Lot Size" />
             <TextInput label="Lot Type" />
