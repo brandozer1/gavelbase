@@ -74,7 +74,7 @@ error ? 'ring-red-500' : 'ring-gray-300'
                                         }}
                                         onLoad={() => console.log('Video feed has loaded!')}
                                         containerStyle={{height: '100%'}}
-                                        videoContainerStyle={{borderRadius: '0.5rem'}}
+                                        videoContainerStyle={{borderRadius: '0.5rem', width: '100%'}}
                                         
                                     />
                                         
