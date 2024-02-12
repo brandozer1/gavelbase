@@ -68,6 +68,7 @@ error ? 'ring-red-500' : 'ring-gray-300'
                                     <BarcodeScannerComponent
                                         width={500}
                                         height={500}
+                                        delay={10}
                                         onUpdate={(err, result) => {
                                         if (result) {
                                             setOpen(false);
