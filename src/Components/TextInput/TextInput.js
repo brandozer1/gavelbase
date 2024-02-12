@@ -70,7 +70,7 @@ error ? 'ring-red-500' : 'ring-gray-300'
                                     leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                                     leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                                     >
-                                    <Dialog.Panel className="relative transform overflow-hidden rounded-lg flex flex-col bg-white px-4 pb-4 pt-3 sm:pt-5 text-left shadow-xl w-full transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+                                    <Dialog.Panel className="relative transform overflow-hidden rounded-lg flex flex-col bg-white text-left shadow-xl w-full transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
                                         <QrReader
                                             delay={10}
                                             onScan={(e)=>console.log(e)}
