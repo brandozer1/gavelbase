@@ -65,7 +65,7 @@ error ? 'ring-red-500' : 'ring-gray-300'
                                 <QrReader
                                     delay={10}
                                     onScan={(e)=>console.log(e)}
-                                    facingMode="front"
+                                    facingMode="rear"
                                 />
                                 <div className="mt-5 sm:mt-4 sm:flex w-full sm:flex-row-reverse">
                                     <button
