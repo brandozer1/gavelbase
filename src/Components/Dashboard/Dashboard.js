@@ -64,6 +64,9 @@ export default function Dashboard({ Children }) {
 
   useEffect(() => {
     document.title = 'Dashboard - Gavelbase'
+
+    // run notification if there is one
+    useLib.useNotification()
   
     // check if the user is already logged in
     axios.get(useLib.createServerUrl('/api/v1/member/verify'), {
@@ -71,11 +74,14 @@ export default function Dashboard({ Children }) {
     })
     .then((response) => {
       if (response.status !== 200) {
-        window.location.href = '/Sign-In#Login Expired'
+        useLib.toast.error('Login Expired')
+        window.location.href = '/Sign-In?'+useLib.createNotification('error', 'Login Expired')
       }
+      
     })
     .catch((error) => {
-      window.location.href = '/Sign-In#Login Expired'
+      window.location.href = '/Sign-In?'+useLib.createNotification('error', 'Login Expired')
+      
     })
   }, [])
 

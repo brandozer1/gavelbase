@@ -40,7 +40,7 @@ import {
             </div>
             <div className="mt-8">
               <h3 className="text-base font-semibold leading-6 text-gray-900">
-                <NavLink to={action.href} className="focus:outline-none">
+                <NavLink onClick={action.onClick} to={action.href} className="focus:outline-none">
                   {/* Extend touch target to entire panel */}
                   <span className="absolute inset-0" aria-hidden="true" />
                   {action.title}
