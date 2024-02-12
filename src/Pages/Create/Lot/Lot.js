@@ -24,7 +24,7 @@ export default function Lot() {
             <TextInput placeholder={'Title'} scanner={true}  />
             <TextInput label="Lot Description" trailingIcon={<AirplayIcon className='h-5 w-5 text-gray-400' />} />
             <TextInput label="Lot Location" helpText={'This is so you know where the item is.'} />
-            <TextInput label="Lot Size" />
+            <TextInput label="Lot Size" scanner={true} />
             <TextInput label="Lot Type" />
             <TextInput label="Lot Price" />
         </div>

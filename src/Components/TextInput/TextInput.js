@@ -1,6 +1,6 @@
 import React, { Fragment, useRef, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react'
-import QrReader from 'react-qr-scanner'
+import BarcodeScannerComponent from "react-qr-barcode-scanner";
 import { ScanBarcodeIcon } from 'lucide-react';
 
 const TextInput = ({
@@ -17,7 +17,8 @@ const TextInput = ({
   hints,
   icon,
   trailingIcon,
-  scanner
+  scanner,
+  value
 }) => {
 const [open, setOpen] = React.useState(false)
 const cancelButtonRef = useRef(null)
@@ -38,13 +39,6 @@ error ? 'ring-red-500' : 'ring-gray-300'
         {
             scanner && (
                 <>
-                    <button
-                        className="absolute inset-y-0 right-0 flex items-center pr-3 focus:outline-none"
-                        onClick={() => setOpen(true)}
-                    >
-                        {/* scan icon from icon pack */}
-                        <ScanBarcodeIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                    </button>
                     <Transition.Root show={open} as={Fragment}>
                         <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setOpen}>
                             <Transition.Child
@@ -71,13 +65,30 @@ error ? 'ring-red-500' : 'ring-gray-300'
                                     leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                                     >
                                     <Dialog.Panel className="relative transform overflow-hidden rounded-lg flex flex-col bg-white p-3 text-left shadow-xl w-full transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
-                                        <QrReader
+                                    <BarcodeScannerComponent
+                                        width={500}
+                                        height={500}
+                                        onUpdate={(err, result) => {
+                                        if (result) {
+                                            setOpen(false);
+                                            document.getElementById(inputId).value = result.text;
+                                        
+                                        }
+                                        }}
+                                    />
+                                        {/* <QrReader
                                             delay={10}
-                                            onScan={(e)=>console.log(e)}
+                                            // set value of input element to the scanned data
+                                            onScan={(data) => {
+                                                if (data) {
+                                                    setOpen(false);
+                                                    document.getElementById(inputId).value = data.text;
+                                                }
+                                            }}
                                             facingMode="rear"
                                             chooseDeviceId={true}
                                             className='rounded-md'
-                                        />
+                                        /> */}
                                         <div className="mt-5 sm:mt-4 sm:flex w-full sm:flex-row-reverse">
                                             <button
                                                 type="button"
@@ -111,6 +122,7 @@ error ? 'ring-red-500' : 'ring-gray-300'
             {icon && <div className="absolute inset-y-0 left-0 flex items-center pl-3">{icon}</div>}
 
             <input
+            value={value}
             type="text"
             id={inputId}
             className={inputClasses}
