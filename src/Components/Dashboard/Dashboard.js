@@ -12,6 +12,7 @@ import {
   // DocumentDuplicateIcon,
   // DocumentTextIcon,
   FolderIcon,
+  GlobeAltIcon,
   HomeIcon,
   // Square2StackIcon,
   // Square3Stack3DIcon,
@@ -22,7 +23,7 @@ import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 
 import Logo from '../../Assets/Images/Logo.webp'
 import { CubeIcon } from '@radix-ui/react-icons'
-import { PlusSquareIcon, Wallet2Icon, WalletIcon } from 'lucide-react'
+import { Globe2Icon, PlusSquareIcon, ShellIcon, Upload, UploadIcon, Wallet2Icon, WalletIcon } from 'lucide-react'
 import useLib from '../../Hooks/useLib'
 
 //import pages
@@ -55,6 +56,7 @@ export default function Dashboard({ Children }) {
   const navigation = [
     { name: 'Dashboard', href: '/Dashboard', icon: HomeIcon, current: path === '' },
     { name: 'Create', href: './Create', icon: PlusSquareIcon, current: path === 'Create'},
+    { name: 'List', href: './List', icon: UploadIcon, current: path === 'List'},
     { name: 'Payments', href: './Payments', icon: WalletIcon, current: path === 'Payments'},
     // { name: 'Fast-Track', href: '/Dashboard/Fasttrack', icon: CubeIcon, current: path === 'Fasttrack'},
     { name: 'Data', href: './Data', icon: FolderIcon, current: path === 'Data'},
