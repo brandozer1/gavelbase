@@ -70,12 +70,15 @@ const actions = [
 
 export default function Create() {
     return (
-        <div className="py-10 px-4 sm:px-6 lg:px-8 bg-gray-100" >
-            <PageHeading title={'Create'} />
-            <Routes>
-                <Route path="/" element={<ActionGrid actions={actions} className={'md:mt-3'} />} />
-                <Route path="Lot" element={<Lot />} />
-            </Routes>
-        </div>
+        
+        <Routes>
+            <Route path="/" element={
+            <div className="py-10 px-4 sm:px-6 lg:px-8 bg-gray-100" >
+              <PageHeading title={'Create'} />
+              <ActionGrid actions={actions} className={'md:mt-3'} />
+            </div>
+            } />
+            <Route path="Lot" element={<Lot />} />
+        </Routes>
     )
 }

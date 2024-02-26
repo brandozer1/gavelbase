@@ -42,7 +42,7 @@ const TextInput = ({
         document.getElementById(inputId).value = '';
     };
   
-    const inputContainerClasses = `relative mt-2 rounded-md shadow-sm ${
+    const inputContainerClasses = `relative mt-1 rounded-md shadow-sm ${
       (prefix || suffix || icon || trailingIcon || scanner) ? 'flex' : ''
     }`;
   
