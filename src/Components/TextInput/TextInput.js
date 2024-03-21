@@ -21,6 +21,7 @@ const TextInput = ({
     trailingIcon,
     scanner,
     value,
+    setState,
     clearable, // New prop for clearable functionality
   }) => {
     const [open, setOpen] = useState(false);
@@ -39,6 +40,9 @@ const TextInput = ({
   
     const handleClearClick = () => {
         setHasContent(false);
+        if (typeof setState === 'function') {
+            setState('');
+        }
         document.getElementById(inputId).value = '';
     };
   

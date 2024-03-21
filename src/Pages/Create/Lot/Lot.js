@@ -27,7 +27,7 @@ export default function Lot() {
         <div className="py-10 px-4 sm:px-6 lg:px-8 bg-gray-100 flex flex-col gap-2" >
             <PageHeading title={'Create Lot'} />
             {/* Image upload component */}
-            <ImageUpload label={'Pictures'} hints={lotInfo.images.length+'/3 Required'} />
+            <ImageUpload label={'Pictures'} hints={lotInfo.images.length+'/3 Required'} helpText={'Drag & Drop Images or Videos'} />
 
             {/* Text input for lot title */}
             <TextInput placeholder={'Title'} label={'Title'} clearable={true} value={lotInfo.title} onChange={(e) => setLotInfo(prevState => ({ ...prevState, title: e.target.value }))} />

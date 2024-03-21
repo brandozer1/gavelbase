@@ -27,7 +27,7 @@ const actions = [
       iconBackground: 'bg-purple-50',
     },
     {
-        title: 'Create Auction',
+        title: 'Create Auction Event',
         href: './Auction',
         icon: ClockIcon,
         iconForeground: 'text-teal-700',
