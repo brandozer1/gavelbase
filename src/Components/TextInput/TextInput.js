@@ -122,11 +122,12 @@ const TextInput = ({
                                             />
 
                                               <BarcodeScannerComponent
+                                                  key={selectedDeviceId} // Add this line
                                                   width={500}
                                                   height={500}
-                                                  delay={500} // Consider increasing delay to reduce processing load
-                                                  facingMode="user" // Default facing mode
-                                                  deviceId={selectedDeviceId} // This line ensures the chosen device ID is set on the component
+                                                  delay={500}
+                                                  facingMode="user"
+                                                  deviceId={selectedDeviceId}
                                                   onUpdate={(err, result) => {
                                                       if (result) {
                                                           setOpen(false);
