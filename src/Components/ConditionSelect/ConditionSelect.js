@@ -9,7 +9,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function SelectMenu({label, options, placeholder, onChange, selectedOption}) {
+export default function ConditionSelect({label, options, placeholder, onChange, selectedOption}) {
 
   const [selected, setSelected] = useState(selectedOption ? selectedOption : placeholder ? {name: placeholder}: options[0])
 

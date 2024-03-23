@@ -28,6 +28,7 @@ import useLib from '../../Hooks/useLib'
 
 //import pages
 import Create from '../../Pages/Create/Create';
+import TextInput from '../TextInput/TextInput';
 
 
 
@@ -391,7 +392,7 @@ export default function Dashboard({ Children }) {
             <div>
               {/* Simple router for routing the path from the react router param */}
               <Routes>
-                <Route path="/" element={<h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>} />
+                <Route path="/" element={<TextInput scanner={true}/>} />
                 <Route path="/Create/*" element={<Create />} />
                 <Route path="/Payments/*" element={<h1 className="text-2xl font-semibold text-gray-900">Payments</h1>} />
                 <Route path="/Fasttrack/*" element={<h1 className="text-2xl font-semibold text-gray-900">Fast-Track</h1>} />

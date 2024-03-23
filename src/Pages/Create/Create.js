@@ -73,7 +73,7 @@ export default function Create() {
         
         <Routes>
             <Route path="/" element={
-            <div className="py-10 px-4 sm:px-6 lg:px-8 bg-gray-100" >
+            <div className="py-10 px-4 sm:px-6 lg:px-8 bg-gray-100 h-100" >
               <PageHeading title={'Create'} />
               <ActionGrid actions={actions} className={'md:mt-3'} />
             </div>
