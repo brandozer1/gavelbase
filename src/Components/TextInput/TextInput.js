@@ -121,23 +121,23 @@ const TextInput = ({
                                                 value={selectedDeviceId}
                                             />
 
-                                            <BarcodeScannerComponent
-                                                width={500}
-                                                height={500}
-                                                delay={500} // Consider increasing delay to reduce processing load
-                                                facingMode="user" // Default facing mode
-                                                deviceId={selectedDeviceId}
-                                                onUpdate={(err, result) => {
-                                                    if (result) {
-                                                        setOpen(false);
-                                                        if (typeof setState === 'function') {
-                                                            setState(result.text);
-                                                        }
-                                                        document.getElementById(inputId).value = result.text;
-                                                        setHasContent(true);
-                                                    }
-                                                }}
-                                            />
+                                              <BarcodeScannerComponent
+                                                  width={500}
+                                                  height={500}
+                                                  delay={500} // Consider increasing delay to reduce processing load
+                                                  facingMode="user" // Default facing mode
+                                                  deviceId={selectedDeviceId} // This line ensures the chosen device ID is set on the component
+                                                  onUpdate={(err, result) => {
+                                                      if (result) {
+                                                          setOpen(false);
+                                                          if (typeof setState === 'function') {
+                                                              setState(result.text);
+                                                          }
+                                                          document.getElementById(inputId).value = result.text;
+                                                          setHasContent(true);
+                                                      }
+                                                  }}
+                                              />
                                             <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
                                                 <button
                                                     type="button"
