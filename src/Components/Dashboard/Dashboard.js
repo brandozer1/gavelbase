@@ -72,20 +72,20 @@ export default function Dashboard({ Children }) {
     useLib.useNotification()
   
     // check if the user is already logged in
-    // axios.get(useLib.createServerUrl('/api/v1/member/verify'), {
-    //   withCredentials: true
-    // })
-    // .then((response) => {
-    //   if (response.status !== 200) {
-    //     useLib.toast.error('Login Expired')
-    //     window.location.href = '/Sign-In?'+useLib.createNotification('error', 'Login Expired')
-    //   }
+    axios.get(useLib.createServerUrl('/api/v1/member/verify'), {
+      withCredentials: true
+    })
+    .then((response) => {
+      if (response.status !== 200) {
+        useLib.toast.error('Login Expired')
+        window.location.href = '/Sign-In?'+useLib.createNotification('error', 'Login Expired')
+      }
       
-    // })
-    // .catch((error) => {
-    //   window.location.href = '/Sign-In?'+useLib.createNotification('error', 'Login Expired')
+    })
+    .catch((error) => {
+      window.location.href = '/Sign-In?'+useLib.createNotification('error', 'Login Expired')
       
-    // })
+    })
   }, [])
 
 
