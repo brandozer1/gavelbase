@@ -126,9 +126,14 @@ export default function Lot() {
             {/* Image upload component */}
             <ImageUpload label={'Pictures'} hints={lotObject.images.length+'/3 Required'} helpText={'Drag & Drop Images'} onChange={(e)=>setLotObject(prevState => ({ ...prevState, images: e }))} value={lotObject.images} />
 
-            {/* Text input for lot title */}
-            <TextInput placeholder={'Title'} label={'Title'} clearable={true} setState={(e)=>setLotObject(prevState => ({ ...prevState, title: e }))} value={lotObject.title} onChange={(e) => setLotObject(prevState => ({ ...prevState, title: e.target.value }))} />
+            <div className='flex gap-2 flex-col md:flex-row'>
+                <TextInput placeholder={'Lot Number'} label={'Lot Number'} scanner={true} />
 
+                {/* Text input for lot title */}
+                <TextInput containerClassName={'w-full'} placeholder={'Title'} label={'Title'} clearable={true} setState={(e)=>setLotObject(prevState => ({ ...prevState, title: e }))} value={lotObject.title} onChange={(e) => setLotObject(prevState => ({ ...prevState, title: e.target.value }))} />
+
+            </div>
+            
             {/* Text area for lot description */}
             <TextArea placeholder={'Description'} label={'Description'} value={lotObject.description} onChange={(e) => setLotObject(prevState => ({ ...prevState, description: e.target.value }))} />
 
@@ -222,7 +227,7 @@ export default function Lot() {
                         </>
                     )}
                 </Disclosure>
-
+                
                 <Button size="md" icon={<CheckCircleIcon />} text="Create Lot" />
             </div>
             

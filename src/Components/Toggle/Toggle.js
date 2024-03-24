@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { Switch } from '@headlessui/react'
+import useSound from 'use-sound'
+import switchtoggle from '../../Assets/Audio/switchtoggle.mp3'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -13,12 +15,18 @@ export default function Toggle({
   switchClassName = '',
   labelClassName = '',
   descriptionClassName = '',
+  playSound = true
 }) {
   const [isEnabled, setIsEnabled] = useState(enabled)
+  const [playswitchtoggle] = useSound(switchtoggle, { volume: 0.25 })
 
   const toggleSwitch = () => {
     setIsEnabled(!isEnabled)
     onChange(!isEnabled)
+    if (playSound === true) {
+        playswitchtoggle()
+    }
+    
   }
 
   return (

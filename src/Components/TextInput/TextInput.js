@@ -2,6 +2,8 @@ import React, { Fragment, useRef, useState, useEffect } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { ScanBarcodeIcon } from 'lucide-react';
 import BarcodeScannerComponent from "react-qr-barcode-scanner";
+import useSound from 'use-sound';
+import scanbeep from '../../Assets/Audio/scanbeep.mp3';
 
 // Assuming Select component's API matches React Select or a similar API
 const Select = ({
@@ -27,6 +29,7 @@ const Select = ({
 };
 
 const TextInput = ({
+    containerClassName,
     className,
     onChange,
     label,
@@ -51,6 +54,8 @@ const TextInput = ({
     const [hasContent, setHasContent] = useState(Boolean(value));
     const [devices, setDevices] = useState([]);
     const [selectedDeviceId, setSelectedDeviceId] = useState('');
+
+    const [playscanbeep] = useSound(scanbeep);
 
     useEffect(() => {
         navigator.mediaDevices.enumerateDevices().then(devices => {
@@ -82,7 +87,7 @@ const TextInput = ({
     const inputClasses = `block w-full rounded-md border-0 py-1.5 ${icon || prefix ? 'pl-10' : 'pl-2'} ${disabled ? 'bg-gray-100' : 'text-gray-900'} shadow-sm ring-1 ring-inset ${error ? 'ring-red-500' : 'ring-gray-300'} placeholder:text-gray-400 focus:ring-indigo-600 sm:text-sm sm:leading-6 ${className}`;
 
     return (
-        <>
+        <div className={containerClassName}>
             {scanner && (
                 <>
                     <Transition.Root show={open} as={Fragment}>
@@ -129,10 +134,13 @@ const TextInput = ({
                                                   facingMode="user"
                                                   deviceId={selectedDeviceId}
                                                   onUpdate={(err, result) => {
+                                                      
                                                       if (result) {
                                                           setOpen(false);
+                                                          playscanbeep();
                                                           if (typeof setState === 'function') {
                                                               setState(result.text);
+                                                              
                                                           }
                                                           document.getElementById(inputId).value = result.text;
                                                           setHasContent(true);
@@ -215,7 +223,7 @@ const TextInput = ({
             </div>
           )}
         </div>
-      </>
+      </div>
     );
   };
   

@@ -13,23 +13,23 @@ export default function Signin() {
   const signin = (e) => {
     e.preventDefault()
     setLoading(true)
-    axios.post(useLib.createServerUrl('/api/v1/member/login'), {
-      username: username,
-      password: password,
-    }, {
-      withCredentials: true
-    })
-    .then((response) => {
-      if (response.status === 200) {
-        window.location.href = '/Dashboard?'+useLib.createNotification('success', response.data)
-      }else{
-        useLib.toast.error(response.data)
-      }
-    })
-    .catch((error) => {
-      setLoading(false)
-      useLib.toast.error(error.response.data)
-    })
+    // axios.post(useLib.createServerUrl('/api/v1/member/login'), {
+    //   username: username,
+    //   password: password,
+    // }, {
+    //   withCredentials: true
+    // })
+    // .then((response) => {
+    //   if (response.status === 200) {
+    //     window.location.href = '/Dashboard?'+useLib.createNotification('success', response.data)
+    //   }else{
+    //     useLib.toast.error(response.data)
+    //   }
+    // })
+    // .catch((error) => {
+    //   setLoading(false)
+    //   useLib.toast.error(error.response.data)
+    // })
   }
 
   useEffect(() => {
