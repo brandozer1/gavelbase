@@ -120,8 +120,8 @@ export default function Lot() {
     }, [lotObject]);
 
     return (
-        <div className="py-10 px-4 sm:px-6 lg:px-8 bg-gray-100 flex flex-col gap-2 h-100" >
-            <PageHeading title={'Create Lot'} />
+        <div className="py-4 md:py-10 px-4 sm:px-6 lg:px-8 bg-gray-100 flex flex-col gap-2 h-100" >
+            <span className="text-3xl font-bold">Create Lot</span>
 
             {/* Image upload component */}
             <ImageUpload label={'Pictures'} hints={lotObject.images.length+'/3 Required'} helpText={'Drag & Drop Images'} onChange={(e)=>setLotObject(prevState => ({ ...prevState, images: e }))} value={lotObject.images} />

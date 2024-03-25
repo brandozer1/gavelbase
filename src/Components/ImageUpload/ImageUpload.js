@@ -127,7 +127,7 @@ export default function ImageUpload({ label, hints, helpText, value, onChange })
         </div>
       )}
 
-      <div className="grid grid-cols-6 sm:grid-cols-6 lg:grid-cols-7 xl:grid-cols-9 2xl:grid-cols-12 gap-2 mt-1">
+      <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 xl:grid-cols-9 2xl:grid-cols-12 gap-2 mt-1">
         {files.map((file, index) => (
           <div
             key={index}
