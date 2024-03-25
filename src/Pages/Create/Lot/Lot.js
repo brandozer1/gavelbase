@@ -162,7 +162,7 @@ export default function Lot() {
             />
 
             {/* Text Area For condition notes */}
-            <TextArea placeholder={'Sounds funny, Dented, Scratched...'} label={'Condition Notes'} hints={'This will be displayed under the title'} value={lotObject.condition.note} onChange={(e) => setLotObject(prevState => ({ ...prevState, condition: { ...prevState.condition, note: e.target.value } }))} />
+            <TextArea placeholder={'Sounds funny, Dented, Scratched...'} label={'Condition Notes'} hints={'Displayed under condition info.'} value={lotObject.condition.note} onChange={(e) => setLotObject(prevState => ({ ...prevState, condition: { ...prevState.condition, note: e.target.value } }))} />
             
             {/* disclosure for lot details  */}
             {/* add a divider with a header saying Lot Details, and a disclosure for the lot details */}
