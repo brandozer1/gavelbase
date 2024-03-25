@@ -15,20 +15,16 @@ const createServerUrl = (path) => {
     return `${process.env.REACT_APP_SERVER_PROTOCOL}://${process.env.REACT_APP_SERVER_DOMAIN}${process.env.REACT_APP_SERVER_PORT ? ':'+process.env.REACT_APP_SERVER_PORT : ''}${path}`};
 
 const getCookie = (name) => {
-    const cookies = document.cookie.split(';');
+    const cookies = document.cookie.split(';').map(cookie => cookie.trim());
 
-    for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim();
-        
-        // Check if the cookie starts with the provided name
-        if (cookie.startsWith(`${name}=`)) {
-        // Return the value of the cookie
-        return cookie.substring(name.length + 1);
+    for (const cookie of cookies) {
+        const [cookieName, cookieValue] = cookie.split('=');
+        if (cookieName === name) {
+            return cookieValue;
         }
     }
 
-    // Return null if the cookie is not found
-    // return null;
+    return null; // Return null if the cookie is not found
 }
 
 const setCookie = (name, value, days) => {
