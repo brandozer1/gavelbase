@@ -30,7 +30,7 @@ export default function Toggle({
   }
 
   return (
-    <Switch.Group as="div" className="flex items-center justify-between">
+    <Switch.Group as="div" className="flex items-center justify-between gap-3">
       <span className="flex flex-grow flex-col">
         {label && (
           <Switch.Label as="span" className={classNames('text-sm font-medium leading-6', labelClassName)} passive>
