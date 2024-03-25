@@ -392,7 +392,7 @@ export default function Dashboard({ Children }) {
             <div>
               {/* Simple router for routing the path from the react router param */}
               <Routes>
-                <Route path="/" element={<TextInput scanner={true}/>} />
+                <Route path="/" element={useLib.getCookie('gavelbase_username')} />
                 <Route path="/Create/*" element={<Create />} />
                 <Route path="/Payments/*" element={<h1 className="text-2xl font-semibold text-gray-900">Payments</h1>} />
                 <Route path="/Fasttrack/*" element={<h1 className="text-2xl font-semibold text-gray-900">Fast-Track</h1>} />
