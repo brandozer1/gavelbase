@@ -28,7 +28,7 @@ const getCookie = (name) => {
     }
 
     // Return null if the cookie is not found
-    return null;
+    // return null;
 }
 
 const setCookie = (name, value, days) => {
