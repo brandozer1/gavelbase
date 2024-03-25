@@ -104,9 +104,9 @@ const conditionBadgeColors = ['bg-color1', 'bg-color2', 'bg-color3', 'bg-color4'
 export default function Lot() {
     // State to manage lot information, wether editing or creating a new lot
     const [lotObject, setLotObject] = useState({
-        title: 'Sub Pump',
-        description: 'dd',
-        condition: {value: 3, name: 'Nedw', description: 'New', note: 'sounds funny'},
+        title: '',
+        description: '',
+        condition: {value: 3, name: 'Nedw', description: 'New', note: ''},
         images: [],
         source: {
             sourceId: 'asdf2323',

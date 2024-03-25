@@ -12,8 +12,7 @@ import { toast } from 'react-toastify';
 // 6. createNotification => creates a notification object to be used in the url ?notification={severity: 'success', message: 'message'}
 // 7. signOut() => signs the user out and redirects to the sign-in page
 const createServerUrl = (path) => {
-    return `${process.env.REACT_APP_SERVER_PROTOCOL}://${process.env.REACT_APP_SERVER_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}${path}`;
-}
+    return `${process.env.REACT_APP_SERVER_PROTOCOL}://${process.env.REACT_APP_SERVER_DOMAIN}${process.env.REACT_APP_SERVER_PORT ? ':'+process.env.REACT_APP_SERVER_PORT : ''}${path}`};
 
 const getCookie = (name) => {
     const cookies = document.cookie.split(';');

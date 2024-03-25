@@ -28,7 +28,11 @@ export default function Signin() {
     })
     .catch((error) => {
       setLoading(false)
-      useLib.toast.error(error.response.data)
+      if (error.response) {
+          useLib.toast.error(error.response.data)
+      }else{
+        useLib.toast.error('An error occurred, please try again later')
+      }
     })
   }
 
