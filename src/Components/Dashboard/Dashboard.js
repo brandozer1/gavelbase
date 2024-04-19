@@ -29,6 +29,7 @@ import useLib from '../../Hooks/useLib'
 //import pages
 import Create from '../../Pages/Create/Create';
 import TextInput from '../TextInput/TextInput';
+import Edit from '../../Pages/Edit/Edit';
 
 
 
@@ -60,7 +61,7 @@ export default function Dashboard({ Children }) {
     { name: 'List', href: './List', icon: UploadIcon, current: path === 'List'},
     { name: 'Payments', href: './Payments', icon: WalletIcon, current: path === 'Payments'},
     // { name: 'Fast-Track', href: '/Dashboard/Fasttrack', icon: CubeIcon, current: path === 'Fasttrack'},
-    { name: 'Data', href: './Data', icon: FolderIcon, current: path === 'Data'},
+    { name: 'Edit', href: './Edit', icon: FolderIcon, current: path === 'Edit'},
     { name: 'Reports', href: './Reports', icon: ChartPieIcon, current: path === 'Reports'},
   
   ]
@@ -90,8 +91,8 @@ export default function Dashboard({ Children }) {
 
 
   return (
-    <>
-      <div>
+    <div className='h-full'>
+      <div className='h-full'>
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog as="div" className="relative z-50 lg:hidden" onClose={setSidebarOpen}>
             <Transition.Child
@@ -308,7 +309,7 @@ export default function Dashboard({ Children }) {
           </div>
         </div>
 
-        <div className="lg:pl-72">
+        <div className="lg:pl-72 h-full">
           <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
             <button type="button" className="-m-2.5 p-2.5 text-gray-700 lg:hidden" onClick={() => setSidebarOpen(true)}>
               <span className="sr-only">Open sidebar</span>
@@ -350,7 +351,7 @@ export default function Dashboard({ Children }) {
                     <span className="sr-only">Open Member menu</span>
                     <span className="hidden lg:flex lg:items-center">
                       <span className="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">
-                        {useLib.getCookie('gavelbase_username')}
+                        {useLib.getMemberCookie().username}
                       </span>
                       <ChevronDownIcon className="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
                     </span>
@@ -388,21 +389,21 @@ export default function Dashboard({ Children }) {
             </div>
           </div>
 
-          <main>
-            <div>
+          <main style={{height: "calc(100vh - 4rem)"}} className="h-full overflow-y-auto bg-gray-100">
+            <div className='h-full'>
               {/* Simple router for routing the path from the react router param */}
               <Routes>
-                <Route path="/" element={useLib.getCookie('gavelbase_username')} />
+                <Route path="/" element={useLib.getMemberCookie().username} />
                 <Route path="/Create/*" element={<Create />} />
                 <Route path="/Payments/*" element={<h1 className="text-2xl font-semibold text-gray-900">Payments</h1>} />
                 <Route path="/Fasttrack/*" element={<h1 className="text-2xl font-semibold text-gray-900">Fast-Track</h1>} />
-                <Route path="/Data/*" element={<h1 className="text-2xl font-semibold text-gray-900">Data</h1>} />
+                <Route path="/Edit/*" element={<Edit />} />
                 <Route path="/Reports/*" element={<h1 className="text-2xl font-semibold text-gray-900">Reports</h1>} />
               </Routes>
             </div>
           </main>
         </div>
       </div>
-    </>
+    </div>
   )
 }

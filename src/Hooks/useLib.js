@@ -6,11 +6,12 @@ import { toast } from 'react-toastify';
 // Functions
 // 1. createServerUrl(path) => returns the server url with the path appended from the env file
 // 2. getCookie(name) => returns the value of the cookie with the name
-// 3. setCookie(name, value, days) => sets a cookie with the name, value, and days until expiration
-// 4. toast => the toast function from react-toastify
-// 5. useNotification => gets and uses the notificatin object from the url ?notification={severity: 'success', message: 'message'} then clears the url
-// 6. createNotification => creates a notification object to be used in the url ?notification={severity: 'success', message: 'message'}
-// 7. signOut() => signs the user out and redirects to the sign-in page
+// 3. getMemberCookie() => returns the member object from the member cookie
+// 4. setCookie(name, value, days) => sets a cookie with the name, value, and days until expiration
+// 5. toast => the toast function from react-toastify
+// 6. useNotification => gets and uses the notificatin object from the url ?notification={severity: 'success', message: 'message'} then clears the url
+// 7. createNotification => creates a notification object to be used in the url ?notification={severity: 'success', message: 'message'}
+// 8. signOut() => signs the user out and redirects to the sign-in page
 const createServerUrl = (path) => {
     return `${process.env.REACT_APP_SERVER_PROTOCOL}://${process.env.REACT_APP_SERVER_DOMAIN}${process.env.REACT_APP_SERVER_PORT ? ':'+process.env.REACT_APP_SERVER_PORT : ''}${path}`};
 
@@ -26,6 +27,20 @@ const getCookie = (name) => {
 
     return null; // Return null if the cookie is not found
 }
+
+const getMemberCookie = () => {
+    let memberObject = getCookie('gavelbase_member');
+    let parsedMemberObject = JSON.parse(decodeURIComponent(memberObject));
+    // return the object if it exists
+    if (parsedMemberObject) {
+        return parsedMemberObject;
+    }else{
+        return null;
+    }
+
+}
+
+
 
 const setCookie = (name, value, days) => {
     let expires = "";
@@ -75,6 +90,7 @@ const signOut = () => {
 const useLib = {
     createServerUrl,
     getCookie,
+    getMemberCookie,
     setCookie,
     toast,
     useNotification,

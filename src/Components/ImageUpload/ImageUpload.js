@@ -50,11 +50,6 @@ export default function ImageUpload({ label, hints, helpText, value, onChange })
       };
     });
   };
-  
-  
-  
-  
-  
 
   const onImageDragStart = (index) => () => {
     setDraggedIndex(index);
@@ -112,7 +107,13 @@ export default function ImageUpload({ label, hints, helpText, value, onChange })
     }
   };
 
+  const onTouchCancel = () => {
+    setDraggedIndex(null);
+    setHoveredIndex(null);
+  };
+
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
+
 
   return (
     <div>
@@ -126,7 +127,7 @@ export default function ImageUpload({ label, hints, helpText, value, onChange })
           )}
         </div>
       )}
-
+  
       <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 xl:grid-cols-9 2xl:grid-cols-12 gap-2 mt-1">
         {files.map((file, index) => (
           <div
@@ -138,6 +139,7 @@ export default function ImageUpload({ label, hints, helpText, value, onChange })
             onTouchStart={onTouchStart(index)}
             onTouchMove={onTouchMove(index)}
             onTouchEnd={onTouchEnd(index)}
+            onTouchCancel={onTouchCancel}
             style={{
               aspectRatio: '1/1',
               display: 'flex',
@@ -188,7 +190,6 @@ export default function ImageUpload({ label, hints, helpText, value, onChange })
               <TrashIcon size={18} />
             </button>
           </div>
-
         ))}
         <div
           {...getRootProps()}
@@ -198,9 +199,10 @@ export default function ImageUpload({ label, hints, helpText, value, onChange })
           style={files.length > 0 ? {aspectRatio: '1'} : {}}
         >
           <input {...getInputProps()} />
-          <p className="text-gray-600">{helpText ? helpText : ''}</p>
+          <p className="text-gray-600">{helpText ? helpText : 'Drag files here or click to select files'}</p>
         </div>
       </div>
     </div>
   );
+  
 }

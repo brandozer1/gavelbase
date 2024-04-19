@@ -2,6 +2,14 @@
 @import url('https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css');
 
 
+html {
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+} 
+
 .App {
   text-align: center;
 }
@@ -30,8 +38,14 @@
 
 body {
   overflow-x: hidden;
+  height: 100%;
 }
 
+/* STYLE FOR AG GRID OUR TABLES LIBRARY */
+.ag-theme-quartz, .ag-theme-quartz-dark {
+    --ag-grid-size: 5px;
+    --ag-list-item-height: 20px;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
