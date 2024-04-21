@@ -7,7 +7,9 @@ const loadingMessages = [
   'Just a moment, almost there...',
 ];
 
-export default function Loading() {
+export default function Loading({loadingMessages = 
+  ['Loading your data...', 'Hang tight, we are preparing things for you...', 'Just a moment, almost there...']
+}) {
   const [messageIndex, setMessageIndex] = useState(0);
 
   useEffect(() => {

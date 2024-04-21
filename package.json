@@ -23,6 +23,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "dnd-kit": "^0.0.2",
+    "fs": "^0.0.1-security",
     "lucide-react": "^0.307.0",
     "primeflex": "^3.3.0",
     "primeicons": "^6.0.1",

@@ -5,13 +5,30 @@ import { toast } from 'react-toastify';
 // so {addNumbers: useAddNumbers} would be used as useLib.addNumbers(Parameters)
 // Functions
 // 1. createServerUrl(path) => returns the server url with the path appended from the env file
+
 // 2. getCookie(name) => returns the value of the cookie with the name
+
 // 3. getMemberCookie() => returns the member object from the member cookie
+
 // 4. setCookie(name, value, days) => sets a cookie with the name, value, and days until expiration
+
 // 5. toast => the toast function from react-toastify
+
 // 6. useNotification => gets and uses the notificatin object from the url ?notification={severity: 'success', message: 'message'} then clears the url
+
 // 7. createNotification => creates a notification object to be used in the url ?notification={severity: 'success', message: 'message'}
+
 // 8. signOut() => signs the user out and redirects to the sign-in page
+// DEPENDENCIES => toast, createNotification
+
+// 9. fileToBase64(file) => converts an image or file to a base64 string
+
+// 10. uploadImages(files) => uploads an array of files to the server (MAINLY USED IN THE IMAGE UPLOAD COMPONENT & ON THE LOT CREATION PAGE) PLEASE CHECK CODE FOR USAGE
+// DEPENDENCIES => createServerUrl
+
+// 11. createLot(lotObject) => creates a lot with the lotObject, sends the images to the servers s3 bucket and returns the response while creating the lot in mongoDB
+// DEPENDENCIES => uploadImages, createServerUrl
+
 const createServerUrl = (path) => {
     return `${process.env.REACT_APP_SERVER_PROTOCOL}://${process.env.REACT_APP_SERVER_DOMAIN}${process.env.REACT_APP_SERVER_PORT ? ':'+process.env.REACT_APP_SERVER_PORT : ''}${path}`};
 
@@ -86,6 +103,72 @@ const signOut = () => {
     })
 }
 
+const fileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      // Use FileReader to convert the file to Base64
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        // The result attribute contains the data as a base64 encoded string
+        resolve(reader.result);
+      };
+      reader.onerror = () => {
+        reject(new Error('Failed to read file!'));
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+  
+
+const uploadImages = async (name, imageArray) => {
+    try {
+        // Axios request with the base64 images
+        const response = await axios.post(createServerUrl('/api/v1/image/upload'), {
+            company: "5dollarauctions",
+            name: name,
+            imageData: imageArray
+        }, {
+            withCredentials: true
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+function createLot(lot) {
+    // Return a new Promise
+    return new Promise((resolve, reject) => {
+        uploadImages(lot.lotNumber, lot.images)
+            .then(response => {
+                // Check if all images were uploaded successfully
+                if (response.length !== lot.images.length) {
+                    throw new Error('Image upload failed');
+                }
+                // Update the lot's images with the response
+                lot.images = response;
+
+                // Proceed to create the lot with updated lot
+                return axios.post(createServerUrl('/api/v1/lot/create'), lot, {
+                    withCredentials: true
+                })
+            })
+            .then(response => {
+                // Resolve the outer Promise with the response if lot creation is successful
+                resolve(response);
+            })
+            .catch(error => {
+                // Reject the outer Promise with a descriptive error message
+                if (error.message === 'Image upload failed') {
+                    reject('Images failed to upload.');
+                } else {
+                    // sends the error code given by mongodb to the front end
+                    reject(error.response.data)
+                }
+            });
+    });
+}
+
 
 const useLib = {
     createServerUrl,
@@ -96,6 +179,9 @@ const useLib = {
     useNotification,
     createNotification,
     signOut,
+    fileToBase64,
+    uploadImages,
+    createLot
 }
 
 export default useLib;

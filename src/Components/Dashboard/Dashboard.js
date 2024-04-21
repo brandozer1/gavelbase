@@ -19,11 +19,11 @@ import {
   // UsersIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
-import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+import { ChevronDownIcon, MagnifyingGlassIcon, PencilSquareIcon } from '@heroicons/react/20/solid'
 
 import Logo from '../../Assets/Images/Logo.webp'
 import { CubeIcon } from '@radix-ui/react-icons'
-import { Globe2Icon, PlusSquareIcon, ShellIcon, Upload, UploadIcon, Wallet2Icon, WalletIcon } from 'lucide-react'
+import { ClipboardCheckIcon, Globe2Icon, PlusSquareIcon, ShellIcon, TagIcon, Upload, UploadIcon, Wallet2Icon, WalletIcon } from 'lucide-react'
 import useLib from '../../Hooks/useLib'
 
 //import pages
@@ -58,10 +58,11 @@ export default function Dashboard({ Children }) {
   const navigation = [
     { name: 'Dashboard', href: '/Dashboard', icon: HomeIcon, current: path === '' },
     { name: 'Create', href: './Create', icon: PlusSquareIcon, current: path === 'Create'},
-    { name: 'List', href: './List', icon: UploadIcon, current: path === 'List'},
-    { name: 'Payments', href: './Payments', icon: WalletIcon, current: path === 'Payments'},
+    { name: 'Edit', href: './Edit', icon: PencilSquareIcon, current: path === 'Edit'},
+    { name: 'List', href: './List', icon: TagIcon, current: path === 'List'},
+    { name: 'Orders', href: './Orders', icon: ClipboardCheckIcon , current: path === 'Orders'},
     // { name: 'Fast-Track', href: '/Dashboard/Fasttrack', icon: CubeIcon, current: path === 'Fasttrack'},
-    { name: 'Edit', href: './Edit', icon: FolderIcon, current: path === 'Edit'},
+    
     { name: 'Reports', href: './Reports', icon: ChartPieIcon, current: path === 'Reports'},
   
   ]
@@ -395,7 +396,7 @@ export default function Dashboard({ Children }) {
               <Routes>
                 <Route path="/" element={useLib.getMemberCookie().username} />
                 <Route path="/Create/*" element={<Create />} />
-                <Route path="/Payments/*" element={<h1 className="text-2xl font-semibold text-gray-900">Payments</h1>} />
+                <Route path="/Orders/*" element={<h1 className="text-2xl font-semibold text-gray-900">Orders</h1>} />
                 <Route path="/Fasttrack/*" element={<h1 className="text-2xl font-semibold text-gray-900">Fast-Track</h1>} />
                 <Route path="/Edit/*" element={<Edit />} />
                 <Route path="/Reports/*" element={<h1 className="text-2xl font-semibold text-gray-900">Reports</h1>} />

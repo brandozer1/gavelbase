@@ -4,6 +4,10 @@ import { AgGridReact } from 'ag-grid-react'; // AG Grid Component
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the grid
 
+import Loading from '../../../Pages/Loading/Loading'; // Loading component
+
+import placeholderImage from '../../../Assets/Images/image_missing.jpg'; // Placeholder image for the thumbnail container
+
 import axios from 'axios';
 import useLib from '../../../Hooks/useLib';
 
@@ -26,9 +30,22 @@ export default function Lots() {
   const [loading, setLoading] = useState(true);
 
   const [colDefs, setColDefs] = useState([
-    // image column
-    { field: "Image", cellRenderer: ()=><ThumbnailContainer />},
+    // image column checks that the images array in a lot is undamaged before loading the images
+    // custom cell renderer to display the image in a thumbnail container
+    { field: "Image", sortable:false, width:135, minWidth:80, cellRenderer: (e)=>{
+      return (
+        <div className='w-full h-full flex justify-center py-1'>
+          {
+            (typeof e.data.images == "object" && e.data.images.length > 0 && typeof e.data.images[0] == "string") ? 
+              <ThumbnailContainer className={"h-full "} src={e.data.images[0]} /> 
+            : 
+              <ThumbnailContainer className={"h-full"} src={placeholderImage} />
+          }
+        </div>
+      )
+    }},
     { field: "lotNumber", headerName: "#",  checkboxSelection: true, headerCheckboxSelection: true },
+    { field: "location", headerName: "Location", editable: false, filter: 'agTextColumnFilter', sortable: true, flex: 1},
     { field: "title",  headerName: "Title", editable: true, filter: 'agTextColumnFilter', sortable: true, flex: 1 },
     { field: "description", headerName: "Description", editable: true, filter: 'agTextColumnFilter', flex: 2},
     { field: "status", headerName: "Status", flex: 1, minWidth: 110},
@@ -59,19 +76,32 @@ export default function Lots() {
 
     
   return (
-    <div
-      className="ag-theme-quartz" // applying the grid theme
-      style={{ height: "100%" }} // the grid will fill the size of the parent container
-    >
-      {/* add make column */}
-        <AgGridReact
-            rowData={rowData}
-            columnDefs={colDefs}
-            pagination={true}
-            paginationPageSize={10}
-            rowSelection='multiple'
+    <>
+      {
+        loading ?
+          <Loading />
+        :
+      
 
-        />
-    </div>
+        <div
+          className="ag-theme-quartz" // applying the grid theme
+          style={{ height: "100%" }} // the grid will fill the size of the parent container
+        >
+          {/* add make column */}
+            <AgGridReact
+                
+                rowData={rowData}
+                columnDefs={colDefs}
+                pagination={true}
+                paginationPageSize={10}
+                rowSelection='multiple'
+                gridOptions={{
+                  autoRowHeight: true,
+                }}
+
+            />
+        </div>
+      }
+    </>
   );
 }

@@ -16,6 +16,7 @@ export default function ImageUpload({ label, hints, helpText, value, onChange })
 
   useEffect(() => {
     if (onChange) {
+
       onChange(files);
     }
   }, [files]);
@@ -40,8 +41,13 @@ export default function ImageUpload({ label, hints, helpText, value, onChange })
         } else if (aspectRatio > MAX_ASPECT_RATIO) {
           useLib.toast.error(`Image aspect ratio should be at most 1:${MAX_ASPECT_RATIO}.`);
         } else {
-          // If the image meets all requirements, add it to the state
-          setFiles(prevFiles => [...prevFiles, file]);
+          // If the image meets all requirements, add it to the state as a base64 string
+          const reader = new FileReader();
+          reader.onload = () => {
+            const base64Image = reader.result;
+            setFiles(prevFiles => [...prevFiles, base64Image]);
+          };
+          reader.readAsDataURL(file);
         }
       };
   
@@ -166,18 +172,35 @@ export default function ImageUpload({ label, hints, helpText, value, onChange })
                   <span className="text-gray-500 text-sm">Drop Here</span>
                 </div>
               )}
-              <img
-                src={URL.createObjectURL(file)}
-                style={{
-                  maxWidth: '100%', // Ensure the image fits within the container
-                  maxHeight: '100%', // Ensure the image fits within the container
-                  height: 'auto', // Maintain aspect ratio
-                  width: 'auto', // Maintain aspect ratio
-                }}
-                alt="uploaded file"
-                draggable
-                onDragStart={onImageDragStart(index)}
-              />
+              {/* ensures the images are rendered regardless of url or file path */}
+              {
+                file instanceof Blob ? (
+                  <img
+                    src={URL.createObjectURL(file)}
+                    style={{
+                      maxWidth: '100%', // Ensure the image fits within the container
+                      maxHeight: '100%', // Ensure the image fits within the container
+                      height: 'auto', // Maintain aspect ratio
+                      width: 'auto', // Maintain aspect ratio
+                    }}
+                    alt="uploaded file"
+                    draggable
+                    onDragStart={onImageDragStart(index)}
+                  />
+                ) : (
+                  <img
+                    src={file} // Path to a placeholder image
+                    style={{
+                      maxWidth: '100%',
+                      maxHeight: '100%',
+                      height: 'auto',
+                      width: 'auto',
+                    }}
+                    alt="placeholder"
+                  />
+                )
+              }
+
             </div>
             <button
               onClick={() => {

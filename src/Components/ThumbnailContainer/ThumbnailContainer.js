@@ -2,7 +2,7 @@ import React from 'react'
 
 import image_missing from '../../Assets/Images/image_missing.jpg';
 
-export default function ThumbnailContainer({imageFile, imageUrl}) {
+export default function ThumbnailContainer({src, className}) {
     return (
         <div
             style={{
@@ -11,7 +11,7 @@ export default function ThumbnailContainer({imageFile, imageUrl}) {
               alignItems: 'center', // Center the content vertically
               overflow: 'hidden', // Ensure content is contained within the container
             }}
-            className={`relative bg-gray-250 rounded justify-center`}
+            className={`relative bg-gray-250 rounded justify-center `+className}
           >
             <div
                 style={{
@@ -24,14 +24,13 @@ export default function ThumbnailContainer({imageFile, imageUrl}) {
                 }}
             >
                 <img
-                    src={"https://food.fnr.sndimg.com/content/dam/images/food/fullset/2012/6/1/1/FNM_070112-Milky-Way-Ice-Cream-Recipe_s4x3.jpg.rend.hgtvcom.616.462.suffix/1382541468590.jpeg"}
+                    src={src}
                     style={{
                         maxWidth: '100%', // Ensure the image fits within the container
                         maxHeight: '100%', // Ensure the image fits within the container
                         height: 'auto', // Maintain aspect ratio
                         width: 'auto', // Maintain aspect ratio
                     }}
-                    alt="Missing Image"
                 />
             </div>
         </div>
