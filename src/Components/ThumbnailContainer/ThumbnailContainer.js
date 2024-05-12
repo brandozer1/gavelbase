@@ -24,7 +24,11 @@ export default function ThumbnailContainer({src, className}) {
                 }}
             >
                 <img
-                    src={src}
+                    src={
+                        src
+                        ? src
+                        : image_missing
+                    }
                     style={{
                         maxWidth: '100%', // Ensure the image fits within the container
                         maxHeight: '100%', // Ensure the image fits within the container

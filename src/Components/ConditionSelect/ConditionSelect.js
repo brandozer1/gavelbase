@@ -3,7 +3,7 @@ import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 
 
-const exampleOption = {id: 1, name: 'Wade Cooper', badgeColor: 'bg-green-400', descripti: 'Online'}
+const exampleOption = {id: 1, name: 'Wade Cooper', badgeColor: 'bg-green-400', description: 'Online'}
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -12,6 +12,12 @@ function classNames(...classes) {
 export default function ConditionSelect({label, options, placeholder, onChange, selectedOption}) {
 
   const [selected, setSelected] = useState(selectedOption ? selectedOption : placeholder ? {name: placeholder}: options[0])
+
+  // useEffect(() => {
+  //   if (selectedOption) {
+  //     setSelected(selectedOption)
+  //   }
+  // }, [])
 
   return (
     // remove badgeColor from e
@@ -46,7 +52,9 @@ export default function ConditionSelect({label, options, placeholder, onChange, 
               leaveTo="opacity-0"
             >
               <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                {options.map((option, i) => (
+                
+                {/* sort greatest to least then map through the available conditions. */}
+                {options.sort((a, b) => b.value - a.value).map((option, i) => (
                   <Listbox.Option
                     key={i}
                     className={({ active }) =>
@@ -91,6 +99,7 @@ export default function ConditionSelect({label, options, placeholder, onChange, 
                     )}
                   </Listbox.Option>
                 ))}
+
               </Listbox.Options>
             </Transition>
           </div>

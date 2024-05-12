@@ -138,35 +138,56 @@ const uploadImages = async (name, imageArray) => {
 
 function createLot(lot) {
     // Return a new Promise
-    return new Promise((resolve, reject) => {
-        uploadImages(lot.lotNumber, lot.images)
-            .then(response => {
-                // Check if all images were uploaded successfully
-                if (response.length !== lot.images.length) {
-                    throw new Error('Image upload failed');
-                }
-                // Update the lot's images with the response
-                lot.images = response;
-
-                // Proceed to create the lot with updated lot
-                return axios.post(createServerUrl('/api/v1/lot/create'), lot, {
-                    withCredentials: true
-                })
+    // if no images just create the lot without images
+    if (lot.images.length === 0) {
+        return new Promise((resolve, reject) => {
+            axios.post(createServerUrl('/api/v1/lot/create'), lot, {
+                withCredentials: true
             })
             .then(response => {
-                // Resolve the outer Promise with the response if lot creation is successful
                 resolve(response);
             })
             .catch(error => {
-                // Reject the outer Promise with a descriptive error message
-                if (error.message === 'Image upload failed') {
-                    reject('Images failed to upload.');
-                } else {
-                    // sends the error code given by mongodb to the front end
-                    reject(error.response.data)
-                }
+                console.log(error)
+                reject(error.response.data)
             });
-    });
+        });
+    }else{
+        return new Promise((resolve, reject) => {
+            uploadImages(lot.lotNumber, lot.images)
+                .then(response => {
+                    // Check if all images were uploaded successfully
+                    if (response) {
+                        if (response.length !== lot.images.length) {
+                            throw new Error('Image upload failed');
+                        }
+                    }
+                    
+                    // Update the lot's images with the response
+                    lot.images = response;
+    
+                    // Proceed to create the lot with updated lot
+                    return axios.post(createServerUrl('/api/v1/lot/create'), lot, {
+                        withCredentials: true
+                    })
+                })
+                .then(response => {
+                    // Resolve the outer Promise with the response if lot creation is successful
+                    resolve(response);
+                })
+                .catch(error => {
+                    // Reject the outer Promise with a descriptive error message
+                    if (error.message === 'Image upload failed') {
+                        reject('Images failed to upload.');
+                    } else {
+                        // sends the error code given by mongodb to the front end
+                        console.log(error)
+                        reject(error.response.data)
+                    }
+                });
+        });
+    }
+    
 }
 
 
