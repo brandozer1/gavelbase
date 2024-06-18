@@ -13,13 +13,13 @@ export default function Signin() {
   const signin = (e) => {
     e.preventDefault()
     setLoading(true)
-    axios.post(useLib.createServerUrl('/api/v1/member/login'), {
-      username: username,
-      password: password,
-    }, {
-      withCredentials: true
-    })
-    .then((response) => {
+    axios.post(useLib.createServerUrl('/v1/public/member/login'), {username: username, password: password}, {
+      headers: {
+        "x-no-auth": true
+      }
+    }).then((response) => {
+      
+
       if (response.status === 200) {
         window.location.href = '/Dashboard?'+useLib.createNotification('success', response.data)
       }else{

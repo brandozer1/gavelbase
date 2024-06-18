@@ -13,11 +13,11 @@ export default function ConditionSelect({label, options, placeholder, onChange, 
 
   const [selected, setSelected] = useState(selectedOption ? selectedOption : placeholder ? {name: placeholder}: options[0])
 
-  // useEffect(() => {
-  //   if (selectedOption) {
-  //     setSelected(selectedOption)
-  //   }
-  // }, [])
+  useEffect(() => {
+    if (selectedOption) {
+      setSelected(selectedOption)
+    }
+  }, [])
 
   return (
     // remove badgeColor from e

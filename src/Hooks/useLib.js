@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 
 // 2. getCookie(name) => returns the value of the cookie with the name
 
-// 3. getMemberCookie() => returns the member object from the member cookie
+// 3. EMPTY
 
 // 4. setCookie(name, value, days) => sets a cookie with the name, value, and days until expiration
 
@@ -45,17 +45,7 @@ const getCookie = (name) => {
     return null; // Return null if the cookie is not found
 }
 
-const getMemberCookie = () => {
-    let memberObject = getCookie('gavelbase_member');
-    let parsedMemberObject = JSON.parse(decodeURIComponent(memberObject));
-    // return the object if it exists
-    if (parsedMemberObject) {
-        return parsedMemberObject;
-    }else{
-        return null;
-    }
 
-}
 
 
 
@@ -194,7 +184,6 @@ function createLot(lot) {
 const useLib = {
     createServerUrl,
     getCookie,
-    getMemberCookie,
     setCookie,
     toast,
     useNotification,

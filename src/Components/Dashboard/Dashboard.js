@@ -73,21 +73,11 @@ export default function Dashboard({ Children }) {
     // run notification if there is one
     useLib.useNotification()
   
-    // check if the user is already logged in
-    axios.get(useLib.createServerUrl('/api/v1/member/verify'), {
-      withCredentials: true
-    })
-    .then((response) => {
-      if (response.status !== 200) {
-        useLib.toast.error('Login Expired')
-        window.location.href = '/Sign-In?'+useLib.createNotification('error', 'Login Expired')
-      }
-      
-    })
-    .catch((error) => {
+    // check if the user is already logged in....
+    if (localStorage.getItem('accessToken') == null) {
+      useLib.toast.error('Login Expired')
       window.location.href = '/Sign-In?'+useLib.createNotification('error', 'Login Expired')
-      
-    })
+    }
   }, [])
 
 
@@ -352,7 +342,7 @@ export default function Dashboard({ Children }) {
                     <span className="sr-only">Open Member menu</span>
                     <span className="hidden lg:flex lg:items-center">
                       <span className="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">
-                        {useLib.getMemberCookie().username}
+                        {localStorage.getItem('accessToken').username || "Null"}
                       </span>
                       <ChevronDownIcon className="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
                     </span>
@@ -394,7 +384,7 @@ export default function Dashboard({ Children }) {
             <div className='h-full'>
               {/* Simple router for routing the path from the react router param */}
               <Routes>
-                <Route path="/" element={useLib.getMemberCookie().username} />
+                <Route path="/" element={localStorage.getItem('accessToken').username || "Null"} />
                 <Route path="/Create/*" element={<Create />} />
                 <Route path="/Orders/*" element={<h1 className="text-2xl font-semibold text-gray-900">Orders</h1>} />
                 <Route path="/Fasttrack/*" element={<h1 className="text-2xl font-semibold text-gray-900">Fast-Track</h1>} />
