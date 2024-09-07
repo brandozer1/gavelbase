@@ -39,6 +39,7 @@ export default function Verify() {
         if (token) {
             verifyEmail();
         } else {
+            setVerificationStatus('failed');
             setError('Invalid verification link.');
             setLoading(false);
         }
