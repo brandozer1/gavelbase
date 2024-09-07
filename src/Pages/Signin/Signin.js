@@ -16,12 +16,18 @@ export default function Signin() {
     axios.post(useLib.createServerUrl('/v1/public/member/login'), {username: username, password: password}, {
       headers: {
         "x-no-auth": true
-      }
+      },
+      withCredentials: true
     }).then((response) => {
-      
-
       if (response.status === 200) {
-        window.location.href = '/Dashboard?'+useLib.createNotification('success', response.data)
+        console.log(response)
+        localStorage.setItem('accessToken', response.data.accessToken).then(() => {
+          window.location.href = '/Dashboard?'+useLib.createNotification('success', response.data)
+        }).catch((error) => {
+          console.log(error)
+          useLib.toast.error('An error occurred while signing in')
+          setLoading(false)
+        })
       }else{
         useLib.toast.error(response.data)
       }
@@ -42,16 +48,9 @@ export default function Signin() {
     useLib.useNotification()
 
     // check if the user is already logged in
-    axios.get(useLib.createServerUrl('/api/v1/member/verify'), {
-      withCredentials: true
-    })
-    .then((response) => {
-      if (response.status === 200) {
-        window.location.href = '/Dashboard'
-      }
-    })
-    .catch((error) => {
-    })
+    if (useLib.getCookie('refreshToken')) {
+      window.location.href = '/Dashboard'
+    }
   }, [])
 
   return (

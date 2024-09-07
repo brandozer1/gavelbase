@@ -1,5 +1,6 @@
 import axios from "axios";
 import { toast } from 'react-toastify';
+import {jwtDecode} from 'jwt-decode'; 
 // Enter the functions here for exporting in the useLib object
 // reference the function by using useLib.functionName given
 // so {addNumbers: useAddNumbers} would be used as useLib.addNumbers(Parameters)
@@ -8,7 +9,7 @@ import { toast } from 'react-toastify';
 
 // 2. getCookie(name) => returns the value of the cookie with the name
 
-// 3. EMPTY
+// 3. isLoggedIn() => returns a boolean value if the user is logged in (checks the refresh token expiration date
 
 // 4. setCookie(name, value, days) => sets a cookie with the name, value, and days until expiration
 
@@ -43,6 +44,22 @@ const getCookie = (name) => {
     }
 
     return null; // Return null if the cookie is not found
+}
+
+
+const isLoggedIn = () => {
+    const refreshToken = getCookie('refreshToken');
+    if (refreshToken) {
+        const decoded = jwtDecode(refreshToken);
+        if (decoded) {
+            if (decoded.exp * 1000 > Date.now()) {
+                return false
+            }else{
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 

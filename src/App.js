@@ -7,6 +7,7 @@ import './App.css';
 // Pages imported below
 import Home from './Pages/Home/Home.js';
 import Signin from './Pages/Signin/Signin.js';
+import Verify from './Pages/Verify/Verify.js';
 import Dashboard from './Components/Dashboard/Dashboard.js';
 
 export default function App() {
@@ -30,6 +31,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/Sign-In" element={<Signin />} />
+        <Route path="/Verify" element={<Verify />} />
         <Route
           path="/Dashboard/*"
           element={<Dashboard />}
