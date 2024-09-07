@@ -17,7 +17,7 @@ export default function Verify() {
 
         const verifyEmail = async () => {
             try {
-                const response = await axios.post(useLib.createServerUrl('/v1/public/user/verify-email'), { token });
+                const response = await axios.post('https://api.gavelbase.com/v1/public/user/verify-email', { token });
                 if (response.status === 200) {
                     setMessage('Email verified successfully! You can now log in. Feel free to close this page.');
                     setVerificationStatus('success');
