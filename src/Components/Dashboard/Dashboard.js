@@ -57,9 +57,9 @@ export default function Dashboard({ Children }) {
   // this is only here because the current var needs to know the routers path
   const navigation = [
     { name: 'Dashboard', href: '/Dashboard', icon: HomeIcon, current: path === '' },
-    { name: 'Create', href: './Create', icon: PlusSquareIcon, current: path === 'Create'},
-    { name: 'Edit', href: './Edit', icon: PencilSquareIcon, current: path === 'Edit'},
-    { name: 'List', href: './List', icon: TagIcon, current: path === 'List'},
+    { name: 'Lots', href: './Create', icon: PlusSquareIcon, current: path === 'Create'},
+    // { name: 'Edit', href: './Edit', icon: PencilSquareIcon, current: path === 'Edit'},
+    { name: 'Listings', href: './List', icon: TagIcon, current: path === 'List'},
     { name: 'Orders', href: './Orders', icon: ClipboardCheckIcon , current: path === 'Orders'},
     // { name: 'Fast-Track', href: '/Dashboard/Fasttrack', icon: CubeIcon, current: path === 'Fasttrack'},
     

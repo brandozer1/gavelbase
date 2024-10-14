@@ -13,13 +13,14 @@ export default function Signin() {
   const signin = (e) => {
     e.preventDefault()
     setLoading(true)
-    axios.post(useLib.createServerUrl('/v1/public/member/login'), {username: username, password: password}, {
+    axios.post(useLib.createServerUrl('/v1/public/crew/login'), {email: username, password: password}, {
       headers: {
         "x-no-auth": true
       },
       withCredentials: true
     }).then((response) => {
-      if (response.status === 200) {
+      console.log(response) 
+      if (response.status == 200) {
         console.log(response)
         localStorage.setItem('accessToken', response.data.accessToken).then(() => {
           window.location.href = '/Dashboard?'+useLib.createNotification('success', response.data)
@@ -29,6 +30,7 @@ export default function Signin() {
           setLoading(false)
         })
       }else{
+        console.log(response)
         useLib.toast.error(response.data)
       }
     })
@@ -122,12 +124,12 @@ export default function Signin() {
                   </button>
                 </div>
               </form>
-              <p className="mt-10 text-center text-sm text-gray-500">
+              {/* <p className="mt-10 text-center text-sm text-gray-500">
                 Not a member?{' '}
                 <a href="/" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
                   Start a 30 day free trial
                 </a>
-              </p>
+              </p> */}
             </div>
           </div>
       }
