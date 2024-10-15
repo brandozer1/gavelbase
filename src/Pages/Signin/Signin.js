@@ -22,6 +22,7 @@ export default function Signin() {
       console.log(response) 
       if (response.status == 200) {
         console.log(response)
+        console.log("setting local storage")
         localStorage.setItem('accessToken', response.data.accessToken).then(() => {
           window.location.href = '/Dashboard?'+useLib.createNotification('success', response.data)
         }).catch((error) => {

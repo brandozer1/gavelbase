@@ -1,4 +1,3 @@
-
 import { Fragment, useState, useEffect } from 'react'
 import axios from 'axios'
 import { Route, BrowserRouter as Router, Routes, useParams, NavLink } from 'react-router-dom';
@@ -6,84 +5,74 @@ import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
   Bars3Icon,
   BellIcon,
-  // CalendarIcon,
   ChartPieIcon,
   Cog6ToothIcon,
-  // DocumentDuplicateIcon,
-  // DocumentTextIcon,
   FolderIcon,
   GlobeAltIcon,
   HomeIcon,
-  // Square2StackIcon,
-  // Square3Stack3DIcon,
-  // UsersIcon,
   XMarkIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
 } from '@heroicons/react/24/outline'
-import { ChevronDownIcon, MagnifyingGlassIcon, PencilSquareIcon } from '@heroicons/react/20/solid'
+import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 
 import Logo from '../../Assets/Images/Logo.webp'
-import { CubeIcon } from '@radix-ui/react-icons'
-import { ClipboardCheckIcon, Globe2Icon, PlusSquareIcon, ShellIcon, TagIcon, Upload, UploadIcon, Wallet2Icon, WalletIcon } from 'lucide-react'
+import { ClipboardCheckIcon, PlusSquareIcon, TagIcon } from 'lucide-react'
 import useLib from '../../Hooks/useLib'
 
-//import pages
+// Import pages
 import Create from '../../Pages/Create/Create';
 import TextInput from '../TextInput/TextInput';
+import Lots from '../../Pages/Lots/Lots';
 import Edit from '../../Pages/Edit/Edit';
+import Listings from '../../Pages/Listings/Listings';
+import { jwtDecode } from 'jwt-decode';
 
-
-
-
-//TEST DATA THIS WILL BE REPLACED WITH REAL DATA FROM A DATABASE, current will be set to true if the current path matches the href
+// Test data
 const Shortcuts = [
   { id: 1, name: 'My Profile', href: '#', initial: 'TC', current: false },
 ]
-  
 
 const memberNavigation = [
-  { name: 'Sign out', onClick: useLib.signOut},
+  { name: 'Sign out', onClick: useLib.signOut },
 ]
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-
-
 export default function Dashboard({ Children }) {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  // Collect path from url to determine which page to render in the dashboard
-  const {path} = useParams();
-  // this is only here because the current var needs to know the routers path
+  const [sidebarOpen, setSidebarOpen] = useState(false) // Initially closed for mobile
+  const [isCollapsed, setIsCollapsed] = useState(false) // New state for desktop sidebar
+  const { path } = useParams();
+
   const navigation = [
     { name: 'Dashboard', href: '/Dashboard', icon: HomeIcon, current: path === '' },
-    { name: 'Lots', href: './Create', icon: PlusSquareIcon, current: path === 'Create'},
-    // { name: 'Edit', href: './Edit', icon: PencilSquareIcon, current: path === 'Edit'},
-    { name: 'Listings', href: './List', icon: TagIcon, current: path === 'List'},
-    { name: 'Orders', href: './Orders', icon: ClipboardCheckIcon , current: path === 'Orders'},
-    // { name: 'Fast-Track', href: '/Dashboard/Fasttrack', icon: CubeIcon, current: path === 'Fasttrack'},
-    
-    { name: 'Reports', href: './Reports', icon: ChartPieIcon, current: path === 'Reports'},
-  
+    { name: 'Lots', href: './Lots', icon: PlusSquareIcon, current: path === 'Lots' },
+    // { name: 'Edit', href: './Edit', icon: PencilSquareIcon, current: path === 'Edit' },
+    { name: 'Listings', href: './Listings', icon: TagIcon, current: path === 'Listings' },
+    { name: 'Orders', href: './Orders', icon: ClipboardCheckIcon, current: path === 'Orders' },
+    // { name: 'Fast-Track', href: '/Dashboard/Fasttrack', icon: CubeIcon, current: path === 'Fasttrack' },
+    { name: 'Reports', href: './Reports', icon: ChartPieIcon, current: path === 'Reports' },
   ]
 
   useEffect(() => {
     document.title = 'Dashboard - Gavelbase'
 
-    // run notification if there is one
+    // Run notification if there is one
     useLib.useNotification()
-  
-    // check if the user is already logged in....
-    if (localStorage.getItem('accessToken') == null) {
-      useLib.toast.error('Login Expired')
-      window.location.href = '/Sign-In?'+useLib.createNotification('error', 'Login Expired')
-    }
-  }, [])
 
+    // Check if the user is already logged in
+    // if (localStorage.getItem('accessToken') == null) {
+    //   useLib.toast.error('Login Expired')
+    //   window.location.href = '/Sign-In?' + useLib.createNotification('error', 'Login Expired')
+    // }
+  }, [])
 
   return (
     <div className='h-full'>
       <div className='h-full'>
+        {/* Mobile sidebar */}
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog as="div" className="relative z-50 lg:hidden" onClose={setSidebarOpen}>
             <Transition.Child
@@ -125,7 +114,7 @@ export default function Dashboard({ Children }) {
                       </button>
                     </div>
                   </Transition.Child>
-                  {/* Sidebar component, swap this element with another sidebar if you like */}
+                  {/* Sidebar component */}
                   <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-4">
                     <div className="flex h-16 shrink-0 items-center">
                       <img
@@ -141,7 +130,7 @@ export default function Dashboard({ Children }) {
                             {navigation.map((item) => (
                               <li key={item.name}>
                                 <NavLink
-                                  onClick={()=>setSidebarOpen(false)}
+                                  onClick={() => setSidebarOpen(false)}
                                   to={item.href}
                                   className={classNames(
                                     item.current
@@ -169,7 +158,7 @@ export default function Dashboard({ Children }) {
                             {Shortcuts.map((team) => (
                               <li key={team.name}>
                                 <NavLink
-                                  href={team.href}
+                                  to={team.href}
                                   className={classNames(
                                     team.current
                                       ? 'bg-gray-50 text-indigo-600'
@@ -195,7 +184,7 @@ export default function Dashboard({ Children }) {
                         </li>
                         <li className="mt-auto">
                           <NavLink
-                            href="#"
+                            to="#"
                             className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600"
                           >
                             <Cog6ToothIcon
@@ -215,15 +204,28 @@ export default function Dashboard({ Children }) {
         </Transition.Root>
 
         {/* Static sidebar for desktop */}
-        <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
-          {/* Sidebar component, swap this element with another sidebar if you like */}
-          <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6 pb-4">
-            <div className="flex h-16 shrink-0 items-center">
+        <div className={`hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:flex-col ${isCollapsed ? 'w-20' : 'w-72'} transition-width duration-300`}>
+          {/* Sidebar component */}
+          <div className={`flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6 pb-4 ${isCollapsed ? 'items-center' : ''}`}>
+            <div className="flex items-center justify-between h-16 shrink-0">
               <img
-                className="h-12 w-auto"
+                className={`h-12 w-auto ${isCollapsed ? 'hidden' : 'block'}`}
                 src={Logo}
                 alt="Gavelbase"
               />
+              {/* Toggle Button */}
+              <button
+                type="button"
+                className="p-2 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none"
+                onClick={() => setIsCollapsed(!isCollapsed)}
+              >
+                <span className="sr-only">Toggle Sidebar</span>
+                {isCollapsed ? (
+                  <ChevronRightIcon className="h-6 w-6" aria-hidden="true" />
+                ) : (
+                  <ChevronLeftIcon className="h-6 w-6" aria-hidden="true" />
+                )}
+              </button>
             </div>
             <nav className="flex flex-1 flex-col">
               <ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -233,12 +235,14 @@ export default function Dashboard({ Children }) {
                       <li key={item.name}>
                         <NavLink
                           to={item.href}
-                          className={classNames(
-                            item.current
-                              ? 'bg-gray-50 text-indigo-600'
-                              : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
-                            'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                          )}
+                          className={({ isActive }) =>
+                            classNames(
+                              isActive
+                                ? 'bg-gray-50 text-indigo-600'
+                                : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
+                              'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                            )
+                          }
                         >
                           <item.icon
                             className={classNames(
@@ -247,25 +251,27 @@ export default function Dashboard({ Children }) {
                             )}
                             aria-hidden="true"
                           />
-                          {item.name}
+                          {!isCollapsed && item.name}
                         </NavLink>
                       </li>
                     ))}
                   </ul>
                 </li>
                 <li>
-                  <div className="text-xs font-semibold leading-6 text-gray-400">Shortcuts</div>
+                  <div className={`text-xs font-semibold leading-6 text-gray-400 ${isCollapsed ? 'hidden' : 'block'}`}>Shortcuts</div>
                   <ul role="list" className="-mx-2 mt-2 space-y-1">
                     {Shortcuts.map((team) => (
                       <li key={team.name}>
                         <NavLink
                           to={team.href}
-                          className={classNames(
-                            team.current
-                              ? 'bg-gray-50 text-indigo-600'
-                              : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
-                            'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                          )}
+                          className={({ isActive }) =>
+                            classNames(
+                              isActive
+                                ? 'bg-gray-50 text-indigo-600'
+                                : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
+                              'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                            )
+                          }
                         >
                           <span
                             className={classNames(
@@ -277,7 +283,7 @@ export default function Dashboard({ Children }) {
                           >
                             {team.initial}
                           </span>
-                          <span className="truncate">{team.name}</span>
+                          {!isCollapsed && <span className="truncate">{team.name}</span>}
                         </NavLink>
                       </li>
                     ))}
@@ -292,7 +298,7 @@ export default function Dashboard({ Children }) {
                       className="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600"
                       aria-hidden="true"
                     />
-                    Settings
+                    {!isCollapsed && 'Settings'}
                   </NavLink>
                 </li>
               </ul>
@@ -300,7 +306,7 @@ export default function Dashboard({ Children }) {
           </div>
         </div>
 
-        <div className="lg:pl-72 h-full">
+        <div className="lg:pl-72 lg:transition-all lg:duration-300" style={{ paddingLeft: isCollapsed ? '5rem' : '18rem' }}>
           <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
             <button type="button" className="-m-2.5 p-2.5 text-gray-700 lg:hidden" onClick={() => setSidebarOpen(true)}>
               <span className="sr-only">Open sidebar</span>
@@ -342,7 +348,7 @@ export default function Dashboard({ Children }) {
                     <span className="sr-only">Open Member menu</span>
                     <span className="hidden lg:flex lg:items-center">
                       <span className="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">
-                        {localStorage.getItem('accessToken').username || "Null"}
+                        {jwtDecode(useLib.getCookie('accessToken')).username || "Username Error"}
                       </span>
                       <ChevronDownIcon className="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
                     </span>
@@ -380,16 +386,17 @@ export default function Dashboard({ Children }) {
             </div>
           </div>
 
-          <main style={{height: "calc(100vh - 4rem)"}} className="h-full overflow-y-auto bg-gray-100">
+          <main style={{ height: "calc(100vh - 4rem)" }} className="h-full overflow-y-auto bg-gray-100">
             <div className='h-full'>
-              {/* Simple router for routing the path from the react router param */}
+              {/* Router for routing the path from the react router param */}
               <Routes>
-                <Route path="/" element={localStorage.getItem('accessToken').username || "Null"} />
-                <Route path="/Create/*" element={<Create />} />
+                {/* <Route path="/" element={localStorage.getItem('accessToken').username || "Null"} /> */}
+                <Route path="/Lots/*" element={<Lots />} />
                 <Route path="/Orders/*" element={<h1 className="text-2xl font-semibold text-gray-900">Orders</h1>} />
                 <Route path="/Fasttrack/*" element={<h1 className="text-2xl font-semibold text-gray-900">Fast-Track</h1>} />
                 <Route path="/Edit/*" element={<Edit />} />
                 <Route path="/Reports/*" element={<h1 className="text-2xl font-semibold text-gray-900">Reports</h1>} />
+                <Route path="/Listings/*" element={<Listings />} />
               </Routes>
             </div>
           </main>
