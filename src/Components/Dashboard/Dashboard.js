@@ -22,9 +22,9 @@ import useLib from '../../Hooks/useLib'
 
 // Import pages
 import Create from '../../Pages/Create/Create';
-import TextInput from '../TextInput/TextInput';
+// import TextInput from '../TextInput/TextInput';
 import Lots from '../../Pages/Lots/Lots';
-import Edit from '../../Pages/Edit/Edit';
+// import Edit from '../../Pages/Edit/Edit';
 import Listings from '../../Pages/Listings/Listings';
 import { jwtDecode } from 'jwt-decode';
 import ViewListings from '../../Pages/Listings/ViewListings';
@@ -395,8 +395,8 @@ export default function Dashboard({ Children }) {
                 {/* <Route path="/" element={localStorage.getItem('accessToken').username || "Null"} /> */}
                 <Route path="/Lots/*" element={<Lots />} />
                 <Route path="/Orders/*" element={<h1 className="text-2xl font-semibold text-gray-900">Orders</h1>} />
-                <Route path="/Fasttrack/*" element={<h1 className="text-2xl font-semibold text-gray-900">Fast-Track</h1>} />
-                <Route path="/Edit/*" element={<Edit />} />
+                {/* <Route path="/Fasttrack/*" element={<h1 className="text-2xl font-semibold text-gray-900">Fast-Track</h1>} /> */}
+                {/* <Route path="/Edit/*" element={<Edit />} /> */}
                 <Route path="/Reports/*" element={<h1 className="text-2xl font-semibold text-gray-900">Reports</h1>} />
                 <Route path="/Listings/*" element={<Listings />} />
               </Routes>
