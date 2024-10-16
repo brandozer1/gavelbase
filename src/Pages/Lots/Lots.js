@@ -1,119 +1,357 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import axiosInstance from '../../axiosInstance';
-import { AgGridReact } from 'ag-grid-react';
-import 'ag-grid-community/styles/ag-grid.css';
-
-import 'ag-grid-community/styles/ag-theme-material.css';
-
+import MUIDataTable from 'mui-datatables';
+import { TextField, IconButton } from '@material-ui/core';
+import {
+  Search as SearchIcon,
+  Clear as ClearIcon,
+} from '@material-ui/icons';
+import Loading from '../Loading/Loading';
 
 export default function Lot() {
-  const [lots, setLots] = useState([]);
+  const [data, setData] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  // Column definitions for Ag-Grid
-  const columnDefs = useMemo(() => [
-    { headerName: 'Lot Number', field: 'lotNumber', sortable: true, filter: 'agNumberColumnFilter', width: 120 },
-    { headerName: 'Title', field: 'title', sortable: true, filter: 'agTextColumnFilter', flex: 1 },
-    { headerName: 'Description', field: 'description', sortable: true, filter: 'agTextColumnFilter', flex: 2 },
-    {
-      headerName: 'Brand',
-      field: 'details.brand',
-      sortable: true,
-      filter: 'agTextColumnFilter',
-      valueGetter: params => params.data.details?.brand || 'N/A'
-    },
-    {
-      headerName: 'Model',
-      field: 'details.model',
-      sortable: true,
-      filter: 'agTextColumnFilter',
-      valueGetter: params => params.data.details?.model || 'N/A'
-    },
-    {
-      headerName: 'Location',
-      field: 'location.label',
-      sortable: true,
-      filter: 'agTextColumnFilter',
-      valueGetter: params => params.data.location?.label || 'Not Located'
-    },
-    { headerName: 'Status', field: 'status', sortable: true, filter: 'agTextColumnFilter', width: 100 },
-    {
-      headerName: 'Thumbnail',
-      field: 'thumbnail',
-      cellRenderer: params => <img src={params.value} alt="thumbnail" style={{ width: '100px', height: 'auto' }} />,
-      sortable: false,
-      filter: false,
-      width: 120
-    }
-  ], []);
+  // Table state
+  const [page, setPage] = useState(0); // Zero-based index
+  const [rowsPerPage, setRowsPerPage] = useState(25);
+  const [searchText, setSearchText] = useState(''); // State for search
 
-  // Default column properties
-  const defaultColDef = useMemo(() => ({
-    resizable: true,
-    sortable: true,
-    filter: true,
-    flex: 1,
-    minWidth: 100,
-  }), []);
+  // Column definitions
+  const columns = useMemo(
+    () => [
+      {
+        name: 'thumbnail',
+        label: 'Thumbnail',
+        options: {
+          filter: false,
+          sort: false,
+          setCellProps: () => ({ style: { width: '120px' } }),
+          setCellHeaderProps: () => ({ style: { width: '120px' } }),
+          customBodyRender: (value, tableMeta) => {
+            const title = tableMeta.rowData[2];
+            return (
+              <div
+                className="w-half flex m-2 items-center justify-center bg-gray-100 border border-gray-300 rounded overflow-hidden"
+                style={{ aspectRatio: '1/1' }}
+              >
+                <img
+                  src={
+                    value
+                      ? value.includes('gavelbase.s3')
+                        ? value.replace('/images/', '/thumbnails/')
+                        : value
+                      : 'https://via.placeholder.com/96'
+                  }
+                  alt={`Thumbnail for ${title}`}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = 'https://via.placeholder.com/96';
+                  }}
+                />
+              </div>
+            );
+          },
+        },
+      },
+      {
+        name: 'lotNumber',
+        label: 'Lot Number',
+        options: {
+          display: 'false', // Hide this column but keep it in rowData
+        },
+      },
+      {
+        name: 'title',
+        label: 'Lot Number/Title',
+        options: {
+          filter: false,
+          sort: false,
+          customBodyRender: (value, tableMeta) => {
+            const lotNumber = tableMeta.rowData[1]; // 'lotNumber' is at index 1
+            return (
+              <div
+                style={{
+                  overflowX: 'hidden',
+                  whiteSpace: 'normal',
+                  wordWrap: 'break-word',
+                }}
+              >
+                <p className="leading-tight font-bold">{lotNumber}</p>
+                <p className="leading-tight">{value}</p>
+              </div>
+            );
+          },
+        },
+      },
+      {
+        name: 'description',
+        label: 'Description',
+        options: {
+          filter: false,
+          sort: false,
+          customBodyRender: (value) => (
+            <div
+              style={{
+                overflowX: 'hidden',
+                whiteSpace: 'normal',
+                wordWrap: 'break-word',
+              }}
+            >
+              <p className="text-xs leading-tight">{value}</p>
+            </div>
+          ),
+        },
+      },
+      {
+        name: 'brand',
+        label: 'Brand',
+        options: {
+          filter: false,
+          sort: false,
+        },
+      },
+      {
+        name: 'model',
+        label: 'Model',
+        options: {
+          filter: false,
+          sort: false,
+        },
+      },
+      {
+        name: 'condition',
+        label: 'Condition',
+        options: {
+          filter: false,
+          sort: false,
+          customBodyRender: (conditionObject) => {
+            console.log('conditionObject:', conditionObject);
+            if (conditionObject && typeof conditionObject === 'object') {
+              // Access the condition data correctly
+              const condition =
+                conditionObject.value && typeof conditionObject.value === 'object'
+                  ? conditionObject.value
+                  : conditionObject;
 
-  useEffect(() => {
-    document.title = 'Lots - Gavelbase';
-    
-    const fetchLots = async () => {
-      try {
-        const response = await axiosInstance.post('/v1/crew/lot/keyword-search', {
-          keyword: '',
-          offset: 0,
-          limit: 10,
-          sort: {"createdAt": -1}
-        });
-        
-        console.log('API Response:', response);
-        
-        if (response.status === 200) {
-          const combinedLots = [...response.data.results, ...response.data.similarResults];
-          setLots(combinedLots);
-          console.log('Combined Lots:', combinedLots);
-        } else {
-          console.warn('Unexpected response status:', response.status);
-        }
-      } catch (error) {
-        console.error('Error fetching lots:', error);
-      } finally {
-        setLoading(false);
+              return (
+                <div className="flex flex-col">
+                  <p className="font-bold">{condition.name || 'N/A'}</p>
+                  <p>{condition.conditionDescription || 'No description'}</p>
+                </div>
+              );
+            }
+            return 'N/A';
+          },
+        },
+      },
+      {
+        name: 'status',
+        label: 'Status',
+        options: {
+          filter: false,
+          sort: false,
+        },
+      },
+      {
+        name: 'location',
+        label: 'Location',
+        options: {
+          filter: false,
+          sort: false,
+        },
+      },
+      {
+        name: 'createdAt',
+        label: 'Created At',
+        options: {
+          filter: false,
+          sort: false,
+          customBodyRender: (value) => {
+            return new Date(value).toLocaleString();
+          },
+        },
+      },
+    ],
+    []
+  );
+
+  // Custom Search Component
+  const CustomSearchRender = ({ searchText, onSearch, onHide }) => {
+    const [text, setText] = useState(searchText || '');
+
+    // Update local text state when searchText prop changes
+    useEffect(() => {
+      setText(searchText || '');
+    }, [searchText]);
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Enter') {
+        onSearch(text);
       }
     };
 
-    fetchLots();
-  }, []);
+    const handleSearchClick = () => {
+      onSearch(text);
+    };
 
-  // Define getRowId to use _id as the unique identifier
-  const getRowId = params => params.data._id;
+    const handleClear = () => {
+      setText('');
+      onSearch('');
+    };
+
+    return (
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <TextField
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="Search"
+          variant="standard"
+          InputProps={{
+            endAdornment: (
+              <IconButton onClick={handleSearchClick}>
+                <SearchIcon />
+              </IconButton>
+            ),
+          }}
+        />
+        <IconButton onClick={handleClear}>
+          <ClearIcon />
+        </IconButton>
+      </div>
+    );
+  };
+
+  // Fetch data from the server
+  const fetchData = async () => {
+    setLoading(true);
+
+    const offset = page * rowsPerPage;
+    const count = rowsPerPage;
+
+    try {
+      const response = await axiosInstance.post(
+        '/v1/crew/lot/keyword-search',
+        {
+          keyword: searchText,
+          offset: offset,
+          count: count,
+          sort: {createdAt: -1}
+        }
+      );
+
+      if (response.status === 200) {
+        const combinedLots = [
+          ...response.data.results,
+          ...response.data.similarResults,
+        ];
+        setData(
+          combinedLots.map((lot) => ({
+            id: lot._id,
+            ...lot,
+            brand: lot.details?.brand || 'N/A',
+            model: lot.details?.model || 'N/A',
+            location: lot.location?.label || 'Not Located',
+            createdAt: lot.createdAt,
+            condition: lot.condition || null, // Include the condition field
+          }))
+        );
+        setTotalCount(response.data.totalSearchCount);
+      } else {
+        console.warn('Unexpected response status:', response.status);
+        setData([]);
+      }
+    } catch (error) {
+      console.error('Error fetching lots:', error);
+      setData([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch data when page, rowsPerPage, or searchText change
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, rowsPerPage, searchText]);
+
+  const options = {
+    responsive: 'scrollMaxHeight',
+    serverSide: true,
+    sort: false, // Disable global sorting
+    filter: false, // Disable filters
+    count: totalCount,
+    page: page,
+    rowsPerPage: rowsPerPage,
+    selectableRows: 'none',
+    search: true, // Enable built-in search bar
+    searchText: searchText, // Bind searchText state to table's search bar
+    customSearchRender: (
+      searchTextValue,
+      handleSearch,
+      hideSearch,
+      options
+    ) => {
+      return (
+        <CustomSearchRender
+          searchText={searchTextValue}
+          onSearch={handleSearch}
+          onHide={hideSearch}
+        />
+      );
+    },
+    onTableChange: (action, tableState) => {
+      switch (action) {
+        case 'changePage':
+          setPage(tableState.page);
+          break;
+        case 'changeRowsPerPage':
+          setRowsPerPage(tableState.rowsPerPage);
+          setPage(0); // Reset to first page when rows per page change
+          break;
+        case 'search':
+          if (searchText !== tableState.searchText) {
+            setSearchText(tableState.searchText);
+            // Do not reset page here to maintain page number when searching
+          }
+          break;
+        default:
+          break;
+      }
+    },
+    textLabels: {
+      body: {
+        noMatch: loading
+          ? <Loading />
+          : 'Sorry, no matching records found',
+      },
+      toolbar: {
+        search: 'Search',
+      },
+      pagination: {
+        next: 'Next Page',
+        previous: 'Previous Page',
+        rowsPerPage: 'Rows per page:',
+        displayRows: 'of',
+      },
+    },
+    rowsPerPageOptions: [10, 20, 30, 40, 50],
+    download: true, // Enable download option
+    print: true, // Enable print option
+    selectableRowsHeader: false,
+  };
 
   return (
-    <div className="flex flex-col justify-end h-full">
-      {loading ? (
-        <div>Loading...</div>
-      ) : (
-        <div className="ag-theme-material" style={{ height: "80%", width: '100%' }}>
-          <AgGridReact
-            rowData={lots}
-            columnDefs={columnDefs}
-            defaultColDef={defaultColDef}
-            pagination={true}
-            paginationPageSize={10}
-            rowSelection="multiple"
-            getRowId={getRowId}
-            enableCellTextSelection={true}
-            animateRows={true}
-            gridOptions={{
-              cellSelection: false,
-              sendToClipboard: ()=>alert('Data copied to clipboard!'),
-            }}
-            
-          />
-        </div>
-      )}
+    <div className="flex flex-col h-full">
+      <MUIDataTable
+        title={'Lots'}
+        data={data}
+        columns={columns}
+        options={options}
+      />
     </div>
   );
 }

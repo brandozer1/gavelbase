@@ -27,6 +27,7 @@ import Lots from '../../Pages/Lots/Lots';
 import Edit from '../../Pages/Edit/Edit';
 import Listings from '../../Pages/Listings/Listings';
 import { jwtDecode } from 'jwt-decode';
+import ViewListings from '../../Pages/Listings/ViewListings';
 
 // Test data
 const Shortcuts = [
@@ -115,6 +116,7 @@ export default function Dashboard({ Children }) {
                     </div>
                   </Transition.Child>
                   {/* Sidebar component */}
+                  
                   <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-4">
                     <div className="flex h-16 shrink-0 items-center">
                       <img
@@ -206,7 +208,7 @@ export default function Dashboard({ Children }) {
         {/* Static sidebar for desktop */}
         <div className={`hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:flex-col ${isCollapsed ? 'w-20' : 'w-72'} transition-width duration-300`}>
           {/* Sidebar component */}
-          <div className={`flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6 pb-4 ${isCollapsed ? 'items-center' : ''}`}>
+          <div className={`flex grow flex-col gap-y-5 overflow-y-auto overflow-x-hidden border-r border-gray-200 bg-white px-6 pb-4 ${isCollapsed ? 'items-center' : ''}`}>
             <div className="flex items-center justify-between h-16 shrink-0">
               <img
                 className={`h-12 w-auto ${isCollapsed ? 'hidden' : 'block'}`}

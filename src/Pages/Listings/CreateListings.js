@@ -1,24 +1,18 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import axiosInstance from '../../axiosInstance';
 import MUIDataTable from 'mui-datatables';
-import { TextField, IconButton, Button } from '@material-ui/core';
-import {
-  Search as SearchIcon,
-  Clear as ClearIcon,
-} from '@material-ui/icons';
-import { Link } from 'react-router-dom';
-import ebayIcon from '../../Assets/Images/ebay_icon.svg';
-import facebookIcon from '../../Assets/Images/facebook_icon.svg';
+import { TextField, IconButton } from '@material-ui/core';
+import { Search as SearchIcon, Clear as ClearIcon } from '@material-ui/icons';
 import Loading from '../Loading/Loading';
 
-export default function ViewListings() {
+export default function CreateListings() {
   const [data, setData] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
   // Table state
   const [page, setPage] = useState(0); // Zero-based index
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(25);
   const [searchText, setSearchText] = useState(''); // State for search
 
   // Column definitions
@@ -33,14 +27,20 @@ export default function ViewListings() {
           setCellProps: () => ({ style: { width: '120px' } }),
           setCellHeaderProps: () => ({ style: { width: '120px' } }),
           customBodyRender: (value, tableMeta) => {
-            const title = tableMeta.rowData[2]; // 'title' is at index 2
+            const title = tableMeta.rowData[2];
             return (
               <div
                 className="w-half flex m-2 items-center justify-center bg-gray-100 border border-gray-300 rounded overflow-hidden"
                 style={{ aspectRatio: '1/1' }}
               >
                 <img
-                  src={value || 'https://via.placeholder.com/96'}
+                  src={
+                    value
+                      ? value.includes('gavelbase.s3')
+                        ? value.replace('/images/', '/thumbnails/')
+                        : value
+                      : 'https://via.placeholder.com/96'
+                  }
                   alt={`Thumbnail for ${title}`}
                   className="w-full h-full object-cover"
                   onError={(e) => {
@@ -53,7 +53,6 @@ export default function ViewListings() {
           },
         },
       },
-      // Include 'lotNumber' as a hidden column
       {
         name: 'lotNumber',
         label: 'Lot Number',
@@ -85,6 +84,32 @@ export default function ViewListings() {
         },
       },
       {
+        name: 'condition',
+        label: 'Condition',
+        options: {
+          filter: false,
+          sort: false,
+          customBodyRender: (conditionObject) => {
+            console.log('conditionObject:', conditionObject);
+            if (conditionObject && typeof conditionObject === 'object') {
+              // Access the condition data correctly
+              const condition =
+                conditionObject.value && typeof conditionObject.value === 'object'
+                  ? conditionObject.value
+                  : conditionObject;
+
+              return (
+                <div className="flex flex-col">
+                  <p className="font-bold">{condition.name || 'N/A'}</p>
+                  <p>{condition.conditionDescription || 'No description'}</p>
+                </div>
+              );
+            }
+            return 'N/A';
+          },
+        },
+      },
+      {
         name: 'status',
         label: 'Status',
         options: {
@@ -92,119 +117,9 @@ export default function ViewListings() {
           sort: false,
         },
       },
-      // Add the 'condition' column here
-      {
-        name: 'condition',
-        label: 'Condition',
-        options: {
-          filter: false,
-          sort: false,
-          customBodyRender: (value) => {
-            if (value && typeof value === 'object') {
-              return (
-                <div className="flex flex-col">
-                  <p className="font-bold">{value.name || 'N/A'}</p>
-                  <p>{value.conditionDescription || 'No description'}</p>
-                </div>
-              );
-            }
-            return 'N/A';
-          },
-        },
-      },
-      {
-        name: 'listings',
-        label: 'Type',
-        options: {
-          filter: false,
-          sort: false,
-          customBodyRender: (listings) => {
-            if (listings && listings.length > 0) {
-              return <div>{listings[0].type}</div>;
-            }
-            return 'N/A';
-          },
-        },
-      },
-      {
-        name: 'listings',
-        label: 'Platforms',
-        options: {
-          filter: false,
-          sort: false,
-          customBodyRender: (listings) => {
-            if (listings && listings.length > 0) {
-              return (
-                <div className="h-full flex gap-3">
-                  {listings.map((listing, index) => (
-                    <div
-                      key={index}
-                      className="flex flex-col items-center justify-evenly h-full leading-tight"
-                    >
-                      <p className="font-bold text-lg">
-                        ${(listing.currentPrice / 100).toFixed(2)}
-                      </p>
-                      {listing.platform === 'Ebay' && (
-                        <a
-                          href={`https://www.ebay.com/itm/${listing.ebayItemId}`}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <img
-                            src={ebayIcon}
-                            className="h-5 mt-0"
-                            alt="Ebay Icon"
-                          />
-                        </a>
-                      )}
-                      {listing.platform === 'Facebook' && (
-                        <a
-                          href={`https://www.facebook.com/marketplace/item/${listing.facebookItemId}`}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <img
-                            src={facebookIcon}
-                            className="h-4"
-                            alt="Facebook Icon"
-                          />
-                        </a>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              );
-            }
-            return 'N/A';
-          },
-        },
-      },
-      {
-        name: 'location',
-        label: 'Location',
-        options: {
-          filter: false,
-          sort: false,
-          customBodyRender: (location) => location?.label || 'N/A',
-        },
-      },
     ],
     []
   );
-
-  // Custom Toolbar Component
-  const CustomToolbar = () => {
-    return (
-      <Button
-        component={Link}
-        to="./Create"
-        variant="contained"
-        color="primary"
-      >
-        Create Listing
-      </Button>
-    );
-  };
 
   // Custom Search Component
   const CustomSearchRender = ({ searchText, onSearch, onHide }) => {
@@ -262,27 +177,30 @@ export default function ViewListings() {
 
     try {
       const response = await axiosInstance.post(
-        '/v1/crew/listing/keyword-search',
+        '/v1/crew/lot/keyword-search',
         {
           keyword: searchText,
           offset: offset,
           count: count,
           sort: { createdAt: -1 },
+          filters: { status: 'Idle' },
         }
       );
 
       if (response.status === 200) {
-        console.log(response.data);
-        const combinedListings = response.data.results;
+        const combinedLots = [
+          ...response.data.results,
+          ...response.data.similarResults,
+        ];
         setData(
-          combinedListings.map((listing) => ({
-            id: listing._id,
-            ...listing,
-            thumbnail:
-              listing.thumbnail || 'https://via.placeholder.com/96',
-            location: listing.location || { label: 'N/A' },
-            lotNumber: listing.lotNumber || 'N/A', // Ensure lotNumber is included
-            condition: listing.condition || null, // Include condition field
+          combinedLots.map((lot) => ({
+            id: lot._id,
+            ...lot,
+            brand: lot.details?.brand || 'N/A',
+            model: lot.details?.model || 'N/A',
+            location: lot.location?.label || 'Not Located',
+            createdAt: lot.createdAt,
+            condition: lot.condition || null, // Include the condition field
           }))
         );
         setTotalCount(response.data.totalSearchCount);
@@ -291,7 +209,7 @@ export default function ViewListings() {
         setData([]);
       }
     } catch (error) {
-      console.error('Error fetching listings:', error);
+      console.error('Error fetching lots:', error);
       setData([]);
     } finally {
       setLoading(false);
@@ -300,24 +218,23 @@ export default function ViewListings() {
 
   // Fetch data when page, rowsPerPage, or searchText change
   useEffect(() => {
-    document.title = 'Listings - Gavelbase';
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, rowsPerPage, searchText]);
 
   const options = {
-    responsive: 'scrollMaxHeight',
+    responsive: 'scroll',
     serverSide: true,
     sort: false, // Disable global sorting
     filter: false, // Disable filters
-    viewColumns: false, // Disable view columns option
     count: totalCount,
     page: page,
     rowsPerPage: rowsPerPage,
-    selectableRows: 'none',
+    selectableRows: 'multiple', // Enable row selection
+    fixedHeader: false, // Keep the header fixed during scroll
+    fixedSelectColumn: false, // Allow the select column to scroll
     search: true, // Enable built-in search bar
     searchText: searchText, // Bind searchText state to table's search bar
-    customToolbar: () => <CustomToolbar />, // Add custom toolbar
     customSearchRender: (
       searchTextValue,
       handleSearch,
@@ -365,22 +282,22 @@ export default function ViewListings() {
         displayRows: 'of',
       },
     },
-    rowsPerPageOptions: [10, 20, 30, 40, 50],
+    rowsPerPageOptions: [10, 25, 50, 100],
     download: true, // Enable download option
     print: true, // Enable print option
-    selectableRowsHeader: false,
+    selectableRowsHeader: true, // Show select all checkbox
+    tableBodyHeight: 'calc(100vh - 200px)', // Adjust the offset as needed
+    maxBodyHeight: 'calc(100vh - 200px)', // Adjust the offset as needed
   };
 
   return (
-    <div className="flex flex-col h-full">
-      <div style={{ overflowX: 'auto' }}>
-        <MUIDataTable
-          title={'Listings'}
-          data={data}
-          columns={columns}
-          options={options}
-        />
-      </div>
+    <div style={{ height: '100%' }}>
+      <MUIDataTable
+        title={'Lots'}
+        data={data}
+        columns={columns}
+        options={options}
+      />
     </div>
   );
 }

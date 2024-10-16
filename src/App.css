@@ -41,6 +41,29 @@ body {
   height: 100%;
 }
 
+.thin-scrollbar {
+  /* For Webkit Browsers (Chrome, Safari, Edge) */
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent; /* Firefox */
+
+  /* Webkit-specific styles */
+}
+
+.thin-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.thin-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.thin-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  border: 1px solid transparent; /* Optional: Adds space around thumb */
+}
+
 /* STYLE FOR AG GRID OUR TABLES LIBRARY */
 .ag-theme-quartz, .ag-theme-quartz-dark {
     --ag-grid-size: 5px;

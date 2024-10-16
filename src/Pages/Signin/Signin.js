@@ -21,15 +21,7 @@ export default function Signin() {
     }).then((response) => {
       console.log(response) 
       if (response.status == 200) {
-        console.log(response)
-        console.log("setting local storage")
-        localStorage.setItem('accessToken', response.data.accessToken).then(() => {
-          window.location.href = '/Dashboard?'+useLib.createNotification('success', response.data)
-        }).catch((error) => {
-          console.log(error)
-          useLib.toast.error('An error occurred while signing in')
-          setLoading(false)
-        })
+        window.location.href = '/Dashboard?'+useLib.createNotification('success', response.data)
       }else{
         console.log(response)
         useLib.toast.error(response.data)

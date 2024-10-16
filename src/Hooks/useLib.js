@@ -95,19 +95,10 @@ const createNotification = (severity, message) => {
 }
 
 const signOut = () => {
-    axios.get(createServerUrl('/api/v1/member/signout'), {
-        withCredentials: true
-    })
-    .then((response) => {
-        if (response.status === 200) {
-            window.location.href = '/Sign-In?'+createNotification('success', 'Signed out successfully');
-        }else{
-            toast.error('An error occurred while signing out');
-        }
-    })
-    .catch((error) => {
-        toast.error('An error occurred while signing out');
-    })
+    // remove the cookies
+    document.cookie = 'refreshToken=; expires = Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    document.cookie = 'accessToken=; expires = Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    window.location.href = '/sign-in';
 }
 
 const fileToBase64 = (file) => {
