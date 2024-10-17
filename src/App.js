@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 
@@ -11,7 +11,22 @@ import Verify from './Pages/Verify/Verify.js';
 import Dashboard from './Components/Dashboard/Dashboard.js';
 
 export default function App() {
-  const isSmallScreen = window.innerWidth < 768; // You may adjust the breakpoint as needed
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768); // You may adjust the breakpoint as needed
+
+  useEffect(() => {
+    // Function to handle screen resize
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth < 768);
+    };
+
+    // Add event listener on mount
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup the event listener on unmount
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []); // Empty dependency array to run only on mount and unmount
 
   return (
     <Router>

@@ -1,11 +1,28 @@
 // axiosInstance.js
 import axios from 'axios';
 import {jwtDecode} from 'jwt-decode'; // Correct import
-import useLib from './Hooks/useLib'; // Import your utility hook
+
+const createServerUrl = (path) => {
+    return `${process.env.REACT_APP_SERVER_PROTOCOL}://${process.env.REACT_APP_SERVER_DOMAIN}${process.env.REACT_APP_SERVER_PORT ? ':'+process.env.REACT_APP_SERVER_PORT : ''}${path}`;
+};
+
+// 2. getCookie(name) => returns the value of the cookie with the name
+const getCookie = (name) => {
+    const cookies = document.cookie.split(';').map(cookie => cookie.trim());
+
+    for (const cookie of cookies) {
+        const [cookieName, cookieValue] = cookie.split('=');
+        if (cookieName === name) {
+            return cookieValue;
+        }
+    }
+
+    return null; // Return null if the cookie is not found
+};
 
 // Create an Axios instance
 const axiosInstance = axios.create({
-  baseURL: useLib.createServerUrl('/'), // Format the URL from envs
+  baseURL: createServerUrl('/'), // Format the URL from envs
   withCredentials: true, // Ensure cookies are sent with every request
 });
 
@@ -19,8 +36,10 @@ function isTokenExpired(token) {
 async function refreshToken() {
   try {
     const response = await axios.post(
-      useLib.createServerUrl('/v1/public/crew/refresh'), 
-      {}, 
+      createServerUrl('/v1/public/crew/refresh'), 
+      {
+        refreshToken: getCookie('refreshToken'),
+      }, 
       { withCredentials: true } // Send cookies with the request
     );
     return response.data.accessToken;

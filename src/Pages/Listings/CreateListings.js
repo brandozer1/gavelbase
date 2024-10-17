@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import axiosInstance from '../../axiosInstance';
 import MUIDataTable from 'mui-datatables';
-import { TextField, IconButton } from '@material-ui/core';
+import { TextField, IconButton, Button } from '@material-ui/core';
 import { Search as SearchIcon, Clear as ClearIcon } from '@material-ui/icons';
 import Loading from '../Loading/Loading';
+import { Link } from 'react-router-dom';
 
 export default function CreateListings() {
   const [data, setData] = useState([]);
@@ -14,6 +15,9 @@ export default function CreateListings() {
   const [page, setPage] = useState(0); // Zero-based index
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [searchText, setSearchText] = useState(''); // State for search
+
+  // Selected lot IDs state
+  const [selectedLots, setSelectedLots] = useState([]);
 
   // Column definitions
   const columns = useMemo(
@@ -90,9 +94,7 @@ export default function CreateListings() {
           filter: false,
           sort: false,
           customBodyRender: (conditionObject) => {
-            console.log('conditionObject:', conditionObject);
             if (conditionObject && typeof conditionObject === 'object') {
-              // Access the condition data correctly
               const condition =
                 conditionObject.value && typeof conditionObject.value === 'object'
                   ? conditionObject.value
@@ -200,7 +202,7 @@ export default function CreateListings() {
             model: lot.details?.model || 'N/A',
             location: lot.location?.label || 'Not Located',
             createdAt: lot.createdAt,
-            condition: lot.condition || null, // Include the condition field
+            condition: lot.condition || null,
           }))
         );
         setTotalCount(response.data.totalSearchCount);
@@ -219,22 +221,46 @@ export default function CreateListings() {
   // Fetch data when page, rowsPerPage, or searchText change
   useEffect(() => {
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, rowsPerPage, searchText]);
+
+  // Handle selection change from the table and merge with previous selections
+  const handleRowsSelect = (currentRowsSelected, allRowsSelected) => {
+    setSelectedLots((prevSelected) => {
+      const selectedSet = new Set(prevSelected);
+
+      currentRowsSelected.forEach((row) => {
+        const lotId = data[row.index]?.id;
+        if (lotId) {
+          if (selectedSet.has(lotId)) {
+            selectedSet.delete(lotId); // Deselect
+          } else {
+            selectedSet.add(lotId); // Select
+          }
+        }
+      });
+
+      return Array.from(selectedSet);
+    });
+  };
+
+  // Create query parameters from selectedLots array
+  const queryString = selectedLots.length
+    ? `?lots=${encodeURIComponent(JSON.stringify(selectedLots))}`
+    : '';
 
   const options = {
     responsive: 'scroll',
     serverSide: true,
-    sort: false, // Disable global sorting
-    filter: false, // Disable filters
+    sort: false,
+    filter: false,
     count: totalCount,
     page: page,
     rowsPerPage: rowsPerPage,
-    selectableRows: 'multiple', // Enable row selection
-    fixedHeader: false, // Keep the header fixed during scroll
-    fixedSelectColumn: false, // Allow the select column to scroll
-    search: true, // Enable built-in search bar
-    searchText: searchText, // Bind searchText state to table's search bar
+    selectableRows: 'multiple',
+    selectableRowsHideCheckboxes: false, // Keep the checkboxes visible
+    fixedHeader: false,
+    search: true,
+    searchText: searchText,
     customSearchRender: (
       searchTextValue,
       handleSearch,
@@ -261,13 +287,17 @@ export default function CreateListings() {
         case 'search':
           if (searchText !== tableState.searchText) {
             setSearchText(tableState.searchText);
-            // Do not reset page here to maintain page number when searching
           }
           break;
         default:
           break;
       }
     },
+    onRowsSelect: handleRowsSelect, // Update selection state on row selection
+    rowsSelected: data
+      .map((lot, index) => (selectedLots.includes(lot.id) ? index : null))
+      .filter(index => index !== null), // Sync selected rows with state
+    selectToolbarPlacement: 'none', // Disable the selection toolbar
     textLabels: {
       body: {
         noMatch: loading ? <Loading /> : 'Sorry, no matching records found',
@@ -283,11 +313,12 @@ export default function CreateListings() {
       },
     },
     rowsPerPageOptions: [10, 25, 50, 100],
-    download: true, // Enable download option
-    print: true, // Enable print option
-    selectableRowsHeader: true, // Show select all checkbox
-    tableBodyHeight: 'calc(100vh - 200px)', // Adjust the offset as needed
-    maxBodyHeight: 'calc(100vh - 200px)', // Adjust the offset as needed
+    download: true,
+    print: true,
+    selectableRowsHeader: true,
+    tableBodyHeight: 'calc(100vh - 200px)',
+    maxBodyHeight: 'calc(100vh - 200px)',
+    onRowsDelete: () => false, // Disable default row delete behavior
   };
 
   return (
@@ -298,6 +329,22 @@ export default function CreateListings() {
         columns={columns}
         options={options}
       />
+
+      {/* Button to navigate to Auction with selected lots in query string */}
+      <Button
+        component={Link}
+        to={`./Auction${queryString}`}
+        variant="contained"
+        color="primary"
+      >
+        For Auction
+      </Button>
+
+      {/* Display selected lot IDs */}
+      <div style={{ marginTop: '20px' }}>
+        <h3>Selected Lots IDs:</h3>
+        <pre>{JSON.stringify(selectedLots, null, 2)}</pre>
+      </div>
     </div>
   );
 }

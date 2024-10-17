@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import axiosInstance from '../../axiosInstance';
 import MUIDataTable from 'mui-datatables';
+import Chip from "../../Components/Chip/Chip"
 import { TextField, IconButton } from '@material-ui/core';
 import {
   Search as SearchIcon,
@@ -153,6 +154,17 @@ export default function Lot() {
         options: {
           filter: false,
           sort: false,
+          customBodyRender: (status) => {
+            switch (status) {
+              case "Idle": return <Chip text={status} />
+              break
+              case "Active": return <Chip text={status} color='green' />
+              break
+              case "Completed": return <Chip text={status} color='blue' />
+              break
+            }
+            
+          }
         },
       },
       {
