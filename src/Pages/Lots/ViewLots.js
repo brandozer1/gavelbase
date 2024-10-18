@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import axiosInstance from '../../axiosInstance';
 import MUIDataTable from 'mui-datatables';
-import { TextField, IconButton, Button } from '@material-ui/core';
+import Chip from '../../Components/Chip/Chip'
+import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
+import { TextField, IconButton } from '@material-ui/core';
 import { Search as SearchIcon, Clear as ClearIcon } from '@material-ui/icons';
 import Loading from '../Loading/Loading';
-import { Link } from 'react-router-dom';
 
-export default function CreateListings() {
+export default function ViewLots() {
   const [data, setData] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -16,8 +17,7 @@ export default function CreateListings() {
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [searchText, setSearchText] = useState(''); // State for search
 
-  // Selected lot IDs state
-  const [selectedLots, setSelectedLots] = useState([]);
+  const navigate = useNavigate(); // Hook to programmatically navigate
 
   // Column definitions
   const columns = useMemo(
@@ -88,6 +88,41 @@ export default function CreateListings() {
         },
       },
       {
+        name: 'description',
+        label: 'Description',
+        options: {
+          filter: false,
+          sort: false,
+          customBodyRender: (value) => (
+            <div
+              style={{
+                overflowX: 'hidden',
+                whiteSpace: 'normal',
+                wordWrap: 'break-word',
+              }}
+            >
+              <p className="text-xs leading-tight">{value}</p>
+            </div>
+          ),
+        },
+      },
+      {
+        name: 'brand',
+        label: 'Brand',
+        options: {
+          filter: false,
+          sort: false,
+        },
+      },
+      {
+        name: 'model',
+        label: 'Model',
+        options: {
+          filter: false,
+          sort: false,
+        },
+      },
+      {
         name: 'condition',
         label: 'Condition',
         options: {
@@ -117,6 +152,36 @@ export default function CreateListings() {
         options: {
           filter: false,
           sort: false,
+          customBodyRender: (status) => {
+            switch (status) {
+              case "Idle": return <Chip text={status} />
+              case "Active": return <Chip text={status} color='green' />
+              case "Completed": return <Chip text={status} color='blue' />
+              default: return status;
+            }
+          }
+        },
+      },
+      {
+        name: 'location',
+        label: 'Location',
+        options: {
+          filter: false,
+          sort: false,
+            customBodyRender: (location)=>{
+                return <p className='font-bold'>{location}</p>
+            }
+        },
+      },
+      {
+        name: 'createdAt',
+        label: 'Created At',
+        options: {
+          filter: false,
+          sort: false,
+          customBodyRender: (value) => {
+            return new Date(value).toLocaleString();
+          },
         },
       },
     ],
@@ -184,8 +249,7 @@ export default function CreateListings() {
           keyword: searchText,
           offset: offset,
           count: count,
-          sort: { createdAt: -1 },
-          filters: { status: 'Idle' },
+          sort: {createdAt: -1}
         }
       );
 
@@ -202,7 +266,7 @@ export default function CreateListings() {
             model: lot.details?.model || 'N/A',
             location: lot.location?.label || 'Not Located',
             createdAt: lot.createdAt,
-            condition: lot.condition || null,
+            condition: lot.condition || null, // Include the condition field
           }))
         );
         setTotalCount(response.data.totalSearchCount);
@@ -223,44 +287,17 @@ export default function CreateListings() {
     fetchData();
   }, [page, rowsPerPage, searchText]);
 
-  // Handle selection change from the table and merge with previous selections
-  const handleRowsSelect = (currentRowsSelected, allRowsSelected) => {
-    setSelectedLots((prevSelected) => {
-      const selectedSet = new Set(prevSelected);
-
-      currentRowsSelected.forEach((row) => {
-        const lotId = data[row.index]?.id;
-        if (lotId) {
-          if (selectedSet.has(lotId)) {
-            selectedSet.delete(lotId); // Deselect
-          } else {
-            selectedSet.add(lotId); // Select
-          }
-        }
-      });
-
-      return Array.from(selectedSet);
-    });
-  };
-
-  // Create query parameters from selectedLots array
-  const queryString = selectedLots.length
-    ? `?lots=${encodeURIComponent(JSON.stringify(selectedLots))}`
-    : '';
-
   const options = {
-    responsive: 'scroll',
+    responsive: 'scrollMaxHeight',
     serverSide: true,
-    sort: false,
-    filter: false,
+    sort: false, // Disable global sorting
+    filter: false, // Disable filters
     count: totalCount,
     page: page,
     rowsPerPage: rowsPerPage,
-    selectableRows: 'multiple',
-    selectableRowsHideCheckboxes: false, // Keep the checkboxes visible
-    fixedHeader: false,
-    search: true,
-    searchText: searchText,
+    selectableRows: 'none',
+    search: true, // Enable built-in search bar
+    searchText: searchText, // Bind searchText state to table's search bar
     customSearchRender: (
       searchTextValue,
       handleSearch,
@@ -274,6 +311,10 @@ export default function CreateListings() {
           onHide={hideSearch}
         />
       );
+    },
+    onRowClick: (rowData, rowMeta) => {
+      const lotId = data[rowMeta.dataIndex].id; // Get lotId from the data array
+      navigate(`./Edit/${lotId}`); // Navigate to the Edit page with lotId in the URL
     },
     onTableChange: (action, tableState) => {
       switch (action) {
@@ -293,14 +334,11 @@ export default function CreateListings() {
           break;
       }
     },
-    onRowsSelect: handleRowsSelect, // Update selection state on row selection
-    rowsSelected: data
-      .map((lot, index) => (selectedLots.includes(lot.id) ? index : null))
-      .filter(index => index !== null), // Sync selected rows with state
-    selectToolbarPlacement: 'none', // Disable the selection toolbar
     textLabels: {
       body: {
-        noMatch: loading ? <Loading /> : 'Sorry, no matching records found',
+        noMatch: loading
+          ? <Loading />
+          : 'Sorry, no matching records found',
       },
       toolbar: {
         search: 'Search',
@@ -312,48 +350,20 @@ export default function CreateListings() {
         displayRows: 'of',
       },
     },
-    rowsPerPageOptions: [10, 25, 50, 100],
-    download: true,
-    print: true,
-    selectableRowsHeader: true,
-    tableBodyHeight: 'calc(100vh - 200px)',
-    maxBodyHeight: 'calc(100vh - 200px)',
-    onRowsDelete: () => false, // Disable default row delete behavior
+    rowsPerPageOptions: [10, 20, 30, 40, 50],
+    download: true, // Enable download option
+    print: true, // Enable print option
+    selectableRowsHeader: false,
   };
 
   return (
-    <div style={{ height: '100%' }}>
+    <div className="flex flex-col h-full">
       <MUIDataTable
         title={'Lots'}
         data={data}
         columns={columns}
         options={options}
       />
-
-      {/* Button to navigate to Auction with selected lots in query string */}
-      <Button
-        component={Link}
-        to={`./Auction${queryString}`}
-        variant="contained"
-        color="primary"
-      >
-        For Auction
-      </Button>
-
-      <Button
-        component={Link}
-        to={`./Sale${queryString}`}
-        variant="contained"
-        color="primary"
-      >
-        For Sale
-      </Button>
-
-      {/* Display selected lot IDs */}
-      <div style={{ marginTop: '20px' }}>
-        <h3>Selected Lots IDs:</h3>
-        <pre>{JSON.stringify(selectedLots, null, 2)}</pre>
-      </div>
     </div>
   );
 }
