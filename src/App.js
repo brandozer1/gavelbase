@@ -45,12 +45,12 @@ export default function App() {
       />
       <Routes>
         <Route path="/" element={<Home />} />
-        {/* <Route path="/Sign-In" element={<Signin />} />
-        <Route path="/Verify" element={<Verify />} /> */}
-        {/* <Route
+        <Route path="/Sign-In" element={<Signin />} />
+        {/* <Route path="/Verify" element={<Verify />} /> */}
+        <Route
           path="/Dashboard/*"
           element={<Dashboard />}
-        /> */}
+        />
       </Routes>
     </Router>
   );
