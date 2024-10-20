@@ -36,9 +36,11 @@ export default function EditLot() {
           params: { lotId: lotId },
         });
         console.log(response.data.lot)
-        setLotInfo(response.data.lot);
-        setEditedLotInfo(response.data.lot);
-        setPreAiInfo(response.data.lot);
+        let lot = response.data.lot
+        lot.conditionDescription = lot.condition.conditionDescription
+        setLotInfo(lot);
+        setEditedLotInfo(lot);
+        setPreAiInfo(lot);
       } catch (error) {
         console.log('Error fetching lot info:', error);
         toast.error('Error fetching lot information.');
@@ -408,10 +410,11 @@ export default function EditLot() {
         {editedLotInfo.condition.useNotes && (
           <TextArea
             label="Condition Description"
-            value={editedLotInfo.condition.conditionDescription}
+            value={editedLotInfo.conditionDescription}
             onChange={(e) =>
               setEditedLotInfo((prevState) => ({
                 ...prevState,
+                
                 conditionDescription: e.target.value,
               }))
             }
