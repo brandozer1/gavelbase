@@ -41,6 +41,7 @@ export default function EditLot() {
         setLotInfo(lot);
         setEditedLotInfo(lot);
         setPreAiInfo(lot);
+        document.title = lotInfo.lotNumber +" - " +lotInfo.title;
       } catch (error) {
         console.log('Error fetching lot info:', error);
         toast.error('Error fetching lot information.');
@@ -60,12 +61,11 @@ export default function EditLot() {
 
   async function handleEditSubmit() {
     try {
-      const tagIds = editedLotInfo.tags.map((tag) => tag._id);
       const response = await axiosInstance.put('/v1/crew/lot/edit/' + lotId, {
         title: editedLotInfo.title,
         description: editedLotInfo.description,
         lotNumber: editedLotInfo.lotNumber,
-        tags: tagIds,
+        tags: editedLotInfo.tags,
         condition: editedLotInfo.condition.id,
         conditionDescription: editedLotInfo.conditionDescription,
         images: editedLotInfo.images,
@@ -422,14 +422,14 @@ export default function EditLot() {
         )}
 
         <TagSelect
-          selectedTags={lotInfo.tags}
+          selectedTags={editedLotInfo.tags}
           label="Tags"
-          onChange={(e) =>
+          onChange={(e) =>{
             setEditedLotInfo((prevState) => ({
               ...prevState,
-              tags: e,
-            }))
-          }
+              tags: e
+            }));
+          }}
         />
       </form>
       <div>

@@ -112,6 +112,7 @@ export default function ViewLots() {
         options: {
           filter: false,
           sort: false,
+          display: false
         },
       },
       {
@@ -120,6 +121,7 @@ export default function ViewLots() {
         options: {
           filter: false,
           sort: false,
+          display: false
         },
       },
       {
@@ -138,7 +140,7 @@ export default function ViewLots() {
               return (
                 <div className="flex flex-col">
                   <p className="font-bold">{condition.name || 'N/A'}</p>
-                  <p>{condition.conditionDescription || 'No description'}</p>
+                  <p className='text-xs'>{condition.conditionDescription || 'No description'}</p>
                 </div>
               );
             }
@@ -174,6 +176,29 @@ export default function ViewLots() {
         },
       },
       {
+        name: 'tags',
+        label: 'Tags',
+        options: {
+          filter: false,
+          sort: false,
+          customBodyRender: (tags) => {
+            return (
+                <div className='flex flex-wrap space-y-2 '>
+                    {
+                        tags.map((tag)=>{
+                            return (
+                                <div className='flex rounded-full py-1 px-2 justify-center text-xs' style={{color: tag.color, backgroundColor: tag.backgroundColor}}>
+                                    {tag.name}
+                                </div>
+                            )
+                        })
+                    }
+                </div>
+            )
+          },
+        },
+      },
+      {
         name: 'createdAt',
         label: 'Created At',
         options: {
@@ -184,6 +209,7 @@ export default function ViewLots() {
           },
         },
       },
+      
     ],
     []
   );

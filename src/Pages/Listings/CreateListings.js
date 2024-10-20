@@ -112,6 +112,29 @@ export default function CreateListings() {
         },
       },
       {
+        name: 'tags',
+        label: 'Tags',
+        options: {
+          filter: false,
+          sort: false,
+          customBodyRender: (tags) => {
+            return (
+                <div className='flex flex-wrap space-y-2 '>
+                    {
+                        tags.map((tag)=>{
+                            return (
+                                <div className='flex rounded-full py-1 px-2 justify-center text-xs' style={{color: tag.color, backgroundColor: tag.backgroundColor}}>
+                                    {tag.name}
+                                </div>
+                            )
+                        })
+                    }
+                </div>
+            )
+          },
+        },
+      },
+      {
         name: 'status',
         label: 'Status',
         options: {
