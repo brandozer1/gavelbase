@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Chip = ({ text, color = 'gray', size = 'md' }) => {
+const Chip = ({ text, customColor, customTextColor, color = "gray", size = 'md' }) => {
   // Define size variations
   const sizeClasses = {
     sm: 'px-1 py-0.5 text-xs',
@@ -23,6 +23,7 @@ const Chip = ({ text, color = 'gray', size = 'md' }) => {
   return (
     <span
       className={`inline-flex items-center gap-x-1.5 rounded-full font-medium ${sizeClasses[size]} ${colorClasses[color]}`}
+    //   style={(customTextColor || customColor)&&{backgroundColor: customColor, color: customTextColor}}
     >
       <svg viewBox="0 0 6 6" aria-hidden="true" className={`h-1.5 w-1.5`}>
         <circle r={3} cx={3} cy={3} />

@@ -33,7 +33,7 @@ export default function App() {
       {/* controls the look of all toasts */}
       <ToastContainer
         position={isSmallScreen ? "bottom-center" : "top-right"}
-        autoClose={5000}
+        autoClose={2000}
         hideProgressBar={true}
         newestOnTop={false}
         closeOnClick
