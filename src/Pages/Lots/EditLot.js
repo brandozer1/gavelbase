@@ -35,6 +35,7 @@ export default function EditLot() {
         const response = await axiosInstance.get('/v1/crew/lot/fullInfo', {
           params: { lotId: lotId },
         });
+        console.log(response.data.lot)
         setLotInfo(response.data.lot);
         setEditedLotInfo(response.data.lot);
         setPreAiInfo(response.data.lot);
@@ -58,7 +59,6 @@ export default function EditLot() {
   async function handleEditSubmit() {
     try {
       const tagIds = editedLotInfo.tags.map((tag) => tag._id);
-
       const response = await axiosInstance.put('/v1/crew/lot/edit/' + lotId, {
         title: editedLotInfo.title,
         description: editedLotInfo.description,
@@ -408,7 +408,7 @@ export default function EditLot() {
         {editedLotInfo.condition.useNotes && (
           <TextArea
             label="Condition Description"
-            value={editedLotInfo.conditionDescription}
+            value={editedLotInfo.condition.conditionDescription}
             onChange={(e) =>
               setEditedLotInfo((prevState) => ({
                 ...prevState,
