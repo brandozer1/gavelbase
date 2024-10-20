@@ -315,18 +315,30 @@ export default function EditLot() {
                   label="UPC"
                   type="number"
                   suffix={
-                    <a
-                      onClick={(e) => {
-                        e.preventDefault();
-                        navigator.clipboard.writeText(
-                          editedLotInfo.details.upc
-                        );
-                        toast.info('UPC copied to clipboard!');
-                      }}
-                      className="cursor-pointer"
-                    >
-                      Copy
-                    </a>
+                    <div>
+                        <a
+                            onClick={(e) => {
+                                e.preventDefault();
+                                navigator.clipboard.writeText(
+                                editedLotInfo.details.upc
+                                );
+                                toast.info('UPC copied to clipboard!');
+                            }}
+                            className="cursor-pointer"
+                        >
+                        Copy
+                        </a>
+                         
+                            {" · "}
+
+                        <a 
+                            href={`https://www.google.com/search?q=${encodeURIComponent(editedLotInfo.details.upc)}`} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            >
+                            Search
+                        </a>
+                    </div>
                   }
                   value={editedLotInfo.details?.upc || ''}
                   onChange={(e) =>
@@ -355,18 +367,30 @@ export default function EditLot() {
                     }))
                   }
                   suffix={
-                    <a
-                      onClick={(e) => {
-                        e.preventDefault();
-                        navigator.clipboard.writeText(
-                          editedLotInfo.details.model
-                        );
-                        toast.info('Model copied to clipboard!');
-                      }}
-                      className="cursor-pointer"
-                    >
-                      Copy
-                    </a>
+                    <div>
+                        <a
+                            onClick={(e) => {
+                                e.preventDefault();
+                                navigator.clipboard.writeText(
+                                editedLotInfo.details.model
+                                );
+                                toast.info('Model copied to clipboard!');
+                            }}
+                            className="cursor-pointer"
+                        >
+                        Copy
+                        </a>
+                         
+                            {" · "}
+
+                        <a 
+                            href={`https://www.google.com/search?q=${encodeURIComponent(editedLotInfo.details.model)}`} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            >
+                            Search
+                        </a>
+                    </div>
                   }
                   placeholder="Enter Model"
                 />
