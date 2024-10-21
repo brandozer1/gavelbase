@@ -95,7 +95,7 @@ export default function CreateAuction() {
                               {
                                 index < 4 &&
                                 <div className='h-full flex justify-center bg-gray-200' style={{aspectRatio: "1/1"}}>
-                                  <img className='object-contain h-full' src={src.includes("gavelbase.s3") && src.replace("/images/", "/thumbnails/")}/>
+                                  <img className='object-contain h-full' src={src.includes("gavelbase.s3") ? src.replace("/images/", "/thumbnails/") : src}/>
                                 </div>
                               }
                             </>

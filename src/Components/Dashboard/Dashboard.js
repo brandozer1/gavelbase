@@ -18,9 +18,7 @@ import { ClipboardCheckIcon, PlusSquareIcon, TagIcon } from 'lucide-react';
 import useLib from '../../Hooks/useLib';
 import Lots from '../../Pages/Lots/Lots';
 import Listings from '../../Pages/Listings/Listings';
-
-// Correct import for jwtDecode
-import {jwtDecode} from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode'; // Correct import
 
 // Test data
 const Shortcuts = [
@@ -35,7 +33,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-// Memoized ShortcutsList component for performance optimization
+// Memoized ShortcutsList component
 const ShortcutsList = memo(({ shortcuts, isCollapsed }) => (
   <ul role="list" className="-mx-2 mt-2 space-y-1">
     {shortcuts.map((team) => (
@@ -53,10 +51,8 @@ const ShortcutsList = memo(({ shortcuts, isCollapsed }) => (
         >
           <span
             className={classNames(
-              isActive => isActive
-                ? 'text-indigo-600 border-indigo-600'
-                : 'text-gray-400 border-gray-200 group-hover:border-indigo-600 group-hover:text-indigo-600',
-              'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white'
+              'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white',
+              isActive => (isActive ? 'text-indigo-600 border-indigo-600' : 'text-gray-400 border-gray-200 group-hover:border-indigo-600 group-hover:text-indigo-600')
             )}
           >
             {team.initial}
@@ -69,11 +65,10 @@ const ShortcutsList = memo(({ shortcuts, isCollapsed }) => (
 ));
 
 export default function Dashboard() {
-  const [sidebarOpen, setSidebarOpen] = useState(false); // Initially closed for mobile
-  const [isCollapsed, setIsCollapsed] = useState(false); // State for desktop sidebar
-  const location = useLocation(); // Using useLocation to get current path
+  const [sidebarOpen, setSidebarOpen] = useState(false); 
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const location = useLocation(); 
 
-  // Navigation items without 'current' property; handled via NavLink's isActive
   const navigation = [
     { name: 'Dashboard', href: '/Dashboard', icon: HomeIcon },
     { name: 'Lots', href: './Lots', icon: PlusSquareIcon },
@@ -82,23 +77,19 @@ export default function Dashboard() {
     { name: 'Reports', href: './Reports', icon: ChartPieIcon },
   ];
 
-  // Callback to handle sidebar toggle to ensure stable reference
   const toggleSidebar = useCallback(() => {
-    setSidebarOpen(prev => !prev);
+    setSidebarOpen((prev) => !prev);
   }, []);
 
-  // Callback to handle desktop sidebar collapse
   const toggleCollapse = useCallback(() => {
-    setIsCollapsed(prev => !prev);
+    setIsCollapsed((prev) => !prev);
   }, []);
 
   useEffect(() => {
     document.title = 'Dashboard - Gavelbase';
 
-    // Initialize notifications and capture cleanup function
     const cleanupNotification = useLib.useNotification();
 
-    // Cleanup function to prevent memory leaks
     return () => {
       if (typeof cleanupNotification === 'function') {
         cleanupNotification();
@@ -106,18 +97,17 @@ export default function Dashboard() {
     };
   }, []);
 
-  // Extract username from JWT token
-  const username = (() => {
+  const username = useCallback(() => {
     try {
       const token = useLib.getCookie('accessToken');
-      if (!token) return "Username Error";
+      if (!token) return 'Username Error';
       const decoded = jwtDecode(token);
-      return decoded.username || "Username Error";
+      return decoded.username || 'Username Error';
     } catch (error) {
       console.error('Error decoding JWT:', error);
-      return "Username Error";
+      return 'Username Error';
     }
-  })();
+  }, []);
 
   return (
     <div className="h-full">
@@ -167,7 +157,7 @@ export default function Dashboard() {
                     </button>
                   </div>
                 </Transition.Child>
-                {/* Sidebar component */}
+                {/* Sidebar */}
                 <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-4">
                   <div className="flex h-16 shrink-0 items-center">
                     <img
@@ -196,10 +186,8 @@ export default function Dashboard() {
                               >
                                 <item.icon
                                   className={classNames(
-                                    isActive => isActive
-                                      ? 'text-indigo-600'
-                                      : 'text-gray-400 group-hover:text-indigo-600',
-                                    'h-6 w-6 shrink-0'
+                                    'h-6 w-6 shrink-0',
+                                    isActive => (isActive ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600')
                                   )}
                                   aria-hidden="true"
                                 />
@@ -227,10 +215,8 @@ export default function Dashboard() {
                         >
                           <Cog6ToothIcon
                             className={classNames(
-                              isActive => isActive
-                                ? 'text-indigo-600'
-                                : 'text-gray-400 group-hover:text-indigo-600',
-                              'h-6 w-6 shrink-0'
+                              'h-6 w-6 shrink-0',
+                              isActive => (isActive ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600')
                             )}
                             aria-hidden="true"
                           />
@@ -252,9 +238,9 @@ export default function Dashboard() {
           isCollapsed ? 'w-20' : 'w-72'
         } transition-all duration-300`}
       >
-        {/* Sidebar component */}
+        {/* Sidebar */}
         <div
-          className={`flex grow flex-col gap-y-5 overflow-y-auto overflow-x-hidden border-r border-gray-200 bg-white px-6 pb-4 ${
+          className={`flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6 pb-4 ${
             isCollapsed ? 'items-center' : ''
           }`}
         >
@@ -297,10 +283,8 @@ export default function Dashboard() {
                       >
                         <item.icon
                           className={classNames(
-                            isActive => isActive
-                              ? 'text-indigo-600'
-                              : 'text-gray-400 group-hover:text-indigo-600',
-                            'h-6 w-6 shrink-0'
+                            'h-6 w-6 shrink-0',
+                            isActive => (isActive ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600')
                           )}
                           aria-hidden="true"
                         />
@@ -330,10 +314,8 @@ export default function Dashboard() {
                 >
                   <Cog6ToothIcon
                     className={classNames(
-                      isActive => isActive
-                        ? 'text-indigo-600'
-                        : 'text-gray-400 group-hover:text-indigo-600',
-                      'h-6 w-6 shrink-0'
+                      'h-6 w-6 shrink-0',
+                      isActive => (isActive ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600')
                     )}
                     aria-hidden="true"
                   />
@@ -410,10 +392,10 @@ export default function Dashboard() {
                   as={Fragment}
                   enter="transition ease-out duration-100"
                   enterFrom="transform opacity-0 scale-95"
-                  enterTo="transform opacity-100 scale-100"
+                  enterTo="opacity-100 scale-100"
                   leave="transition ease-in duration-75"
-                  leaveFrom="transform opacity-100 scale-100"
-                  leaveTo="transform opacity-0 scale-95"
+                  leaveFrom="opacity-100 scale-100"
+                  leaveTo="opacity-0 scale-95"
                 >
                   <Menu.Items className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
                     {memberNavigation.map((item) => (
