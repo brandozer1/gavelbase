@@ -93,6 +93,7 @@ export default function ViewLots() {
         options: {
           filter: false,
           sort: false,
+          display: false,
           customBodyRender: (value) => (
             <div
               style={{
@@ -275,7 +276,8 @@ export default function ViewLots() {
           keyword: searchText,
           offset: offset,
           count: count,
-          sort: {createdAt: -1}
+          sort: {createdAt: -1},
+          // filters: {tags: { $in: ["66e9c9dad25905fd4b8ca700"] }}
         }
       );
 
@@ -315,6 +317,7 @@ export default function ViewLots() {
 
   const options = {
     responsive: 'scrollMaxHeight',
+    
     serverSide: true,
     sort: false, // Disable global sorting
     filter: false, // Disable filters
@@ -385,6 +388,7 @@ export default function ViewLots() {
   return (
     <div className="flex flex-col h-full">
       <MUIDataTable
+      
         title={'Lots'}
         data={data}
         columns={columns}

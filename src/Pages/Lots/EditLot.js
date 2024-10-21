@@ -125,6 +125,7 @@ export default function EditLot() {
 
       setGptStatus('Complete');
       toast.success('AI completion successful!');
+      console.log(response)
       return response;
     } catch (error) {
       console.log(error);
@@ -136,7 +137,7 @@ export default function EditLot() {
 
   return (
     <div className="mx-auto p-3">
-      <div className="lg:flex lg:items-center lg:justify-between">
+      <div className="md:flex lg:items-center lg:justify-between">
         <div className="min-w-0 flex-1 mb-3">
           <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
             Edit Lot
@@ -170,8 +171,8 @@ export default function EditLot() {
             )}
           </div>
         </div>
-        <div className="mt-5 flex lg:ml-4 lg:mt-0">
-          <span className="ml-3 hidden sm:block">
+        <div className="mt-5 flex pb-3 md:pb-0 lg:ml-4 lg:mt-0">
+          <span>
             {gptStatus === 'Complete' ? (
               <button
                 type="button"
@@ -218,7 +219,7 @@ export default function EditLot() {
             )}
           </span>
 
-          <span className="sm:ml-3">
+          <span className="ml-3">
             <button
               type="button"
               className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"

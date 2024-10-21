@@ -177,7 +177,7 @@ const extractFileName = (url, index) => {
     const nameParts = originalName.split('.');
     const extension = nameParts.pop();
     const baseName = nameParts.join('.') || 'image';
-    return `${baseName}_${index}.${extension}`;
+    return `${baseName}(${index}).${extension}`;
 };
 
 // Helper function to generate CSV content
@@ -188,14 +188,16 @@ const generateCSV = (lots) => {
         'Description',
         'Condition',
         'Condition Description',
+        'model',
+        'upc',
+        'brand',
         'Category',
-        'User Name',
-        'User Email',
-        'Member Name',
+        // 'User Name',
+        // 'User Email',
+        // 'Member Name',
         'Status',
-        'Source Name',
-        'Crew Name',
-        'Tags',
+        // 'Source Name',
+        // 'Crew Name',
         'Created At',
         'Updated At',
         'Image URLs',
@@ -205,19 +207,22 @@ const generateCSV = (lots) => {
         lot.lotNumber || '',
         `"${lot.title || ''}"`, // Encapsulate in quotes to handle commas
         `"${lot.description || ''}"`,
-        lot.condition ? lot.condition.name : '',
-        lot.conditionDescription || '',
-        lot.category ? lot.category.name : '',
-        lot.userId ? lot.userId.username : '',
-        lot.userId ? lot.userId.email : '',
-        lot.member ? lot.member.name : '',
+        lot.condition ? lot.condition.name || '' : '',
+        `"${lot.conditionDescription}"` || '',
+        lot.details.model || '',
+        lot.details.upc || '',
+        lot.details.brand || '',
+        lot.category ? `"${lot.category.name}"` || '' : '',
+        // lot.userId ? lot.userId.username : '',
+        // lot.userId ? lot.userId.email : '',
+        // lot.member ? lot.member.name : '',
         lot.status || '',
-        lot.sourceId ? lot.sourceId.sourceName : '',
-        lot.crewId ? lot.crewId.crewName : '',
-        lot.tags && lot.tags.length > 0 ? lot.tags.map(tag => tag.tagName).join('; ') : '',
-        lot.createdAt ? new Date(lot.createdAt).toISOString() : '',
-        lot.updatedAt ? new Date(lot.updatedAt).toISOString() : '',
-        lot.images && lot.images.length > 0 ? lot.images.join('; ') : '',
+        // lot.sourceId ? lot.sourceId : '',
+        // lot.crewId ? lot.crewId.crewName : '',
+        // lot.tags && lot.tags.length > 0 ? lot.tags.map(tag => tag.tagName).join('; ') : '',
+        lot.createdAt ? new Date(lot.createdAt).toISOString() || '' : '',
+        lot.updatedAt ? new Date(lot.updatedAt).toISOString() || '' : '',
+        lot.images && lot.images.length > 0 ? lot.images.join('; ') || '' : '',
     ]);
 
     const csv = [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
@@ -282,7 +287,7 @@ const downloadAuctionData = async (lotIds) => {
                 results.forEach((blob, index) => {
                     if (blob) {
                         const { lotNumber, index: imageIndex } = batch[index];
-                        const fileName = `${lotNumber}_${imageIndex + 1}.jpg`; // Set filename to lotNumber + index
+                        const fileName = `${lotNumber}(${imageIndex + 1}).jpg`; // Set filename to lotNumber + index
                         zip.folder('images').file(fileName, blob);
                     }
                 });

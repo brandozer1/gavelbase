@@ -83,9 +83,9 @@ export default function CreateSale() {
           {
             lotDetails.map((lot) => {
               return (
-                <div className='flex gap-2 justify-between w-full h-16 p-3'>
-                  <div className='flex justify-between gap-2'>
-                    <div className='flex gap-1 w-68'>
+                <div className='flex flex-col gap-2 justify-between w-full h-40 p-3 xl:flex-row xl:h-24'>
+                  <div className='flex justify-start gap-2 h-1/3 xl:h-2/3'>
+                    <div className='flex gap-1 w-68 items-center '>
                       {
                         lot.images.map((src, index)=>{
                           
@@ -110,19 +110,30 @@ export default function CreateSale() {
                       <p className='text-xs'>{lot.title}</p>
                     </div>
                   </div>
-                  <div className='flex flex-col'>
+                  {/* <div className='flex flex-col'>
                     <p className='text-bold'>{lot.condition.name}</p>
                     <p className='text-xs'>{lot.conditionDescription}</p>
-                  </div>
-                  <div className='flex flex-col'>
-                    <TextInput></TextInput>
-                    <p className='leading-tight text-xs text-gray-400'> Suggestion: <span className='underline' onClick={()=>{}}>$120.00</span></p>
-                  </div>
-                  <div className='flex w-52'>
-                    <TextInput placeholder={'L"'} className={'rounded-r-none'} />
-                    <TextInput placeholder={'W"'} className={'rounded-r-none rounded-l-none z-2'} />
-                    <TextInput placeholder={'H"'} className={'rounded-l-none'} style={{borderWidth: "0px"}} />
-                    <TextInput placeholder={'LB'} className={"ml-3"} />
+                  </div> */}
+                  <div className='flex gap-3 items-center'>
+                    <div className='flex flex-col'>
+                      <div className='flex justify-between'>
+                        <span className='text-sm font-medium text-gray-700 mb-1'>Dimensions</span>
+                        <span className='text-sm font-medium text-gray-700 mb-1'>Weight</span>
+                      </div>
+                      <div className='flex w-52'>
+                        <TextInput placeholder={'L"'} className={'rounded-r-none'} />
+                        <TextInput placeholder={'W"'} className={'rounded-r-none rounded-l-none z-2'} />
+                        <TextInput placeholder={'H"'} className={'rounded-l-none'} style={{borderWidth: "0px"}} />
+                        <TextInput placeholder={'LB'} className={"ml-3"} />
+                      </div>
+                    </div>
+                    <div className='flex flex-col ml-3'>
+                      <TextInput
+                        label={"Fixed Price"}
+                        // helpText={"sdf"}
+                      />
+                      {/* <p className='leading-tight text-xs text-gray-400'> Suggestion: <span className='underline' onClick={()=>{}}>$120.00</span></p> */}
+                    </div>
                   </div>
                 </div>
               )

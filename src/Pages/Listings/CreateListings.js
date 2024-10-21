@@ -208,7 +208,7 @@ export default function CreateListings() {
           offset: offset,
           count: count,
           sort: { createdAt: -1 },
-          filters: { status: 'Idle' },
+          filters: { status: 'Idle'},
         }
       );
 

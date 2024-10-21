@@ -156,6 +156,39 @@ export default function CreateAuction() {
       }}
       disabled={false} // Optionally manage disabled state based on loading
     />
+    <Button
+      text='Mark Items as Completed'
+      spinner={manualExportStatus}
+      onClick={async () => {
+        const lotsParam = new URLSearchParams(location.search).get('lots');
+        let lotIds;
+    
+        try {
+          lotIds = JSON.parse(lotsParam);
+          if (!Array.isArray(lotIds)) {
+            lotIds = [lotIds];
+          }
+          console.log('Parsed lotIds:', lotIds);
+        } catch (e) {
+          console.error('Error parsing lots parameter:', e);
+          alert('Invalid lots parameter format.');
+          return;
+        }
+    
+        // Update status to indicate the process is starting
+        setManualExportStatus('BarLoader');
+    
+        // Call the downloadAuctionData function and handle the promise
+        axiosInstance.post('/v1/crew/lot/bulk-status-update', {lotIds: lotIds, status: "Completed"})
+          .then((response) => {
+            console.log(response)
+          })
+          .catch((error) => {
+            console.log(error)
+          });
+      }}
+      disabled={false} // Optionally manage disabled state based on loading
+    />
     </div>
   );
 }
