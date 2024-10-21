@@ -428,7 +428,7 @@ export default function Dashboard() {
           <div className="h-full">
             {/* Router for routing the path from the react router param */}
             <Routes>
-              <Route path="/Lots/*" element={<Lots />} />
+              {/* <Route path="/Lots/*" element={<Lots />} /> */}
               <Route
                 path="/Orders/*"
                 element={<h1 className="text-2xl font-semibold text-gray-900">Orders</h1>}
