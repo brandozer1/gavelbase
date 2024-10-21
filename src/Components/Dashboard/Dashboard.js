@@ -97,17 +97,17 @@ export default function Dashboard() {
     };
   }, []);
 
-  const username = useCallback(() => {
+  const username = (() => {
     try {
       const token = useLib.getCookie('accessToken');
-      if (!token) return 'Username Error';
+      if (!token) return "Username Error";
       const decoded = jwtDecode(token);
-      return decoded.username || 'Username Error';
+      return decoded.username || "Username Error";
     } catch (error) {
       console.error('Error decoding JWT:', error);
-      return 'Username Error';
+      return "Username Error";
     }
-  }, []);
+  })();
 
   return (
     <div className="h-full">
@@ -437,7 +437,7 @@ export default function Dashboard() {
                 path="/Reports/*"
                 element={<h1 className="text-2xl font-semibold text-gray-900">Reports</h1>}
               />
-              <Route path="/Listings/*" element={<Listings />} />
+              {/* <Route path="/Listings/*" element={<Listings />} /> */}
               {/* Add more routes as needed */}
             </Routes>
           </div>
