@@ -437,7 +437,7 @@ export default function Dashboard() {
                 path="/Reports/*"
                 element={<h1 className="text-2xl font-semibold text-gray-900">Reports</h1>}
               />
-              <Route path="/Listings/*" element={<Listings />} />
+              {/* <Route path="/Listings/*" element={<Listings />} /> */}
               {/* Add more routes as needed */}
             </Routes>
           </div>
